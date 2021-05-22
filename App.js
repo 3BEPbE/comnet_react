@@ -4,9 +4,11 @@ import { createDrawerNavigator } from '@react-navigation/drawer';
 import {createStackNavigator} from '@react-navigation/stack'
 import { NavigationContainer } from '@react-navigation/native'; 
 import Home from './screens/Home'
-import SafeArea from './components/SafeArea'
-import { Button ,StyleSheet,Text,TouchableHighlight} from 'react-native';
+import { Text,TouchableHighlight,View} from 'react-native';
 import HeaderStyle from './styles/header'
+import BurgerMenu from './components/BuregerMenu'
+import safeArea from './styles/SafeArea';
+import Watched from './screens/watched'
 
 const Stack = createStackNavigator()
 const Drawer = createDrawerNavigator();
@@ -23,17 +25,28 @@ function stack({ navigation }) {
             </TouchableHighlight>
           )
         }} name="first"  component={Home} />
+      <Stack.Screen options={{
+         title:'',
+         headerStyle:HeaderStyle.header,
+         headerLeft: ()=>(
+           <TouchableHighlight onPress={() => navigation.openDrawer()}>
+             <Text style={HeaderStyle.headerButton}>Главная</Text>
+           </TouchableHighlight>
+         )
+       }} name="Watched"  component={Watched} />
       </Stack.Navigator>
   );
 }
 export default function App() {
   return (
     <>
-    <NavigationContainer>
-      <Drawer.Navigator>
-      <Drawer.Screen name="Главная" component={stack} />
-      </Drawer.Navigator>
-    </NavigationContainer>
+    <View style={safeArea.Top}></View>
+    
+      <NavigationContainer>
+        <Drawer.Navigator drawerContent={props =><BurgerMenu {...props}/>}>
+        <Drawer.Screen  name="Главная" component={stack} />
+        </Drawer.Navigator>
+      </NavigationContainer>
     </>
   );
 }
