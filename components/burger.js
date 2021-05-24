@@ -54,8 +54,9 @@ export default function Burger() {
       backgroundColor:'#242424',
       position:'absolute',
       top:0,
+      right:0,
       transform:[ 
-        { translateX: "100%" }
+        { translateX: 1000 }
       ]
     },
 
