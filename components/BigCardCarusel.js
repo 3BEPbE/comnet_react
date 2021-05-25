@@ -25,7 +25,7 @@ const exampleItems = [
       text: 'Text 5',
     },
   ];
-export default function CustomCarusel(props) {
+export default function BigCardCarusel(props) {
     const [activeIndex, setActiveIndex] = React.useState(0);
     const [carouselItems, setCarouselItems] = React.useState(exampleItems);
     const ref = React.useRef(null);

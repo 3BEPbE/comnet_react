@@ -6,7 +6,6 @@ import { NavigationContainer } from '@react-navigation/native';
 import Home from './screens/Home'
 import { Text,TouchableHighlight,View} from 'react-native';
 import BurgerMenu from './components/BuregerMenu'
-import LoadScreen from './screens/LoadScreen'
 import Watched from './screens/watched'
 import {options,HeaderLeft,HeaderRight,HeaderCenter} from './components/Header'
 
@@ -26,7 +25,6 @@ export default function App() {
     <>  
       <NavigationContainer>
         <Drawer.Navigator drawerContent={props =><BurgerMenu {...props}/>}>
-          <Drawer.Screen options={{swipeEnabled:false}}  name="LoadScreen"  component={LoadScreen} />
           <Drawer.Screen  name="BurgerNavigation"  component={stack} />
         </Drawer.Navigator>
       </NavigationContainer>

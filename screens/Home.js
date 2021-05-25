@@ -1,13 +1,18 @@
 import React from 'react';
-import { View ,StyleSheet,Text,Dimensions} from 'react-native';
-import Corusel from '../components/Corusel'
+import { View ,StyleSheet,Text,Dimensions,ScrollView} from 'react-native';
+import BigCardCarusel from '../components/BigCardCarusel'
+import CardCarusel from '../components/CardCarusel'
+
 export default function Home(props) {
  
   
     return (
-        <View style={styles.home}>
-            <Corusel/>
-        </View>
+        <ScrollView style={styles.home}>
+            <View >
+                <BigCardCarusel/>
+                <CardCarusel/>
+            </View>
+        </ScrollView>
   
     );
   };

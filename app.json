@@ -5,6 +5,11 @@
     "name": "AwesomeProject",
     "slug": "AwesomeProject",
     "version": "1.0.0",
+    "splash": {
+      "image": "./images/splashScreen.png",
+      "backgroundColor": "#1C1C1C",
+      "resizMode":"cover"
+    },
     "assetBundlePatterns": [
       "**/*"
     ]
