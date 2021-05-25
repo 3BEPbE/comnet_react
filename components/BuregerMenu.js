@@ -57,8 +57,8 @@ const links =[
 
 export default function BurgerMenu(props) {
     return(
-        <View style={styles.content}>
-            <DrawerContentScrollView {...props} >
+
+            <DrawerContentScrollView style={styles.content} {...props} >
                 <ImageBackground style={styles.bcImage} source={require('../images/burgerMenu-bc.png')}>
                         <View style={styles.profileBlock}>
                             <Image source={require('../images/burgerMenuProfile.png')} style={styles.profileImage}/>
@@ -83,23 +83,24 @@ export default function BurgerMenu(props) {
                 </View>
             </DrawerContentScrollView>
             
-        </View>
+    
     )
 }
 const styles = StyleSheet.create({
    bcImage:{
         flex:1,
-        height:110,
+        height:150,
         paddingLeft:20,
         paddingTop:20
     },
   content:{
     backgroundColor:'#242424',
-    flex:1
+    flex:1,
+    marginTop:-40,
   },
   link:{
       flex:1,
-      height:32
+      
   },
   icon:{
       height:19,
@@ -107,11 +108,9 @@ const styles = StyleSheet.create({
       resizeMode:'contain'
   },
   list:{
-      
       display:'flex',
-      flex:1,
       flexDirection:'column',
-      justifyContent:'space-between'
+      justifyContent:'space-around'
   },
   profileImage:{
     width:70,
