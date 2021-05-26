@@ -5,24 +5,39 @@ import Carousel from 'react-native-snap-carousel';
 const { width: screenWidth } = Dimensions.get('window')
 const exampleItems = [
     {
-      title: 'Item 1',
-      text: 'Text 1',
+      image: require('../images/exampleImage.png'),
+      imd:'8.1',
+      kinopoisk:'8.0',
+      title:'Необыкновенный плейлист Зои',
+      text: 'После обследования головного мозга Зои получила дар телепатии. Эта суперспособность ...',
     },
     {
-      title: 'Item 2',
-      text: 'Text 2',
+      image: require('../images/exampleImage.png'),
+      imd:'8.1',
+      kinopoisk:'8.0',
+      title:'Необыкновенный плейлист Зои',
+      text: 'После обследования головного мозга Зои получила дар телепатии. Эта суперспособность ...',
     },
     {
-      title: 'Item 3',
-      text: 'Text 3',
+      image: require('../images/exampleImage.png'),
+      imd:'8.1',
+      kinopoisk:'8.0',
+      title:'Необыкновенный плейлист Зои',
+      text: 'После обследования головного мозга Зои получила дар телепатии. Эта суперспособность ...',
     },
     {
-      title: 'Item 4',
-      text: 'Text 4',
+      image: require('../images/exampleImage.png'),
+      imd:'8.1',
+      kinopoisk:'8.0',
+      title:'Необыкновенный плейлист Зои',
+      text: 'После обследования головного мозга Зои получила дар телепатии. Эта суперспособность ...',
     },
     {
-      title: 'Item 5',
-      text: 'Text 5',
+      image: require('../images/exampleImage.png'),
+      imd:'8.1',
+      kinopoisk:'8.0',
+      title:'Необыкновенный плейлист Зои',
+      text: 'После обследования головного мозга Зои получила дар телепатии. Эта суперспособность ...',
     },
   ];
 export default function BigCardCarusel(props) {
@@ -32,37 +47,38 @@ export default function BigCardCarusel(props) {
     const renderItem = React.useCallback(({ item, index }) => (
   
         <View >
-            <ImageBackground source={require('../images/exampleImage.png')} style={styles.imgBlocl}>
+            <ImageBackground source={item.image} style={styles.imgBlocl}>
                 <ImageBackground source={require('../images/corusulGradient.png')} style={styles.textBlock}>
                     <View style={styles.ranking}>
                         <View style={styles.rankingItem}>
-                                <Text  style={styles.rankingNumber}>8.1</Text>
+                                <Text  style={styles.rankingNumber}>{item.imd}</Text>
                                 <Text style={styles.rankingText}>IMDb</Text>
                         </View>
                         <View style={styles.rankingItem}>
-                                <Text style={styles.rankingNumber}>8.0</Text>
+                                <Text style={styles.rankingNumber}>{item.kinopoisk}</Text>
                                 <Text style={styles.rankingText}>КиноПоиск</Text>
                         </View>
                     </View>
-                    <View style={styles.nameBlock}><Text style={styles.name}>Необыкновенный плейлист Зои</Text></View>
-                    <Text style={styles.about}>После обследования головного мозга Зои получила дар телепатии. Эта суперспособность ...</Text>
+                    <View style={styles.nameBlock}><Text style={styles.name}>{item.title}</Text></View>
+                    <Text style={styles.about}>{item.text}</Text>
                 </ImageBackground>    
             </ImageBackground>
         </View>
     ), []);
   
     return (
-        <View style={{ marginTop:20}}>
+        <View style={{ marginTop:20,marginBottom:20}}>
           <Carousel
             layout="default"
             ref={ref}
             data={carouselItems}
             sliderWidth={screenWidth}
-            itemWidth={screenWidth-60}
+            itemWidth={screenWidth-40}
             sliderHeight={screenWidth}
             renderItem={renderItem}
             activeSlideAlignment={'center'}
             onSnapToItem={(index) => setActiveIndex(index)}
+            inactiveSlideScale={0.93}
           />
         </View>
   

@@ -55,7 +55,7 @@ const links =[
 ]
 
 
-export default function BurgerMenu(props) {
+export  function BurgerMenu(props) {
     return(
 
             <DrawerContentScrollView style={styles.content} {...props} >
@@ -86,6 +86,33 @@ export default function BurgerMenu(props) {
     
     )
 }
+export  function BurgerMenuGuest(props) {
+    return(
+
+            <DrawerContentScrollView style={styles.content} {...props} >
+                <View style={styles.bcImage} >
+
+                </View>
+                <DrawerItem key={'Войти'} {...props} style={styles.link} icon={()=>(
+                        <Image style={styles.icon} source={require('../images/burgerMenuIcon11.png')}/>)}
+                        onPress={() => props.navigation.closeDrawer()} inactiveTintColor ='#fff' label={'Войти'}/>
+                <View style={styles.list}>
+                    {links.map(e=>(
+                        <DrawerItem key={e.label} {...props} style={styles.link} icon={()=>(
+                        <Image style={styles.icon} source={e.icon}/>)}
+                        onPress={() => props.navigation.navigate('Watched')} inactiveTintColor ='#fff' label={e.label}/>
+                    ))}
+                    <DrawerItem key={'Узбекские'} {...props} style={styles.link} icon={()=>(
+                        <Image style={styles.icon} source={require('../images/burgerMenuIcon10.png')}/>)}
+                        onPress={() => alert('useless')} inactiveTintColor ='#fff' label={'Узбекские'}/>
+                   
+                </View>
+            </DrawerContentScrollView>
+            
+    
+    )
+}
+
 const styles = StyleSheet.create({
    bcImage:{
         flex:1,

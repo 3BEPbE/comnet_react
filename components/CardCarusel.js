@@ -1,5 +1,5 @@
 import React from 'react';
-import { View ,StyleSheet,Text,Dimensions,ImageBackground} from 'react-native';
+import { View ,StyleSheet,Text,Dimensions,ImageBackground,TouchableWithoutFeedback} from 'react-native';
 import Carousel from 'react-native-snap-carousel';
 
 const { width: screenWidth } = Dimensions.get('window')
@@ -30,29 +30,29 @@ export default function BigCardCarusel(props) {
     const [carouselItems, setCarouselItems] = React.useState(exampleItems);
     const ref = React.useRef(null);
     const renderItem = React.useCallback(({ item, index }) => (
-  
-        <View  style={styles.mainBlock}>
-            <ImageBackground source={require('../images/exampleImage.png')} style={styles.imgBlocl}>
-            </ImageBackground>
-            <Text style={styles.title}>Союз зверей: Спасение двуногих</Text>
-        </View>
+        <TouchableWithoutFeedback onPress={()=>{props.navigation.navigate('Movie', { id:index })}}>
+          <View  style={styles.mainBlockItem}>
+              <ImageBackground source={require('../images/exampleImage.png')} style={styles.imgBlocl}>
+              </ImageBackground>
+              <Text style={styles.title}>Союз зверей: Спасение двуногих</Text>
+          </View>
+        </TouchableWithoutFeedback>
     ), []);
   
     return (
-        <View style={{ marginTop:20,marginBottom:20}}>
+        <View style={styles.mainBlock}>
           <Carousel
             layout="default"
             ref={ref}
             data={carouselItems}
             sliderWidth={screenWidth}
-            itemWidth={screenWidth-205}
-            sliderHeight={(screenWidth-205)*1.2}
+            itemWidth={screenWidth-207}
+            sliderHeight={(screenWidth-207)*1.2}
             renderItem={renderItem}
             activeSlideAlignment="start"
             onSnapToItem={(index) => setActiveIndex(index)}
             inactiveSlideOpacity={1}
             inactiveSlideScale={1}
-
           />
         </View>
   
@@ -63,13 +63,17 @@ const styles = StyleSheet.create({
     imgBlocl:{
         borderRadius: 8,
         overflow:'hidden',
-        height: (screenWidth-205)*1.2 -40,
+        height: (screenWidth-207)*1.2 -40,
         display:'flex',
         justifyContent:'flex-end'
     },
+    mainBlockItem:{
+        height: (screenWidth-207)*1.2,
+        marginRight:10
+    },
     mainBlock:{
-        height: (screenWidth-205)*1.2,
-        marginLeft:10
+      marginLeft:20,
+      marginBottom:20
     },
     title:{
         fontSize:14,
