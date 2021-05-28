@@ -6,13 +6,13 @@ export const options = {
         headerStyle:HeaderStyle.header,
 }
 
-export const HeaderLeft = ({navigation}) => (
+export const HeaderRight = ({navigation}) => (
 
         <TouchableHighlight  onPress={() => navigation.navigate('Home')}>
-            <Text style={HeaderStyle.headerButton}>Главная</Text>
+            <Text style={HeaderStyle.headerLink}>Главная</Text>
         </TouchableHighlight>
 )
-export const HeaderRight = ({navigation}) => (
+export const HeaderLeft = ({navigation}) => (
     <TouchableHighlight onPress={() =>  navigation.openDrawer()}>
             <View style={HeaderStyle.burger}>
                 <View style={HeaderStyle.burgerItem}></View>

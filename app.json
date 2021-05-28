@@ -8,10 +8,13 @@
     "splash": {
       "image": "./images/splashScreen.png",
       "backgroundColor": "#1C1C1C",
-      "resizMode":"cover"
+      "resizMode": "cover"
     },
     "assetBundlePatterns": [
       "**/*"
-    ]
+    ],
+    "android": {
+      "package": "host.exp.exponent"
+    }
   }
 }

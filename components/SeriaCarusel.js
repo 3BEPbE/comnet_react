@@ -3,7 +3,7 @@ import { View ,StyleSheet,Text,Dimensions,Image,TouchableWithoutFeedback} from '
 import Carousel from 'react-native-snap-carousel';
 
 const { width: screenWidth } = Dimensions.get('window')
-
+const isTV = screenWidth>1000
 export default function SerialCarusel(props) {
     const [activeIndex, setActiveIndex] = React.useState(0);
     const [carouselItems, setCarouselItems] = React.useState([1,2,3,4,5,6,7]);
@@ -25,8 +25,8 @@ export default function SerialCarusel(props) {
                     ref={ref}
                     data={carouselItems}
                     sliderWidth={screenWidth}
-                    itemWidth={(screenWidth)/2.76+10}
-                    sliderHeight={(screenWidth)/2.76*1.9}
+                    itemWidth={(isTV?360:140)}
+                    sliderHeight={100}
                     renderItem={renderItem}
                     activeSlideAlignment="start"
                     onSnapToItem={(index) => setActiveIndex(index)}
@@ -39,11 +39,11 @@ export default function SerialCarusel(props) {
   };
 const styles = StyleSheet.create({
     image:{
-        height:(screenWidth)/4.5,
+        height:(isTV?180:100),
         borderRadius:4,
         overflow:'hidden',
         resizeMode:'cover',
-        width:(screenWidth)/2.76,
+        width:(isTV?350:130),
     },
     mainBlock:{
         marginLeft:20,

@@ -4,14 +4,14 @@ import Carousel from 'react-native-snap-carousel';
 
 const { width: screenWidth } = Dimensions.get('window')
 
-export default function SeasonCarusel(props) {
+export default function Janr(props) {
     const [activeIndex, setActiveIndex] = React.useState(0);
-    const [carouselItems, setCarouselItems] = React.useState([1,2,3,4,5,6,7]);
+    const [carouselItems, setCarouselItems] = React.useState(['Комедии','Драма','Джейн Леви','Драма','Драма','Драма','Драма']);
     const ref = React.useRef(null);
     const renderItem = React.useCallback(({ item, index }) => (
     <TouchableOpacity>
-        <View style={{...styles.seasonButton,backgroundColor:(index===0?'#373737':'transperent')}}>
-           <Text style={styles.seasonButtonText}>СЕЗОН {item}</Text>
+        <View style={{...styles.seasonButton,backgroundColor:'#373737'}}>
+           <Text style={styles.seasonButtonText}> {item}</Text>
         </View>       
     </TouchableOpacity>
     ), []);
@@ -22,8 +22,8 @@ export default function SeasonCarusel(props) {
                     ref={ref}
                     data={carouselItems}
                     sliderWidth={screenWidth}
-                    itemWidth={90}
-                    sliderHeight={40}
+                    itemWidth={120}
+                    sliderHeight={35}
                     renderItem={renderItem}
                     activeSlideAlignment="start"
                     onSnapToItem={(index) => setActiveIndex(index)}
@@ -42,14 +42,14 @@ const styles = StyleSheet.create({
         marginBottom:20
     },
     seasonButton:{
-        width:80,
-        height:40,
+        width:110,
+        height:35,
         marginLeft:5,
         backgroundColor:'#373737',
         alignItems:'center',
         justifyContent:'center',
         marginRight:20,
-        borderRadius:7,
+        borderRadius:50,
         overflow:'hidden',
         marginTop:5
     },

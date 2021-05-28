@@ -1,8 +1,9 @@
 import React from 'react';
-import { View ,StyleSheet,Text,Dimensions,ImageBackground} from 'react-native';
+import { View ,StyleSheet,Text,Dimensions,ImageBackground,Platform} from 'react-native';
 import Carousel from 'react-native-snap-carousel';
 
 const { width: screenWidth } = Dimensions.get('window')
+let isTV = screenWidth>1000
 const exampleItems = [
     {
       image: require('../images/exampleImage.png'),
@@ -44,11 +45,13 @@ export default function BigCardCarusel(props) {
     const [activeIndex, setActiveIndex] = React.useState(0);
     const [carouselItems, setCarouselItems] = React.useState(exampleItems);
     const ref = React.useRef(null);
+   
+    console.log(isTV)
+
     const renderItem = React.useCallback(({ item, index }) => (
-  
         <View >
             <ImageBackground source={item.image} style={styles.imgBlocl}>
-                <ImageBackground source={require('../images/corusulGradient.png')} style={styles.textBlock}>
+                <ImageBackground source={require('../images/example.jpg')} style={styles.textBlock}>
                     <View style={styles.ranking}>
                         <View style={styles.rankingItem}>
                                 <Text  style={styles.rankingNumber}>{item.imd}</Text>
@@ -73,8 +76,8 @@ export default function BigCardCarusel(props) {
             ref={ref}
             data={carouselItems}
             sliderWidth={screenWidth}
-            itemWidth={screenWidth-40}
-            sliderHeight={screenWidth}
+            itemWidth={isTV?screenWidth-400:340}
+            sliderHeight={isTV?700:300}
             renderItem={renderItem}
             activeSlideAlignment={'center'}
             onSnapToItem={(index) => setActiveIndex(index)}
@@ -89,23 +92,23 @@ const styles = StyleSheet.create({
     imgBlocl:{
         borderRadius: 8,
         overflow:'hidden',
-        height: 300,
+        height: (isTV?280*1.77:300),
         display:'flex',
         justifyContent:'flex-end'
     },
     textBlock:{
-        height: 300,
+        height: (isTV?280*1.77:300),
         display:'flex',
         justifyContent:'flex-end',
         padding:15
     },
     about:{
-        width:screenWidth-90,
+        width:(isTV?280:320),
         fontSize:12,
         color:'#fff'
     },
     name:{
-        width:screenWidth-130,
+        width:(isTV?280:320),
         fontSize:20,
         color:'#fff',
         fontWeight:'bold',

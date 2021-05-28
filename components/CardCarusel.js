@@ -3,7 +3,28 @@ import { View ,StyleSheet,Text,Dimensions,ImageBackground,TouchableWithoutFeedba
 import Carousel from 'react-native-snap-carousel';
 
 const { width: screenWidth } = Dimensions.get('window')
+const isTV = screenWidth >1000
 const exampleItems = [
+    {
+      title: 'Item 1',
+      text: 'Text 1',
+    },
+    {
+      title: 'Item 2',
+      text: 'Text 2',
+    },
+    {
+      title: 'Item 3',
+      text: 'Text 3',
+    },
+    {
+      title: 'Item 4',
+      text: 'Text 4',
+    },
+    {
+      title: 'Item 5',
+      text: 'Text 5',
+    },
     {
       title: 'Item 1',
       text: 'Text 1',
@@ -46,8 +67,8 @@ export default function BigCardCarusel(props) {
             ref={ref}
             data={carouselItems}
             sliderWidth={screenWidth}
-            itemWidth={screenWidth-207}
-            sliderHeight={(screenWidth-207)*1.2}
+            itemWidth={isTV?210:180}
+            sliderHeight={240}
             renderItem={renderItem}
             activeSlideAlignment="start"
             onSnapToItem={(index) => setActiveIndex(index)}
@@ -63,13 +84,13 @@ const styles = StyleSheet.create({
     imgBlocl:{
         borderRadius: 8,
         overflow:'hidden',
-        height: (screenWidth-207)*1.2 -40,
+        height: 200,
         display:'flex',
         justifyContent:'flex-end'
     },
     mainBlockItem:{
-        height: (screenWidth-207)*1.2,
-        marginRight:10
+        height: 240,
+        marginRight:isTV?15:10
     },
     mainBlock:{
       marginLeft:20,

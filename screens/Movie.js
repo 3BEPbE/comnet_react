@@ -1,15 +1,17 @@
 import React from 'react';
-import { View ,StyleSheet,Text,Dimensions,Image,TouchableWithoutFeedback,ScrollView} from 'react-native';
+import { View ,StyleSheet,Text,Dimensions,Image,TouchableOpacity,TouchableWithoutFeedback,ScrollView} from 'react-native';
 import SeasonCarusel from '../components/SeasonCarusel'
 import SeriaCarusel from '../components/SeriaCarusel'
-
+import JanrCarusel from '../components/JanrCarusel'
+import CardCarusel from '../components/CardCarusel'
 const { width: screenWidth } = Dimensions.get('window')
 
-export default function Movie({route}) {
+const isTV = 1000<screenWidth
+
+export default function Movie({route,navigation}) {
     return(
         <ScrollView style={styles.Page}>
-            <Image style={styles.firstImage} source={require('../images/exampleImage.png')}>
-            </Image>
+            <View style={{alignItems:'center'}}><Image style={styles.firstImage} source={require('../images/example.jpg')}/></View>
             <View stylle={styles.content}>
                 <View style={styles.mainInfo}>
                     <Image style={styles.secondImage} source={require('../images/exampleImage2.png')}></Image>
@@ -17,14 +19,46 @@ export default function Movie({route}) {
                         <Text style={styles.mainInfoTextItem1}>Необыкновенный плейлист Зои</Text>
                         <Text style={styles.mainInfoTextItem2}>Cезон 1. Cерия 1</Text>
                         <Text style={styles.mainInfoTextItem3}>США. 2020 (2 сезона)</Text>
+                        <View style={{flexDirection:'row'}}>
                         <View style={styles.mainInfoTextItem4Block}><Text  style={styles.mainInfoTextItem4}>+18</Text></View>
+                        <View style={{...styles.ranking,display:(isTV?'flex':'none')}}>
+                            <View style={styles.rankingItem}>
+                                    <Text  style={styles.rankingNumber}>8.1</Text>
+                                    <Text style={styles.rankingText}>IMDb</Text>
+                            </View>
+                            <View style={styles.rankingItem}>
+                                    <Text style={styles.rankingNumber}>8</Text>
+                                    <Text style={styles.rankingText}>КиноПоиск</Text>
+                            </View>
+                        </View> 
+                        </View>
+                       
                     </View>
                 </View>
-                <TouchableWithoutFeedback style={styles.button}>
+                <TouchableOpacity style={styles.button}>
                         <View style={styles.button}><Text style={styles.buttonText}>Приобрети подписку</Text></View>
-                </TouchableWithoutFeedback>
+                </TouchableOpacity>
                 <SeasonCarusel/>
                 <SeriaCarusel/>
+                <Text style={styles.aboutText}>После обследования головного мозга Зои получила дар телепатии. Эта суперспособность превращает жизнь в девушки в мюзикл, ведь все желания и мысли людей она слышит в формате музыкального представления. ...</Text>
+                <TouchableWithoutFeedback>
+                    <Text style={styles.aboutButton}>Подробнее</Text>
+                </TouchableWithoutFeedback>
+                <View style={{...styles.ranking,display:(isTV?'none':'flex')}}>
+                        <View style={styles.rankingItem}>
+                                <Text  style={styles.rankingNumber}>8.1</Text>
+                                <Text style={styles.rankingText}>IMDb</Text>
+                        </View>
+                        <View style={styles.rankingItem}>
+                                <Text style={styles.rankingNumber}>8</Text>
+                                <Text style={styles.rankingText}>КиноПоиск</Text>
+                        </View>
+                </View>  
+                <JanrCarusel/>
+                <Text style={styles.caruselTitle}>Похожие фильмы</Text>
+                <CardCarusel navigation={navigation} />
+                <Text style={styles.caruselTitle}>Фильмы которые идут по телеканалам в данный момент</Text>
+                <CardCarusel navigation={navigation}/>
             </View>
         </ScrollView>
         
@@ -38,10 +72,12 @@ const styles = StyleSheet.create({
    firstImage:{
         display:'flex',
         flexDirection:'row',
-        height:200,
-        width:screenWidth,
+        height:isTV?500:screenWidth,
+        width:isTV?screenWidth-40:screenWidth,
         resizeMode:'cover',
-        marginBottom:20
+        marginBottom:20,
+        resizeMode:'cover'
+
    },
    content:{
        paddingLeft:20,
@@ -50,14 +86,14 @@ const styles = StyleSheet.create({
    mainInfo:{
     display:'flex',
     flexDirection:'row',
-    justifyContent:'space-between',
+    justifyContent: isTV?`flex-start`:'space-between',
     paddingLeft:20,
     paddingRight:20,
     paddingTop:20
    },
    secondImage:{
-        height: (screenWidth-240)*1.4 -20,
-        width:screenWidth-240,
+        height: 200,
+        width:150,
         borderRadius:7,
         overflow:'hidden'
    },
@@ -113,5 +149,41 @@ const styles = StyleSheet.create({
         color:'#fff',
         fontSize:15
     },
-     
+    aboutText:{
+        paddingLeft:20,
+        paddingRight:20,
+        paddingBottom:20,
+        color:'#BCBCBC',
+        fontSize:14
+    },
+    aboutButton:{
+        marginLeft:20,
+        color:'#F08019',
+        fontSize:16,
+        marginBottom:20
+    },
+    ranking:{
+        display:'flex',
+        flexDirection:'row',
+        width:100,
+        justifyContent:'space-between',
+        marginLeft:20,
+        marginBottom:20
+    },
+    rankingNumber:{
+        color:'#fff',
+        fontSize:17,
+        fontWeight:'bold'
+    },
+    rankingText:{
+        color:'#fff',
+        fontSize:10,
+    },
+    caruselTitle:{
+        paddingLeft:22,
+        fontSize:18,
+        color:'#fff',
+        marginBottom:10,
+        width:screenWidth-20,
+    }
   });

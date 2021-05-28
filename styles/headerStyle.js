@@ -4,16 +4,16 @@ const headerBlock = StyleSheet.create({
    header: {
        backgroundColor: '#0A0A0A',
     },
-    headerButton:{
+    headerLink:{
         color:'#fff',
-        marginLeft:22
+        marginRight:22
     },
     burger:{
         height:18,
         width:22,
         display:'flex',
         justifyContent:'space-between',
-        marginRight:20,
+        marginLeft:22,
     },
     burgerItem:{
         width:22,
@@ -25,6 +25,7 @@ const headerBlock = StyleSheet.create({
     searchBarIcon:{
         height:18,
         width:22,
+        marginRight:12
     },
     searchbarBlock:{
         display:'flex',

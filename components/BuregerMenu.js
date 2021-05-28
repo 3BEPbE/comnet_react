@@ -4,6 +4,7 @@ import {
     DrawerContentScrollView,
     DrawerItem
 } from '@react-navigation/drawer'
+import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
 
 
 const links =[
@@ -61,9 +62,13 @@ export  function BurgerMenu(props) {
             <DrawerContentScrollView style={styles.content} {...props} >
                 <ImageBackground style={styles.bcImage} source={require('../images/burgerMenu-bc.png')}>
                         <View style={styles.profileBlock}>
-                            <Image source={require('../images/burgerMenuProfile.png')} style={styles.profileImage}/>
+                            <TouchableWithoutFeedback onPress={() => props.navigation.navigate('Profile')}>
+                            <><Image source={require('../images/burgerMenuProfile.png')} style={styles.profileImage}/></>
+                            </TouchableWithoutFeedback>
                             <View>
-                                <Text style={styles.name}>Имя Фамилия</Text>
+                                <TouchableWithoutFeedback onPress={() => props.navigation.navigate('Profile')}>
+                                    <Text style={styles.name}>Имя Фамилия</Text>
+                                </TouchableWithoutFeedback>
                                 <Text style={styles.status}>Активный</Text>
                             </View>
                         </View>
@@ -154,7 +159,7 @@ const styles = StyleSheet.create({
       alignItems:'center'
   },
   name:{
-      fontSize:12,
+      fontSize:15,
       color:'#fff'
   },
   status:{
