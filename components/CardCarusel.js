@@ -1,9 +1,9 @@
 import React from 'react';
 import { View ,StyleSheet,Text,Dimensions,ImageBackground,TouchableWithoutFeedback} from 'react-native';
 import Carousel from 'react-native-snap-carousel';
-
+import { DrawerItem } from '@react-navigation/drawer'
 const { width: screenWidth } = Dimensions.get('window')
-const isTV = screenWidth >1000
+const isTV = screenWidth >950
 const exampleItems = [
     {
       title: 'Item 1',
@@ -51,13 +51,13 @@ export default function BigCardCarusel(props) {
     const [carouselItems, setCarouselItems] = React.useState(exampleItems);
     const ref = React.useRef(null);
     const renderItem = React.useCallback(({ item, index }) => (
-        <TouchableWithoutFeedback onPress={()=>{props.navigation.navigate('Movie', { id:index })}}>
-          <View  style={styles.mainBlockItem}>
-              <ImageBackground source={require('../images/exampleImage.png')} style={styles.imgBlocl}>
-              </ImageBackground>
-              <Text style={styles.title}>Союз зверей: Спасение двуногих</Text>
-          </View>
-        </TouchableWithoutFeedback>
+        <DrawerItem  label='' onPress={()=>{props.navigation.navigate('Movie', { id:index })}} icon={()=>(
+            <View  style={styles.mainBlockItem}>
+                <ImageBackground source={require('../images/exampleImage.png')} style={styles.imgBlocl}>
+                </ImageBackground>
+                <Text style={styles.title}>Союз зверей: Спасение двуногих</Text>
+            </View>
+        )}/>
     ), []);
   
     return (
@@ -67,7 +67,7 @@ export default function BigCardCarusel(props) {
             ref={ref}
             data={carouselItems}
             sliderWidth={screenWidth}
-            itemWidth={isTV?210:180}
+            itemWidth={isTV?250:180}
             sliderHeight={240}
             renderItem={renderItem}
             activeSlideAlignment="start"
@@ -90,7 +90,8 @@ const styles = StyleSheet.create({
     },
     mainBlockItem:{
         height: 240,
-        marginRight:isTV?15:10
+        marginRight:isTV?15:10,
+        width:isTV?210:140
     },
     mainBlock:{
       marginLeft:20,

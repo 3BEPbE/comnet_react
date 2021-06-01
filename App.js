@@ -8,6 +8,7 @@ import Movie from './screens/Movie'
 import ChangeData from './screens/ChangeData'
 import Watched from './screens/watched'
 import Profile from './screens/Profile'
+import Search from './screens/Search'
 import {options,HeaderLeft,HeaderRight,HeaderCenter} from './components/Header'
 import {BurgerMenu,BurgerMenuGuest} from './components/BuregerMenu'
 import {ContextProvider} from './context/context'
@@ -18,11 +19,12 @@ const Drawer = createDrawerNavigator();
 function stack({ navigation }) {
   return (
       <Stack.Navigator>
-        <Stack.Screen options={{...options,headerTitle:()=>(<HeaderCenter/>),headerLeft:()=>(<HeaderLeft navigation={navigation}/>)}} name="Home"  component={Home} />
+        <Stack.Screen options={{...options,headerTitle:()=>(<HeaderCenter  navigation={navigation}/>),headerLeft:()=>(<HeaderLeft  navigation={navigation}/>)}} name="Home"  component={Home} />
         <Stack.Screen options={{...options,headerRight:()=>(<HeaderRight navigation={navigation}/>),headerLeft:()=>(<HeaderLeft navigation={navigation}/>)}} name="Watched"  component={Watched} />
         <Stack.Screen options={{...options,headerRight:()=>(<HeaderRight navigation={navigation}/>),headerLeft:()=>(<HeaderLeft navigation={navigation}/>)}} name="Profile"  component={Profile} />
         <Stack.Screen options={{...options,headerRight:()=>(<HeaderRight navigation={navigation}/>),headerLeft:()=>(<HeaderLeft navigation={navigation}/>)}} name="Movie"  component={Movie} />
         <Stack.Screen options={{...options,headerRight:()=>(<HeaderRight navigation={navigation}/>),headerLeft:()=>(<HeaderLeft navigation={navigation}/>)}} name="Change"  component={ChangeData} />
+        <Stack.Screen options={{...options,headerLeft:()=>(<HeaderLeft navigation={navigation}/>),headerRight:()=>(<HeaderRight navigation={navigation}/>)}} name="Search"  component={Search} />
       </Stack.Navigator>
   );
 }

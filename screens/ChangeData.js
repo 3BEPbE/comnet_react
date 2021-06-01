@@ -23,19 +23,19 @@ export default function ChangData(props) {
             <View style={styles.forma}>
                 <View style={styles.formItem}>
                     <Text style={styles.titleInput}>Имя</Text>
-                    <TextInput style={styles.input}  autoCompleteType={'off'} autoCorrect={false}  onChangeText={(e)=>{changeHandler(e,'name')}} value={data.name} multiline  style={styles.input}/>
+                    <TextInput   autoCompleteType={'off'} autoCorrect={false}  onChangeText={(e)=>{changeHandler(e,'name')}} value={data.name} multiline  style={styles.input}/>
                 </View>
                 <View style={styles.formItem} >
                     <Text style={styles.titleInput}>Фамилия</Text>
-                    <TextInput style={styles.input}  autoCompleteType={'off'} autoCorrect={false}  onChangeText={(e)=>{changeHandler(e,'surname')}} value={data.surname} multiline  style={styles.input}/>
+                    <TextInput   autoCompleteType={'off'} autoCorrect={false}  onChangeText={(e)=>{changeHandler(e,'surname')}} value={data.surname} multiline  style={styles.input}/>
                 </View>
                 <View style={styles.formItem}>
                     <Text style={styles.titleInput}>Пароль</Text>
-                    <TextInput secureTextEntry={true}  style={styles.input}  autoCompleteType={'off'} autoCorrect={false}  onChangeText={(e)=>{changeHandler(e,'password')}} value={data.password} multiline  style={styles.input}/>
+                    <TextInput secureTextEntry={true}   autoCompleteType={'off'} autoCorrect={false}  onChangeText={(e)=>{changeHandler(e,'password')}} value={data.password} multiline  style={styles.input}/>
                 </View>
                 <View style={styles.formItem}> 
                     <Text style={styles.titleInput}>Повторить Пароль</Text>
-                    <TextInput style={styles.input}  autoCompleteType={'off'} autoCorrect={false}  onChangeText={(e)=>{changeHandler(e,'repeatPasword')}} value={data.repeatPasword} multiline  style={styles.input}/>
+                    <TextInput   autoCompleteType={'off'} autoCorrect={false}  onChangeText={(e)=>{changeHandler(e,'repeatPasword')}} value={data.repeatPasword} multiline  style={styles.input}/>
                 </View>
                 <Button  mode="contained" style={styles.button}> Сохранить</Button>
             </View>

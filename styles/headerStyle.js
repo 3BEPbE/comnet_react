@@ -6,14 +6,13 @@ const headerBlock = StyleSheet.create({
     },
     headerLink:{
         color:'#fff',
-        marginRight:22
+        marginRight:20
     },
     burger:{
         height:18,
         width:22,
         display:'flex',
         justifyContent:'space-between',
-        marginLeft:22,
     },
     burgerItem:{
         width:22,

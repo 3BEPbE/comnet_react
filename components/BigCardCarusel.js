@@ -1,40 +1,44 @@
 import React from 'react';
-import { View ,StyleSheet,Text,Dimensions,ImageBackground,Platform} from 'react-native';
+import { View ,StyleSheet,Text,Dimensions,ImageBackground,Platform, TouchableHighlight} from 'react-native';
 import Carousel from 'react-native-snap-carousel';
+import {
+  DrawerContentScrollView,
+  DrawerItem
+} from '@react-navigation/drawer'
 
 const { width: screenWidth } = Dimensions.get('window')
-let isTV = screenWidth>1000
+let isTV = screenWidth>950
 const exampleItems = [
     {
-      image: require('../images/exampleImage.png'),
+      image: require('../images/example.jpg'),
       imd:'8.1',
       kinopoisk:'8.0',
       title:'Необыкновенный плейлист Зои',
       text: 'После обследования головного мозга Зои получила дар телепатии. Эта суперспособность ...',
     },
     {
-      image: require('../images/exampleImage.png'),
+      image: require('../images/example.jpg'),
       imd:'8.1',
       kinopoisk:'8.0',
       title:'Необыкновенный плейлист Зои',
       text: 'После обследования головного мозга Зои получила дар телепатии. Эта суперспособность ...',
     },
     {
-      image: require('../images/exampleImage.png'),
+      image: require('../images/example.jpg'),
       imd:'8.1',
       kinopoisk:'8.0',
       title:'Необыкновенный плейлист Зои',
       text: 'После обследования головного мозга Зои получила дар телепатии. Эта суперспособность ...',
     },
     {
-      image: require('../images/exampleImage.png'),
+      image: require('../images/example.jpg'),
       imd:'8.1',
       kinopoisk:'8.0',
       title:'Необыкновенный плейлист Зои',
       text: 'После обследования головного мозга Зои получила дар телепатии. Эта суперспособность ...',
     },
     {
-      image: require('../images/exampleImage.png'),
+      image: require('../images/example.jpg'),
       imd:'8.1',
       kinopoisk:'8.0',
       title:'Необыкновенный плейлист Зои',
@@ -45,13 +49,11 @@ export default function BigCardCarusel(props) {
     const [activeIndex, setActiveIndex] = React.useState(0);
     const [carouselItems, setCarouselItems] = React.useState(exampleItems);
     const ref = React.useRef(null);
-   
-    console.log(isTV)
 
     const renderItem = React.useCallback(({ item, index }) => (
-        <View >
-            <ImageBackground source={item.image} style={styles.imgBlocl}>
-                <ImageBackground source={require('../images/example.jpg')} style={styles.textBlock}>
+            <DrawerItem label='' icon={()=>{
+              return(<ImageBackground source={item.image} style={styles.imgBlocl}>
+                <ImageBackground source={require('../images/corusulGradient.png')} style={styles.textBlock}>
                     <View style={styles.ranking}>
                         <View style={styles.rankingItem}>
                                 <Text  style={styles.rankingNumber}>{item.imd}</Text>
@@ -65,8 +67,9 @@ export default function BigCardCarusel(props) {
                     <View style={styles.nameBlock}><Text style={styles.name}>{item.title}</Text></View>
                     <Text style={styles.about}>{item.text}</Text>
                 </ImageBackground>    
-            </ImageBackground>
-        </View>
+            </ImageBackground>)
+            }}/>
+            
     ), []);
   
     return (
@@ -76,7 +79,7 @@ export default function BigCardCarusel(props) {
             ref={ref}
             data={carouselItems}
             sliderWidth={screenWidth}
-            itemWidth={isTV?screenWidth-400:340}
+            itemWidth={isTV?screenWidth:340}
             sliderHeight={isTV?700:300}
             renderItem={renderItem}
             activeSlideAlignment={'center'}
@@ -94,10 +97,11 @@ const styles = StyleSheet.create({
         overflow:'hidden',
         height: (isTV?280*1.77:300),
         display:'flex',
-        justifyContent:'flex-end'
+        justifyContent:'flex-end', 
+        width:screenWidth
     },
     textBlock:{
-        height: (isTV?280*1.77:300),
+        height: (isTV?280*1.77-40:300),
         display:'flex',
         justifyContent:'flex-end',
         padding:15
