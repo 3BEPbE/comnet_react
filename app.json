@@ -4,9 +4,17 @@
   "expo": {
     "name": "AwesomeProject",
     "slug": "AwesomeProject",
-    "version": "1.0.0",
+    "version": "2.19.6",
+    "splash": {
+      "image": "./images/splashScreen.png",
+      "backgroundColor": "#1C1C1C",
+      "resizMode": "cover"
+    },
     "assetBundlePatterns": [
       "**/*"
-    ]
+    ],
+    "android": {
+      "package": "host.exp.exponent"
+    }
   }
 }
