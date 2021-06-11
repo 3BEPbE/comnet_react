@@ -17,7 +17,7 @@ export default function Home(props) {
                 <CardCarusel navigation ={props.navigation}/>
                 <View style={styles.newsBlock} >
                     <Text style={styles.newsText}>Новинки</Text>
-                    <DrawerItem style={{marginTop:-10,marginBottom:-20,}} label='' icon={()=>(<Text style={styles.newsLink}>{'Ещё >'}</Text>)}/>
+                    <DrawerItem pressColor='#fff' style={{marginTop:-10,marginBottom:-20,}} label='' icon={()=>(<Text style={styles.newsLink}>{'Ещё >'}</Text>)}/>
                 </View>
                 <CardCarusel navigation ={props.navigation} />
                 <Text style={styles.titleBlock}>Фильмы по жанрам</Text>

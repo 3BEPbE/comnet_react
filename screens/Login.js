@@ -1,23 +1,35 @@
 import React from 'react';
 import { View, StyleSheet, Text, Image, TextInput, Dimensions, ScrollView} from 'react-native';
 import {DrawerItem} from '@react-navigation/drawer'
+import axios from 'axios'
 const { width: screenWidth } = Dimensions.get('window')
 
 export default function Login({navigation}) {
-
-
     const [data,setData] = React.useState({
-        id:'',
+        abonement:'',
         password:'',
 
     })
-
     const changeHandler = (text,condition) =>{
         let newData = {...data}
         newData[condition] = text;
         setData(newData)
     }
     const textInputs = []
+
+    const login = () => {
+        axios({
+            method: 'POST',
+            url:`http://192.168.1.106/api/login`,
+            body:{
+            }
+            }).then((e)=>{
+                console.log(e)
+            }).catch((e)=>{
+                console.log(e)
+            })
+    }
+    
     return(
         <ScrollView style={styles.container}>
             <View style={styles.block}>
@@ -31,7 +43,7 @@ export default function Login({navigation}) {
                     <View style={styles.inputItem}>
                         <Text style={styles.titleInput}>Абонемент</Text>
                         <DrawerItem onPress={()=>textInputs[0].focus()} style={styles.focusItem} label='' icon={()=>(
-                           <TextInput ref={(input)=>{textInputs[0]=input}} value={data.id} onChangeText={(text)=>changeHandler(text,'id')} style={styles.input} autoCompleteType={'off'} autoCorrect={false}/>
+                           <TextInput ref={(input)=>{textInputs[0]=input}} value={data.abonement} onChangeText={(text)=>changeHandler(text,'abonement')} style={styles.input} autoCompleteType={'off'} autoCorrect={false}/>
                         )}/>
                     </View>
                     <View style={styles.inputItem}>
@@ -42,7 +54,7 @@ export default function Login({navigation}) {
                     </View>
                 </View>
                 <View style={styles.blockButton}>
-                    <DrawerItem style={styles.focusItem} label='' icon={()=>(
+                    <DrawerItem onPress={()=>login()} style={styles.focusItem} label='' icon={()=>(
                         <View style={styles.buttonLogin}>
                             <Text style={styles.buttonText}>Войти</Text>
                         </View>

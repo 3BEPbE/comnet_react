@@ -14,34 +14,47 @@ import Registration from './screens/Registration'
 import TV from './screens/TV'
 import {options,HeaderLeft,HeaderRight,HeaderCenter} from './components/header'
 import {BurgerMenu,BurgerMenuGuest} from './components/BuregerMenu'
-import {ContextProvider} from './context/context'
+import {ContextProvider, Datas} from './context/context'
+
+
 const Stack = createStackNavigator()
 const Drawer = createDrawerNavigator();
 
 function stack({ navigation }) {
+  const {createOption} = React.useContext(Datas)
   return (
       <Stack.Navigator>
-        <Stack.Screen options={{...options,headerTitle:()=>(<HeaderCenter  navigation={navigation}/>),headerLeft:()=>(<HeaderLeft  navigation={navigation}/>)}} name="Home"  component={Home} />
-        <Stack.Screen options={{...options,headerRight:()=>(<HeaderRight navigation={navigation}/>),headerLeft:()=>(<HeaderLeft navigation={navigation}/>)}} name="Watched"  component={Watched} />
-        <Stack.Screen options={{...options,headerRight:()=>(<HeaderRight navigation={navigation}/>),headerLeft:()=>(<HeaderLeft navigation={navigation}/>)}} name="Profile"  component={Profile} />
-        <Stack.Screen options={{...options,headerRight:()=>(<HeaderRight navigation={navigation}/>),headerLeft:()=>(<HeaderLeft navigation={navigation}/>)}} name="Movie"  component={Movie} />
-        <Stack.Screen options={{...options,headerRight:()=>(<HeaderRight navigation={navigation}/>),headerLeft:()=>(<HeaderLeft navigation={navigation}/>)}} name="TV"  component={TV} />
-        <Stack.Screen options={{...options,headerRight:()=>(<HeaderRight navigation={navigation}/>),headerLeft:()=>(<HeaderLeft navigation={navigation}/>)}} name="Change"  component={ChangeData} />
-        <Stack.Screen options={{...options,headerLeft:()=>(<HeaderLeft navigation={navigation}/>),headerRight:()=>(<HeaderRight navigation={navigation}/>)}} name="Search"  component={Search} />
+        <Stack.Screen options={createOption(navigation,"Home")}    name="Home"    component={Home} />
+        <Stack.Screen options={createOption(navigation,"Watched")} name="Watched" component={Watched} />
+        <Stack.Screen options={createOption(navigation,"Profile")} name="Profile" component={Profile} />
+        <Stack.Screen options={createOption(navigation,"Movie")}   name="Movie"   component={Movie} />
+        <Stack.Screen options={createOption(navigation,"TV")}      name="TV"      component={TV} />
+        <Stack.Screen options={createOption(navigation,"Change")}  name="Change"  component={ChangeData} />
+        <Stack.Screen options={createOption(navigation,"Search")}  name="Search"  component={Search} />
       </Stack.Navigator>
   );
 }
-export default function App() {
-  return (
-    <><ContextProvider>
+
+const DrawerNav = () =>{
+  const {isStatusHidden} = React.useContext(Datas)
+  return(
+    <>
       <NavigationContainer>
         <Drawer.Navigator drawerContent={props =>(false?<BurgerMenuGuest {...props}/>:<BurgerMenu {...props}/>)}>
           {/* <Drawer.Screen options={{ swipeEnabled: false,gestureEnabled:false }}  name="Login"  component={Login} />
-          <Drawer.Screen options={{ swipeEnabled: false,gestureEnabled:false }}  name="Registration"  component={Registration} /> */}
+          <Drawer.Screen options={{ swipeEnabled: false,gestureEnabled:false }}  name="Registration"  component={Registration} />  */}
           <Drawer.Screen  name="BurgerNavigation"  component={stack} />
         </Drawer.Navigator>
       </NavigationContainer>
-      <StatusBar style="inverted" />
+      <StatusBar hidden={isStatusHidden}  style="inverted" />
+    </>
+  )
+}
+
+export default function App() {
+  return (
+    <><ContextProvider>
+        <DrawerNav/>
       </ContextProvider>
     </>
   );

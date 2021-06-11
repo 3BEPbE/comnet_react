@@ -18,4 +18,8 @@ target 'AwesomeProject' do
   #     flipper_post_install(installer)
   #   end
   # end
+  pod 'react-native-video', :path => '../node_modules/react-native-video'
+
+  pod 'react-native-vlc-media-player', :path => '../node_modules/react-native-vlc-media-player'
+
 end

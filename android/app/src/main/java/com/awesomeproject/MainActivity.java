@@ -1,5 +1,5 @@
 package com.awesomeproject;
-
+import net.gamesofton.rnjwplayer.RNJWPlayerPackage;
 import android.os.Bundle;
 
 import com.facebook.react.ReactActivity;

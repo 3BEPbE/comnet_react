@@ -10,11 +10,16 @@
       "backgroundColor": "#1C1C1C",
       "resizMode": "cover"
     },
+    "orientation":"portrait",
     "assetBundlePatterns": [
       "**/*"
     ],
+    "ios": {
+      "requireFullScreen": true,
+    },
     "android": {
       "package": "host.exp.exponent"
     }
+    
   }
 }

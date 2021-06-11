@@ -48,7 +48,7 @@ export default function BigCardCarusel(props) {
     const ref = React.useRef(null);
 
     const renderItem = React.useCallback(({ item, index }) => (
-            <DrawerItem label='' icon={()=>{
+            <DrawerItem pressColor={'#fff'} label='' icon={()=>{
               return(<ImageBackground source={item.image} style={styles.imgBlocl}>
                 <ImageBackground source={require('../images/corusulGradient.png')} style={styles.textBlock}>
                     <View style={styles.ranking}>

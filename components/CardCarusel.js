@@ -1,5 +1,5 @@
 import React from 'react';
-import { View ,StyleSheet,Text,Dimensions,ImageBackground,TouchableWithoutFeedback} from 'react-native';
+import { View ,StyleSheet,Text,Dimensions,ImageBackground, TouchableWithoutFeedback} from 'react-native';
 import Carousel from 'react-native-snap-carousel';
 import { DrawerItem } from '@react-navigation/drawer'
 const { width: screenWidth } = Dimensions.get('window')
@@ -50,8 +50,9 @@ export default function BigCardCarusel(props) {
     const [activeIndex, setActiveIndex] = React.useState(0);
     const [carouselItems, setCarouselItems] = React.useState(exampleItems);
     const ref = React.useRef(null);
+   
     const renderItem = React.useCallback(({ item, index }) => (
-        <DrawerItem style={{marginRight:-15}}   label='' onPress={()=>{props.navigation.navigate('Movie', { id:index })}} icon={()=>(
+        <DrawerItem  pressColor={'#fff'}  style={{marginRight:-15}}   label='' onPress={()=>{props.navigation.navigate('Movie', { id:index })}} icon={()=>(
             <View  style={styles.mainBlockItem}>
                 <ImageBackground source={require('../images/exampleImage.png')} style={styles.imgBlocl}>
                 </ImageBackground>
