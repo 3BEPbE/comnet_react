@@ -6,7 +6,7 @@ import {doubleClick} from './videoHelper'
 
 const { width: screenWidth,height:screenHeight } = Dimensions.get('window')
 const isTV = 1000<screenWidth
-const CustomVideoPlayer = ({fullScreen,setScreen}) => {
+const CustomVideoPlayer = ({fullScreen,setScreen,navigation}) => {
     const [isStop,setIsStop] = React.useState(true)
     const video = React.useRef(null);
     const [status, setStatus] = React.useState({});
@@ -79,14 +79,14 @@ const CustomVideoPlayer = ({fullScreen,setScreen}) => {
         setControl((changed)=>!changed)
       }}>
         <View style={{...styles.bottomBar,...fullScreen.styleBar,...stopStyle}}>
-          <Controller setControl={setControl} video={video} setScreen={setScreen} fullScreen={fullScreen} status = {status}/>
+          <Controller navigation={navigation} setControl={setControl} video={video} setScreen={setScreen} fullScreen={fullScreen} status = {status}/>
         </View>
       </TouchableWithoutFeedback>  
       <Video
         ref={video}
         style={{...styles.firstImage,...fullScreen.styleVideo}}
         source={{
-          uri: 'http://mobi.mytube.uz/v9/D/Disc2/6e27e816-6e8e-40c8-9edd-7787c3096293_768.mp4?file=1',
+          uri: 'http://mobi.mytube.uz/v3/D/Disc123/6514c1fc-4b74-42af-b79b-fa8d5701a4cc_1024.mp4?file=1',
         }}
         useNativeControls ={false}
         resizeMode="contain"

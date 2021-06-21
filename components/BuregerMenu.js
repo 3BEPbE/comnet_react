@@ -4,7 +4,7 @@ import {
     DrawerContentScrollView,
     DrawerItem
 } from '@react-navigation/drawer'
-
+import { Datas } from '../context/context';
 
 const links =[
     {
@@ -56,6 +56,12 @@ const links =[
 
 
 export  function BurgerMenu(props) {
+    const {storeData,getData} = React.useContext(Datas)
+    const exit = () =>{
+        props.navigation.closeDrawer();
+        storeData('token',null)  
+        getData('token')
+    }
     return(
 
             <DrawerContentScrollView style={styles.content} {...props} >
@@ -81,7 +87,7 @@ export  function BurgerMenu(props) {
                         onPress={() => alert('useless')} inactiveTintColor ='#fff' label={'Узбекские'}/>
                     <DrawerItem key={'Выйти'} {...props} style={styles.link} icon={()=>(
                         <Image style={styles.icon} source={require('../images/burgerMenuIcon11.png')}/>)}
-                        onPress={() => props.navigation.closeDrawer()} inactiveTintColor ='#fff' label={'Выйти'}/>
+                        onPress={() => exit()} inactiveTintColor ='#fff' label={'Выйти'}/>
                 </View>
             </DrawerContentScrollView>
             
@@ -97,7 +103,7 @@ export  function BurgerMenuGuest(props) {
                 </View>
                 <DrawerItem  key={'Войти'} {...props} style={styles.link} icon={()=>(
                         <Image style={styles.icon} source={require('../images/burgerMenuIcon11.png')}/>)}
-                        onPress={() => props.navigation.closeDrawer()} inactiveTintColor ='#fff' label={'Войти'}/>
+                        onPress={() => props.navigation.navigate('Login')} inactiveTintColor ='#fff' label={'Войти'}/>
                 <View style={styles.list}>
                     {links.map(e=>(
                         <DrawerItem key={e.label} {...props} style={styles.link} icon={()=>(

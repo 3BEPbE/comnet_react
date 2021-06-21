@@ -6,6 +6,7 @@ import JanrCarusel from '../components/JanrCarusel'
 import CardCarusel from '../components/CardCarusel'
 import {DrawerItem} from '@react-navigation/drawer'
 import CustomVideoPlayer from '../components/Video/index'
+import Trailer from '../components/Trailer';
 import {Datas} from '../context/context'
 
 const { width: screenWidth,height:screenHeight } = Dimensions.get('window')
@@ -31,10 +32,14 @@ export default function Movie({route,navigation}) {
         const option = createOption(navigation,'Movie')
         navigation.setOptions({...option,headerShown:fullScreen.headerShown})
     },[fullScreen])
-
+  
     return(
         <ScrollView style={styles.Page}>
-            <View style={{alignItems:'center'}}><CustomVideoPlayer fullScreen={fullScreen} setScreen={setScreen}/></View>
+            {isTV?
+            <View style={{alignItems:'center'}}><Trailer /></View>:
+            <View style={{alignItems:'center'}}><CustomVideoPlayer navigation={navigation} fullScreen={fullScreen} setScreen={setScreen}/></View>
+            }
+        
             <View stylle={{...styles.content,display:'none'}}>
                 <View style={{...styles.mainInfo,display:fullScreen.display}}>
                     <Image style={styles.secondImage} source={require('../images/exampleImage2.png')}></Image>
@@ -105,13 +110,13 @@ const styles = StyleSheet.create({
     justifyContent: isTV?`flex-start`:'space-between',
     paddingLeft:20,
     paddingRight:20,
-    paddingTop:20
+    paddingTop:isTV?280:20
    },
    secondImage:{
         height: 200,
         width:150,
         borderRadius:7,
-        overflow:'hidden'
+        overflow:'hidden',
    },
    mainInfoText:{
     width:screenWidth - (screenWidth-230),

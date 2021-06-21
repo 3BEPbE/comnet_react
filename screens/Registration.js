@@ -21,20 +21,10 @@ export default function Registration(props) {
         newData.number = text
         setData(newData)
     }
-    const submit = () =>{
-            axios({
-            method: 'POST',
-            url:`http://192.168.5.71/api/login`,
-            body:{
-                    abonement: 'Finn',
-                     password: 'Williams'
-                  }
-          }).then((e)=>{
-            console.log(e)
-          }).catch((e)=>{
-            console.log(e)
-          })
-    }
+    const [aksiya,setAksiya] = React.useState({
+       one: {backgroundColor:'transparent'},
+       two:{backgroundColor:'transparent'}
+    })
     return(
         <ScrollView style={styles.container}>
             <View style={styles.block}>
@@ -47,14 +37,14 @@ export default function Registration(props) {
                         setStatus({log:!status.log,reg:false})
                     }} style={styles.focusItem} label='' icon={()=>(
                         <View style={{...styles.button,backgroundColor:status.log?'#E41A4B':'transparent'}}>
-                            <Text style={styles.buttonText}>Я абонемент Comnet</Text>
+                            <Text style={styles.buttonText}>Я абонент Comnet</Text>
                         </View>
                     )} />
                      <DrawerItem onPress={()=>{
                         setStatus({log:false,reg:!status.reg})
                         }} style={styles.focusItem}  label='' icon={()=>(
                         <View style={{...styles.button,backgroundColor:status.reg?'#E41A4B':'transparent'}}>
-                            <Text style={styles.buttonText}>Я не абонемент Comnet</Text>
+                            <Text style={styles.buttonText}>Я не абонент Comnet</Text>
                         </View>
                     )} />
                 </View>
@@ -80,10 +70,19 @@ export default function Registration(props) {
                         )}/>
                     </View>
                     <View style={styles.aksiya}>
-                        <DrawerItem onPress={submit} style={styles.aksiyaFocus} label='' icon={()=>(
-                            <View style={styles.aksiyaBtn}><Text style={styles.aksiyaText1}>Использовать Промокод</Text></View>)}/>
-                        <DrawerItem style={styles.aksiyaFocus} label='' icon={()=>(
-                            <View style={styles.aksiyaBtn}><Text style={styles.aksiyaText2}>Акция “Приведи друга”</Text></View>)}/>
+                        <DrawerItem onPress={()=>{
+                            if(aksiya.one.backgroundColor==='#E41A4B'){
+                                setAksiya({one:{backgroundColor:'transparent'},two:{backgroundColor:'transparent'}});return}
+                            setAksiya({one:{backgroundColor:'#E41A4B'},two:{backgroundColor:'transparent'}});}} 
+                            style={styles.aksiyaFocus} label='' icon={()=>(
+                                <View style={{...styles.aksiyaBtn,...aksiya.one}}><Text style={styles.aksiyaText1}>Использовать Промокод</Text></View>)}/>
+                        <DrawerItem 
+                            onPress={()=>
+                               {if(aksiya.two.backgroundColor==='#E41A4B'){
+                                setAksiya({one:{backgroundColor:'transparent'},two:{backgroundColor:'transparent'}});return}
+                                setAksiya({one:{backgroundColor:'transparent'},two:{backgroundColor:'#E41A4B'}})}} 
+                                style={styles.aksiyaFocus} style={styles.aksiyaFocus} label='' icon={()=>(
+                                <View style={{...styles.aksiyaBtn,...aksiya.two}}><Text style={styles.aksiyaText2}>Акция “Приведи друга”</Text></View>)}/>
                     </View>
                 </View>
                 <View style={styles.agreeBlock}>
@@ -208,16 +207,17 @@ const styles = StyleSheet.create({
     aksiya:{
       flexDirection:'row',
       justifyContent:'space-between',
-      width:isTV?400:screenWidth-40
+      width:isTV?400:screenWidth-40,
     },
     aksiyaBtn:{
         width:isTV?180:screenWidth/2-30,
         height:50,
-        backgroundColor:'#E41A4B',
         alignItems:'center',
         justifyContent:'center',
         borderRadius:7,
-        overflow:'hidden'
+        overflow:'hidden',
+        borderWidth:1,
+        borderColor:'#E41A4B'
     },
     aksiyaFocus:{
         width:isTV?190:screenWidth/2-20,
@@ -226,6 +226,8 @@ const styles = StyleSheet.create({
     },
     aksiyaText1:{
         color:'#fff',
+        width:150,
+        textAlign:'center'
     },
     aksiyaText2:{
         color:'#fff',

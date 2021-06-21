@@ -1,35 +1,26 @@
 import React from 'react';
 import { View, StyleSheet, Text, Image, TextInput, Dimensions, ScrollView} from 'react-native';
 import {DrawerItem} from '@react-navigation/drawer'
-import axios from 'axios'
+import {Datas} from '../context/context'
+
 const { width: screenWidth } = Dimensions.get('window')
 
 export default function Login({navigation}) {
+
+    const {login} = React.useContext(Datas)
+
+    const [errorColor,setError] = React.useState('#969696')
     const [data,setData] = React.useState({
         abonement:'',
         password:'',
 
-    })
+    }) 
     const changeHandler = (text,condition) =>{
         let newData = {...data}
         newData[condition] = text;
         setData(newData)
     }
     const textInputs = []
-
-    const login = () => {
-        axios({
-            method: 'POST',
-            url:`http://192.168.1.106/api/login`,
-            body:{
-            }
-            }).then((e)=>{
-                console.log(e)
-            }).catch((e)=>{
-                console.log(e)
-            })
-    }
-    
     return(
         <ScrollView style={styles.container}>
             <View style={styles.block}>
@@ -41,20 +32,23 @@ export default function Login({navigation}) {
                 </View>
                 <View style={styles.inputBlock}>
                     <View style={styles.inputItem}>
-                        <Text style={styles.titleInput}>Абонемент</Text>
+                        <Text style={{...styles.titleInput,color:errorColor}}>Абонемент</Text>
                         <DrawerItem onPress={()=>textInputs[0].focus()} style={styles.focusItem} label='' icon={()=>(
-                           <TextInput ref={(input)=>{textInputs[0]=input}} value={data.abonement} onChangeText={(text)=>changeHandler(text,'abonement')} style={styles.input} autoCompleteType={'off'} autoCorrect={false}/>
+                           <TextInput ref={(input)=>{textInputs[0]=input}} value={data.abonement} onChangeText={(text)=>changeHandler(text,'abonement')} style={{...styles.input,borderColor:errorColor}} autoCompleteType={'off'} autoCorrect={false}/>
                         )}/>
                     </View>
                     <View style={styles.inputItem}>
-                        <Text style={styles.titleInput}>Пароль</Text>
+                        <Text style={{...styles.titleInput,color:errorColor}}>Пароль</Text>
                         <DrawerItem  onPress={()=>textInputs[1].focus()} style={styles.focusItem} label='' icon={()=>(
-                             <TextInput ref={(input)=>{textInputs[1]=input}} secureTextEntry={true} autoCompleteType ='password' value={data.password} onChangeText={(text)=>changeHandler(text,'password')} style={styles.input} autoCompleteType={'off'} autoCorrect={false}/>
+                             <TextInput ref={(input)=>{textInputs[1]=input}} secureTextEntry={true} autoCompleteType ='password' value={data.password} onChangeText={(text)=>changeHandler(text,'password')} style={{...styles.input,borderColor:errorColor}} autoCompleteType={'off'} autoCorrect={false}/>
                         )}/>
                     </View>
                 </View>
                 <View style={styles.blockButton}>
-                    <DrawerItem onPress={()=>login()} style={styles.focusItem} label='' icon={()=>(
+                    <Text style={{...styles.error,opacity:errorColor==='#e5474c'?1:0}}>
+                    Аккаунт по указанным параметрам не найден.
+                    </Text>
+                    <DrawerItem onPress={()=>login(data,setError,navigation)} style={styles.focusItem} label='' icon={()=>(
                         <View style={styles.buttonLogin}>
                             <Text style={styles.buttonText}>Войти</Text>
                         </View>
@@ -122,9 +116,9 @@ const styles = StyleSheet.create({
         fontSize:20,
         color:'#fff',
         borderBottomWidth:1,
-        borderBottomColor:'#474747',
         paddingBottom:3,
-        marginLeft:-5
+        marginLeft:-5,
+
     },
     buttonLogin:{
         width:'100%',
@@ -150,6 +144,14 @@ const styles = StyleSheet.create({
     },
     blockButton:{
         marginBottom:30
+    },
+    error:{
+        color:'#fff',
+        width:screenWidth-40,
+        textAlign:'center',
+        fontSize:15,
+        marginTop:0,
+        marginBottom:10
     }
 
   });

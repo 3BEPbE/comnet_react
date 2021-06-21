@@ -8,12 +8,17 @@ import { Datas } from '../../context/context';
 
 const { width: screenWidth,height:screenHeight } = Dimensions.get('window')
 
-export const Controller = ({status,fullScreen,setScreen,video,setControl}) => {
+export const Controller = ({status,fullScreen,setScreen,video,setControl,navigation}) => {
     const {setStatusHidden} = React.useContext(Datas)
     const [sliderVal,setSliderVal] = React.useState(0)
     const [isMute,setMute] = React.useState(false)
     let IntervalSlider = React.useRef()
-
+    navigation.addListener('beforeRemove', e => {
+      if(!fullScreen.headerShown){
+        closeFullScreen(setScreen,setStatusHidden)
+      }
+    
+    });
     React.useEffect(() => {                         // every 10 secund slider will be equal to video's time position
       IntervalSlider = setInterval(() => {
         setSliderVal(status.positionMillis)

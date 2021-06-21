@@ -4,13 +4,13 @@ import { DrawerItem } from '@react-navigation/drawer'
 const { width: screenWidth } = Dimensions.get('window')
 const isTV = screenWidth>950
 
-export default function Watched(props) {
+export default function TV(props) {
 
     return(
         <ScrollView style={styles.Container}>
                <View  style={styles.listBlock}>
                 { [1,2,3,4,5,6,7,8,9,10,11].map((e)=>(
-                        <DrawerItem key={e} style={styles.listFocus}  label='' icon={()=>(
+                        <DrawerItem onPress={()=>{props.navigation.navigate('Channel', { id:e })}}  key={e} style={styles.listFocus}  label='' icon={()=>(
                             <View style={styles.listItem}>
                                 <Image source={require('../images/exampleTV.png')}/>
                                 <Text style={styles.tvInfo}>14:55 Тайны следствия (Отец: Часть 1-я)</Text>
@@ -53,7 +53,8 @@ const styles = StyleSheet.create({
 
     tvInfo:{
         color:'#BCBCBC',
-        width:isTV?'auto':180
+        width:isTV?'auto':175,
+        marginLeft:10
     },
     tvData:{
         color:'#BCBCBC',
