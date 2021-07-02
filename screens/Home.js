@@ -1,18 +1,18 @@
 import { DrawerItem } from '@react-navigation/drawer';
 import React from 'react';
-import { View ,StyleSheet,Text,Dimensions,ScrollView,TouchableWithoutFeedback} from 'react-native';
+import { View ,StyleSheet,Text,Dimensions,ScrollView,ActivityIndicator} from 'react-native';
 import BigCardCarusel from '../components/BigCardCarusel'
 import CardCarusel from '../components/CardCarusel'
-
-const { width: screenWidth } = Dimensions.get('window')
+import { Datas } from '../context/context';
+const { width: screenWidth,height: screenHeight } = Dimensions.get('window')
 
 export default function Home(props) {
- 
-  
+    const {serials} = React.useContext(Datas)
+
     return (
         <ScrollView style={styles.home}>
-            <View >
-                <BigCardCarusel/>
+            <View style={{justifyContent:'center',alignItems:"center"}}>
+                {serials.length?<><BigCardCarusel/>
                 <Text style={styles.titleBlock}>Лучшие подборки </Text>
                 <CardCarusel navigation ={props.navigation}/>
                 <View style={styles.newsBlock} >
@@ -30,7 +30,8 @@ export default function Home(props) {
                 <CardCarusel navigation ={props.navigation}/>
                 <Text style={styles.titleBlock}>Лидеры</Text>
                 <CardCarusel navigation ={props.navigation}/>
-            </View>
+             </>:<View style={{width:screenWidth,height:screenHeight-150,alignItems:'center',justifyContent:'center'}}><ActivityIndicator  size="large" color='#fff' /></View>}
+             </View>
         </ScrollView>
   
     );
@@ -38,7 +39,7 @@ export default function Home(props) {
 const styles = StyleSheet.create({
     home:{
         flex:1,
-        backgroundColor:'#1C1C1C'
+        backgroundColor:'#1C1C1C',
     },
     titleBlock:{
         fontSize:18,

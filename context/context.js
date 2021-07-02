@@ -2,12 +2,22 @@
 import React,{createContext} from 'react'
 import {options,HeaderLeft,HeaderRight,HeaderCenter} from '../components/header'
 import axios from 'axios'
+import { Dimensions } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+
+const { width: screenWidth } = Dimensions.get('window')
+const isTV = screenWidth>950
 
 export const Datas = createContext(null);
 
 export const ContextProvider = (props) => {
     const { children } = props;
+    
+    const [isLogin,setLogin] = React.useState(false)
+    const [token,setToken] = React.useState(null)
+    const [isStatusHidden,setStatusHidden] = React.useState(false)
+    const [serials,setSerials] = React.useState([])
+
     const createOption = (navigation,position) => {
       const Options = {
         Movie:{
@@ -20,7 +30,7 @@ export const ContextProvider = (props) => {
           headerTitle:()=>(<HeaderCenter  navigation={navigation}/>),
           headerLeft:()=>(<HeaderLeft  navigation={navigation}/>)
         },
-        Watched:{
+        MovieList:{
           ...options,
           headerRight:()=>(<HeaderRight navigation={navigation}/>),
           headerLeft:()=>(<HeaderLeft navigation={navigation}/>)
@@ -62,12 +72,13 @@ export const ContextProvider = (props) => {
         // saving error
       }
     }
-    const [isLogin,setLogin] = React.useState(false)
+    
     const getData = async (key) => {
       try {
         const jsonValue = await AsyncStorage.getItem(key)
         
         if(jsonValue!=='null'){
+          setToken(JSON.parse(jsonValue).token)
           setLogin(true)
         }else{
           setLogin(false)
@@ -77,28 +88,127 @@ export const ContextProvider = (props) => {
         // error reading value
       }
     }
-    const [isStatusHidden,setStatusHidden] = React.useState(false)
+  
     const login = async(data,setError,navigation) => {
       axios({
           method: 'POST',
-          url:`http://192.168.5.120/api/login`,//28 123457
+          url:`http://172.16.236.84/api/login`,//28 123457
           data
           }).then((e)=>{
               if(e.data.status==='error'||e.data[0].error){
                   setError('#e5474c')
-                  
                   console.log('error')
               }else{
                   storeData('token',{token:e.data[0].authkey})
                   getData('token')
-                  console.log('sss')
                   navigation.navigate('BurgerNavigation')
               }
           }).catch((e)=>{
               console.log(e)
           })
     }
+    const getFilms = (page)=>{
+      if(isLogin){
+       return axios({
+          method: 'POST',
+          url:`http://172.16.236.84/api/auth/video/list?`,//28 123457
+          data:{
+            limit:isTV?24:20,
+            page,
+            authkey:token,
+            season:0
+          }
+          }).then((e)=>{
+              return(e.data['0'].videos)
+              
+          }).catch((e)=>{
+              console.log(e)
+          })
+      }else{
+       return axios({
+          method: 'POST',
+          url:`http://172.16.236.84/api/noauth/video/list?`,//28 123457
+          data:{
+            limit:isTV?24:20,
+            page,
+            season:0
+          }
+          }).then((e)=>{ 
+              return(e.data['0'].videos)  
+          }).catch((e)=>{
+              console.log(e)
+          })
+      }
+    }
     
+    const getSerialas = (page)=>{
+      if(isLogin){
+       return axios({
+          method: 'POST',
+          url:`http://172.16.236.84/api/auth/video/list?`,//28 123457
+          data:{
+            limit:isTV?24:20,
+            page,
+            authkey:token,
+            season:1
+            
+          }
+          }).then((e)=>{
+              return(e.data['0'].videos)
+              
+          }).catch((e)=>{
+              console.log(e)
+          })
+      }else{
+       return axios({
+          method: 'POST',
+          url:`http://172.16.236.84/api/noauth/video/list?`,//28 123457
+          data:{
+            limit:isTV?24:20,
+            page,
+            season:1
+          }
+          }).then((e)=>{ 
+              return(e.data['0'].videos)
+              
+          }).catch((e)=>{
+              console.log(e)
+          })
+      }
+    }
+
+    const getCurrentMovie = async(id)=>{
+     return axios({
+        method: 'POST',
+        url:`http://172.16.236.84/api/auth/video/detail`,//28 123457
+        data:{
+          id,
+          authkey:token
+        }
+        }).then((e)=>{
+            return e.data['0'].actions
+            
+        }).catch((e)=>{
+            console.log(e)
+        })
+    }
+    const getSrc = async(id)=>{
+      return axios({
+        method: 'POST',
+        url:`http://172.16.236.84/api/auth/video/url`,//28 123457
+        data:{
+          id:id.id,
+          authkey:token,
+          fileId:id.fileId
+        }
+        }).then((e)=>{
+           // console.log('e.data')
+           return e.data['0'].uri
+            
+        }).catch((e)=>{
+            console.log(e)
+        })
+    }
     return(
         <Datas.Provider
           value = {{
@@ -107,8 +217,13 @@ export const ContextProvider = (props) => {
             setStatusHidden,
             login,
             getData,
+            getSrc,
             storeData,
             isLogin,
+            serials,
+            getSerialas,
+            getFilms,
+            getCurrentMovie
           }}>
             {children}
         </Datas.Provider>

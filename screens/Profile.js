@@ -4,7 +4,7 @@ import TarifCarusel from '../components/TarifCarusel'
 import {Datas} from '../context/context'
 import { DrawerItem } from '@react-navigation/drawer' 
 
-export default function Watched(props) {
+export default function Profile(props) {
     const {test} = React.useContext(Datas)
     return(
         <ScrollView style={styles.Container}>

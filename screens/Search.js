@@ -4,7 +4,7 @@ import CardCarusel from '../components/CardCarusel'
 
 const { width: screenWidth } = Dimensions.get('window')
 
-export default function Watched(props) {
+export default function Search(props) {
     const [data,setData] = React.useState('')
     const changeHandler = (text) => {
         setData(text)

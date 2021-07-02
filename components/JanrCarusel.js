@@ -1,19 +1,20 @@
 import React from 'react';
-import { View ,StyleSheet,Text,Dimensions,ImageBackground,TouchableOpacity} from 'react-native';
+import { View ,StyleSheet,Text,Dimensions,ImageBackground,TouchableOpacity,Platform} from 'react-native';
 import Carousel from 'react-native-snap-carousel';
 import { DrawerItem } from '@react-navigation/drawer'
 
 
 const { width: screenWidth } = Dimensions.get('window')
 
-export default function Janr(props) {
-    const [activeIndex, setActiveIndex] = React.useState(0);
-    const [carouselItems, setCarouselItems] = React.useState(['Комедии','Драма','Джейн Леви','Драма','Драма','Драма','Драма']);
+export default function Janr({janr}) {
+
+    const carouselItems = janr.split(',')
     const ref = React.useRef(null);
+
     const renderItem = React.useCallback(({ item, index }) => (
     <DrawerItem style={{marginRight:-13}} label='' icon={()=>(     
     <View style={{...styles.seasonButton,backgroundColor:'#373737'}}>
-        <Text style={styles.seasonButtonText}> {item}</Text>
+        <Text style={styles.seasonButtonText}>{item.replace(/\s/g, '')}</Text>
     </View>  )}/>
         
     ), []);
@@ -28,7 +29,7 @@ export default function Janr(props) {
                     sliderHeight={35}
                     renderItem={renderItem}
                     activeSlideAlignment="start"
-                    onSnapToItem={(index) => setActiveIndex(index)}
+                    onSnapToItem={(index) => {console}}
                     inactiveSlideOpacity={1}
                     inactiveSlideScale={1}
                 />

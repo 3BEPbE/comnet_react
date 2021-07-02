@@ -1,56 +1,82 @@
 import React from 'react';
-import { View ,StyleSheet,Text,Dimensions,Image,TouchableWithoutFeedback} from 'react-native';
-import Carousel from 'react-native-snap-carousel';
-import {DrawerItem} from '@react-navigation/drawer'
+import { View ,StyleSheet,Text,Dimensions,Image,TouchableOpacity} from 'react-native';
+import { Picker  } from '@react-native-community/picker';
 
-const { width: screenWidth } = Dimensions.get('window')
+
+const { width: screenWidth,height:screenHeight } = Dimensions.get('window')
 const isTV = screenWidth>1000
 
-export default function SerialCarusel(props) {
-    const [activeIndex, setActiveIndex] = React.useState(0);
-    const [carouselItems, setCarouselItems] = React.useState([1,2,3,4,5,6,7]);
-    const ref = React.useRef(null);
-    const renderItem = React.useCallback(({ item, index }) => (
-        <DrawerItem style={{marginRight:-10}} label=''icon={()=>( 
-        <View style={{width:150}}>
-            <Image style={styles.image} source={require('../images/exampleImage.png')}/>
-            <Text style={styles.text}>{item}-я серия</Text>    
-        </View>)} />
-    ), []);
-    return (
-        <View style={styles.mainBlock}>
-                <Carousel
-                    layout="default"
-                    ref={ref}
-                    data={carouselItems}
-                    sliderWidth={screenWidth}
-                    itemWidth={(isTV?360:160)}
-                    sliderHeight={100}
-                    renderItem={renderItem}
-                    activeSlideAlignment="start"
-                    onSnapToItem={(index) => setActiveIndex(index)}
-                    inactiveSlideOpacity={1}
-                    inactiveSlideScale={1}
-                />
-        </View>
+export default function SerialCarusel({currentFilm,SetSelectedSeria,SetSelectedValue,selectedSeria,selectedValue}) {
+
+ 
+  const [season,setSeason] = React.useState()
+  const [serial,setSerial] = React.useState()
+  const [unSoretedSerial,setUnsortedSerial] = React.useState([])
+    React.useEffect(()=>{
+      let array = currentFilm.files.map((item)=>item.name.split(' '))
+      SetSelectedValue(array[0][1])
+      setUnsortedSerial(array.map((item)=>{
+        return {seria:item[3],
+                season:item[1]
+              }
+      }))
+    },[])
+    React.useEffect(()=>{
+      if(unSoretedSerial){
+        setSeason([...new Set(unSoretedSerial.map((item)=>item.season))])
+      }
+    },[unSoretedSerial])
+
+    React.useEffect(()=>{
+      if(selectedValue){
+        let selectedSeasonSeria =  unSoretedSerial.filter(item=>item.season===selectedValue)
+        let sorted = selectedSeasonSeria.sort((a, b) => Number(a.seria) - Number(b.seria))
+        setSerial(sorted)
+      }
+    },[selectedValue])
+
+
+    
   
+    return (
+       <View  style={styles.block}>
+       <Picker
+          ref={(i)=>console.log(i?i.props:'')}
+          selectedValue={selectedValue}
+          onValueChange={hand => SetSelectedValue(hand)}
+          style={styles.itemStyle}
+          mode="dropdown"
+          itemStyle={{ color:'red', fontWeight:'900', fontSize: 18, padding:30}}>
+          {season && season.map((e,i)=>(
+              <Picker.Item key={i} label={`${e} сезон`} value={e} />
+          )) }
+        </Picker>
+          <Picker
+          selectedValue={selectedSeria}
+          onValueChange={hand => SetSelectedSeria(hand)}
+          style={styles.itemStyle}
+          mode="dropdown"
+          itemStyle={{ color:'red', fontWeight:'900', fontSize: 18, padding:30}}>
+          {serial && serial.map((e,i)=>(
+              <Picker.Item key={i} label={`${e.seria} серия`} value={e} />
+          )) }
+        </Picker>
+       </View>
     );
   };
+
 const styles = StyleSheet.create({
-    image:{
-        height:(isTV?180:100),
-        borderRadius:4,
-        overflow:'hidden',
-        resizeMode:'cover',
-        width:(isTV?350:150),
+  block:{
+    flexDirection:'row'
+  },
+  itemStyle:{
+      height:50,
+      width:100,
+      marginBottom:10,
+      marginLeft:20,
+      color:'#fff',
+      backgroundColor:'#373737',
+      paddingLeft:10,
+      borderRadius:50,
     },
-    mainBlock:{
-        marginBottom:20
-    },
-    text:{
-        color:'#fff',
-        fontSize:14,
-        marginTop:2
-    }
-    
   });

@@ -4,7 +4,7 @@ import { Video } from 'expo-av';
 import {Controller} from './controller'
 import {doubleClick} from './videoHelper'
 import { LinearGradient } from 'expo-linear-gradient';
-
+import { DrawerItem } from '@react-navigation/drawer';
 const { width: screenWidth,height:screenHeight } = Dimensions.get('window')
 const isTV = 1000<screenWidth
 const CustomVideoPlayer = ({src}) => {
@@ -67,36 +67,48 @@ const CustomVideoPlayer = ({src}) => {
      </View>
    
     <View style={styles.stopBlock}>
-        
-            <TouchableWithoutFeedback  onPress={()=>{doubleClick('left',doubleClickCounter,removeClickTime,setSkipIcon,status,video,setControl)}}>
+
+            {/* <TouchableWithoutFeedback  onPress={()=>{doubleClick('left',doubleClickCounter,removeClickTime,setSkipIcon,status,video,setControl)}}>
               <View style={styles.skipBloack}>
                 <Image source={require('../../images/leftSkip.png')} style={{...skipIcon.left,...styles.leftButton}}/>
               </View>
-            </TouchableWithoutFeedback>
-    
-            <TouchableWithoutFeedback onPress={()=>setIsStop((last)=>!last)}>
-              <View style={{...styles.shadow,...stopStyle}}>
-                <Image style={styles.stop} source={isStop?require('../../images/startIcon.png'):require('../../images/Pause-button.png')}/>
-              </View>   
-            </TouchableWithoutFeedback>  
-            <TouchableWithoutFeedback onPress={()=>{doubleClick('right',doubleClickCounter,removeClickTime,setSkipIcon,status,video,setControl)}}>
+            </TouchableWithoutFeedback> */}
+            <DrawerItem onPress={()=>setIsStop(i=>!i)} pressColor='#fff'  style={{width:75,height:75}} label='' icon={()=>(
+               <View style={{...styles.shadow,...stopStyle}}>
+               <Image style={styles.stop} source={isStop?require('../../images/startIcon.png'):require('../../images/Pause-button.png')}/>
+              </View>  
+            )}/>
+            {/* <TouchableWithoutFeedback onPress={()=>{doubleClick('right',doubleClickCounter,removeClickTime,setSkipIcon,status,video,setControl)}}>
             <View style={styles.skipBloack}>
                <Image source={require('../../images/rightSkip.png')} style={{...skipIcon.right,...styles.RightButton}}/>
             </View>
-            </TouchableWithoutFeedback>    
+            </TouchableWithoutFeedback>     */}
     
     </View>
-      <TouchableWithoutFeedback onPress={()=>{
+    {/* <View style={{...styles.bottomBar,...stopStyle,}}>
+      <DrawerItem label='' pressColor='#fff' style={{width:screenWidth,height:100}}
+      onPress={()=>{setControl((changed)=>!changed)}}
+      icon={()=>(
+        <View style={{...styles.bottomBar,...stopStyle}}>
+         <Controller skipIcon={skipIcon}  isClickControl={isClickControl} stopStyle={stopStyle}  setControl={setControl} video={video} status = {status}/>
+        </View>
+      )}/>
+    </View> */}
+    <View style={{...styles.bottomBar,...stopStyle}}>
+         <Controller skipIcon={skipIcon}  isClickControl={isClickControl} stopStyle={stopStyle}  setControl={setControl} video={video} status = {status}/>
+    </View>
+      {/* <TouchableWithoutFeedback onPress={()=>{
         setControl((changed)=>!changed)
       }}>
         <View style={{...styles.bottomBar,...stopStyle}}>
           <Controller skipIcon={skipIcon}  isClickControl={isClickControl} stopStyle={stopStyle}  setControl={setControl} video={video} status = {status}/>
         </View>
-      </TouchableWithoutFeedback> 
+      </TouchableWithoutFeedback>  */}
         <Video
           ref={video}
           rate={1}
           style={styles.firstImage}
+          isMuted={false}
           source={{
             uri: src,
           }}
@@ -114,26 +126,22 @@ export default CustomVideoPlayer
 
 const styles = StyleSheet.create({
     firstImage:{
-      width:screenHeight,
+      width:screenWidth,
       height:screenHeight,
       zIndex:3,
-      transform:[{rotate:'90deg'}]
-
    },
-
-
    bottomBar:{
      position:'absolute',
-     width:screenHeight,
-     transform:[{rotate:'90deg'}],
-     height:isTV?(screenWidth-150)/9:60,
+     width:screenWidth,
+     height:isTV?50:60,
      zIndex:11,
-     right:0
+     right:0,
+     bottom:0
    },
    
    stopBlock:{
      position:'absolute',
-      flexDirection:'column',
+     flexDirection:'column',
      top: 0, left: 0, right: 0, bottom: 0,
      justifyContent:'space-around',
      alignItems:'center',
@@ -142,7 +150,6 @@ const styles = StyleSheet.create({
    stop:{
     width:25,
     height:25,
-    transform:[{rotate:'90deg'}],
    },
    shadow:{
      width:60,
@@ -151,17 +158,15 @@ const styles = StyleSheet.create({
      alignItems:'center',
      justifyContent:'center',
      borderRadius:50,
-     overflow:'hidden'
+     overflow:'hidden',
    },
    leftButton:{
      width:50,
      height:25,
-     transform:[{rotate:'90deg'}],
    },
    RightButton:{
     width:50,
     height:25,
-    transform:[{rotate:'90deg'}],
   },
   skipBloack:{
     alignItems:'center',
@@ -171,7 +176,6 @@ const styles = StyleSheet.create({
     zIndex:12,
     justifyContent:'center',
     alignItems:'center',
- //   backgroundColor:'#fff'
   },
   loadIcon:{
      position:'absolute',

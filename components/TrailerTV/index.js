@@ -5,14 +5,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 const { width: screenWidth,height:screenHeight } = Dimensions.get('window')
 const isTV = 1000<screenWidth
 const Trailer = () => {
-    const [isStop,setIsStop] = React.useState(false)
     const video = React.useRef(null);
-    const [status, setStatus] = React.useState({});
-    const [isClickControl,setControl] = React.useState(false)
-    const [stopStyle,setStopStyle] = React.useState({
-      opacity:0
-    })
-
     React.useEffect(()=>{
         video.current.playAsync()
     },[video])
@@ -27,8 +20,8 @@ const Trailer = () => {
                     }}
                     useNativeControls ={false}
                     resizeMode="contain"
+                    isMuted={true}
                     isLooping
-                    onPlaybackStatusUpdate={status => setStatus(() => status)}
                 />
         <LinearGradient style={{ position:'absolute',
      top: -350, left: 0, right: 0, bottom: 0,width:screenWidth,height:screenHeight,}} colors={['transparent', '#000000c4','#000000c4']}>

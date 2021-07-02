@@ -9,47 +9,50 @@ import { Datas } from '../context/context';
 const links =[
     {
         label:'Просмотреные',
-        navigation:'Watched',
+        navigation:'MovieList',
         icon:require('../images/burgerMenuIcon1.png')
     },
     {
         label:'Избранные',
-        navigation:'Watched',
+        navigation:'MovieList',
         icon:require('../images/burgerMenuIcon2.png')
     },
     {
         label:'Телевидение',
         navigation:'TV',
+        params:'TV',
         icon:require('../images/burgerMenuIcon3.png')
     },
     {
         label:'Фильмы',
-        navigation:'Watched',
+        navigation:'MovieList',
+        params:'film',
         icon:require('../images/burgerMenuIcon4.png')
     },
     {
         label:'Сериалы',
-        navigation:'Watched',
+        navigation:'MovieList',
+        params:'serial',
         icon:require('../images/burgerMenuIcon5.png')
     },
     {
         label:'Амедиатека',
-        navigation:'Watched',
+        navigation:'MovieList',
         icon:require('../images/burgerMenuIcon6.png')
     },
     {
         label:'Мегого',
-        navigation:'Watched',
+        navigation:'MovieList',
         icon:require('../images/burgerMenuIcon7.png')
     },
     {
         label:'Start',
-        navigation:'Watched',
+        navigation:'MovieList',
         icon:require('../images/burgerMenuIcon8.png')
     },
     {
         label:'Детям',
-        navigation:'Watched',
+        navigation:'MovieList',
         icon:require('../images/burgerMenuIcon9.png')
     },
 ]
@@ -63,7 +66,7 @@ export  function BurgerMenu(props) {
         getData('token')
     }
     return(
-
+    <>
             <DrawerContentScrollView style={styles.content} {...props} >
                 <ImageBackground style={styles.bcImage} source={require('../images/burgerMenu-bc.png')}>
                     <DrawerItem onPress={()=>props.navigation.navigate('Profile')} style={{marginTop:30}} label='' icon={()=>(     
@@ -80,7 +83,7 @@ export  function BurgerMenu(props) {
                     {links.map(e=>(
                         <DrawerItem key={e.label} {...props} style={styles.link} icon={()=>(
                         <Image style={styles.icon} source={e.icon}/>)}
-                        onPress={() => props.navigation.navigate(e.navigation)} inactiveTintColor ='#fff' label={e.label}/>
+                        onPress={() => props.navigation.navigate(e.navigation,{name:e.params})} inactiveTintColor ='#fff' label={e.label}/>
                     ))}
                     <DrawerItem key={'Узбекские'} {...props} style={styles.link} icon={()=>(
                         <Image style={styles.icon} source={require('../images/burgerMenuIcon10.png')}/>)}
@@ -91,7 +94,7 @@ export  function BurgerMenu(props) {
                 </View>
             </DrawerContentScrollView>
             
-    
+    </>
     )
 }
 export  function BurgerMenuGuest(props) {
@@ -108,7 +111,7 @@ export  function BurgerMenuGuest(props) {
                     {links.map(e=>(
                         <DrawerItem key={e.label} {...props} style={styles.link} icon={()=>(
                         <Image style={styles.icon} source={e.icon}/>)}
-                        onPress={() => props.navigation.navigate('Watched')} inactiveTintColor ='#fff' label={e.label}/>
+                        onPress={() => props.navigation.navigate('MovieList',{name:e.params})} inactiveTintColor ='#fff' label={e.label}/>
                     ))}
                     <DrawerItem key={'Узбекские'} {...props} style={styles.link} icon={()=>(
                         <Image style={styles.icon} source={require('../images/burgerMenuIcon10.png')}/>)}

@@ -1,86 +1,56 @@
 import React from 'react';
-import { View ,StyleSheet,Text,Dimensions,ImageBackground,Platform, TouchableHighlight} from 'react-native';
+import { View ,StyleSheet,Text,Dimensions,ImageBackground} from 'react-native';
 import Carousel from 'react-native-snap-carousel';
 import {DrawerItem} from '@react-navigation/drawer'
+import {Datas} from '../context/context'
+import { getSpecificOrientation } from 'react-native-orientation';
 
 const { width: screenWidth } = Dimensions.get('window')
 let isTV = screenWidth>950
-const exampleItems = [
-    {
-      image: require('../images/example.jpg'),
-      imd:'8.1',
-      kinopoisk:'8.0',
-      title:'Необыкновенный плейлист Зои',
-      text: 'После обследования головного мозга Зои получила дар телепатии. Эта суперспособность ...',
-    },
-    {
-      image: require('../images/example.jpg'),
-      imd:'8.1',
-      kinopoisk:'8.0',
-      title:'Необыкновенный плейлист Зои',
-      text: 'После обследования головного мозга Зои получила дар телепатии. Эта суперспособность ...',
-    },
-    {
-      image: require('../images/example.jpg'),
-      imd:'8.1',
-      kinopoisk:'8.0',
-      title:'Необыкновенный плейлист Зои',
-      text: 'После обследования головного мозга Зои получила дар телепатии. Эта суперспособность ...',
-    },
-    {
-      image: require('../images/example.jpg'),
-      imd:'8.1',
-      kinopoisk:'8.0',
-      title:'Необыкновенный плейлист Зои',
-      text: 'После обследования головного мозга Зои получила дар телепатии. Эта суперспособность ...',
-    },
-    {
-      image: require('../images/example.jpg'),
-      imd:'8.1',
-      kinopoisk:'8.0',
-      title:'Необыкновенный плейлист Зои',
-      text: 'После обследования головного мозга Зои получила дар телепатии. Эта суперспособность ...',
-    },
-  ];
-export default function BigCardCarusel(props) {
-    const [activeIndex, setActiveIndex] = React.useState(0);
-    const [carouselItems, setCarouselItems] = React.useState(exampleItems);
-    const ref = React.useRef(null);
 
-    const renderItem = React.useCallback(({ item, index }) => (
+export default function BigCardCaruselgetSerialasgetSerialas() {
+    const {getSerialas,serials} = React.useContext(Datas)
+    const ref = React.useRef(null);
+    React.useEffect(()=>{
+    //  getSerialas(1)
+    },[])
+   
+
+    
+    const renderItem = React.useCallback(({ item, index }) => {
+      return(
             <DrawerItem pressColor={'#fff'} label='' icon={()=>{
-              return(<ImageBackground source={item.image} style={styles.imgBlocl}>
+              return(<ImageBackground source={{uri:item.thumbnail_big}} style={styles.imgBlocl}>
                 <ImageBackground source={require('../images/corusulGradient.png')} style={styles.textBlock}>
                     <View style={styles.ranking}>
                         <View style={styles.rankingItem}>
-                                <Text  style={styles.rankingNumber}>{item.imd}</Text>
+                                <Text  style={styles.rankingNumber}>{item.imdb_rating}</Text>
                                 <Text style={styles.rankingText}>IMDb</Text>
                         </View>
                         <View style={styles.rankingItem}>
-                                <Text style={styles.rankingNumber}>{item.kinopoisk}</Text>
+                                <Text style={styles.rankingNumber}>{item.kinopoisk_rating}</Text>
                                 <Text style={styles.rankingText}>КиноПоиск</Text>
                         </View>
                     </View>
-                    <View style={styles.nameBlock}><Text style={styles.name}>{item.title}</Text></View>
-                    <Text style={styles.about}>{item.text}</Text>
+                    <View style={styles.nameBlock}><Text style={styles.name}>{item.name}</Text></View>
+                    <Text style={styles.about}>{item.description && item.description.slice(0,100)}...</Text>
                 </ImageBackground>    
             </ImageBackground>)
             }}/>
             
-    ), []);
+    )}, []);
   
     return (
         <View style={{ marginTop:20,marginBottom:20}}>
           <Carousel
             layout="default"
             ref={ref}
-            data={carouselItems}
+            data={serials}
             sliderWidth={screenWidth}
             itemWidth={isTV?screenWidth:screenWidth}
             sliderHeight={isTV?700:300}
             renderItem={renderItem}
             activeSlideAlignment={'center'}
-            onSnapToItem={(index) => setActiveIndex(index)}
             inactiveSlideScale={0.93}
           />
         </View>
@@ -95,7 +65,8 @@ const styles = StyleSheet.create({
         height: (isTV?280*1.77:300),
         display:'flex',
         justifyContent:'flex-end', 
-        width:screenWidth-40
+        width:screenWidth-40,
+        resizeMode:'center'
     },
     textBlock:{
         height: (isTV?280*1.77-40:350),

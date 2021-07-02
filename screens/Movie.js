@@ -1,54 +1,60 @@
 import React from 'react';
 import { View ,StyleSheet,Text,Dimensions,Image,ScrollView} from 'react-native';
-import SeasonCarusel from '../components/SeasonCarusel'
 import SeriaCarusel from '../components/SeriaCarusel'
 import JanrCarusel from '../components/JanrCarusel'
 import CardCarusel from '../components/CardCarusel'
 import {DrawerItem} from '@react-navigation/drawer'
-import CustomVideoPlayer from '../components/Video/index'
-import Trailer from '../components/Trailer';
-import {Datas} from '../context/context'
+import TrailerAndroid from '../components/TrailerAndroid'
+import Trailer from '../components/TrailerTV';
+import { Datas } from '../context/context';
 
 const { width: screenWidth,height:screenHeight } = Dimensions.get('window')
 
 const isTV = 1000<screenWidth
 
 export default function Movie({route,navigation}) {
+    const {isLogin,getCurrentMovie,getSrc} = React.useContext(Datas) 
+    const [description,setDiscription] = React.useState(false)
+    const currentFilm = route.params;
+    const [src,setSrc] = React.useState('')
+    const [selectedValue,SetSelectedValue] = React.useState(currentFilm.files[0])
+    const [selectedSeria,SetSelectedSeria] = React.useState(currentFilm.files[0])
+    React.useEffect(()=>{      
+        if(currentFilm.is_season){
+            const fetch = async()=>{ 
+                const actions = await getCurrentMovie(currentFilm.id)
+                const currentVid = await actions.filter((elem)=>{return elem.caption === `Сезон ${selectedValue} серия ${selectedSeria.seria}`})
+               if(currentVid[0]){
+                 console.log(currentVid)
+                 const src =  await getSrc({fileId:currentVid[0].file_id,id:currentVid[0].video_id})
+                 setSrc(src)   
+               }
 
-    const {createOption} = React.useContext(Datas)
-    const [fullScreen,setScreen] = React.useState({
-        display:'flex',
-        headerShown:true,
-        styleVideo:{
-        height:screenWidth-150,
-        width:screenWidth,
-        },
-        styleBar:{
-            bottom:0
+                }
+            fetch()
         }
-    })
-    
-    React.useEffect(()=>{
-        const option = createOption(navigation,'Movie')
-        navigation.setOptions({...option,headerShown:fullScreen.headerShown})
-    },[fullScreen])
-  
+        else{
+            const fetch = async()=>{ 
+                const actions = await getCurrentMovie(currentFilm.id)
+                const src =  await getSrc({fileId:actions[0].fileId,id:actions[0].video_id})   
+                setSrc(src)
+                }
+            fetch()
+        }
+    },[selectedSeria,selectedValue])
     return(
         <ScrollView style={styles.Page}>
             {isTV?
             <View style={{alignItems:'center'}}><Trailer /></View>:
-            <View style={{alignItems:'center'}}><CustomVideoPlayer navigation={navigation} fullScreen={fullScreen} setScreen={setScreen}/></View>
+            <View style={{alignItems:'center'}}><TrailerAndroid navigation={navigation}/></View>
             }
-        
-            <View stylle={{...styles.content,display:'none'}}>
-                <View style={{...styles.mainInfo,display:fullScreen.display}}>
-                    <Image style={styles.secondImage} source={require('../images/exampleImage2.png')}></Image>
+                <View style={styles.mainInfo}>
+                    <Image style={styles.secondImage} source={{uri:currentFilm.thumbnail_small}}></Image>
                     <View style={styles.mainInfoText}> 
-                        <Text style={styles.mainInfoTextItem1}>Необыкновенный плейлист Зои</Text>
-                        <Text style={styles.mainInfoTextItem2}>Cезон 1. Cерия 1</Text>
-                        <Text style={styles.mainInfoTextItem3}>США. 2020 (2 сезона)</Text>
+                        <Text style={styles.mainInfoTextItem1}>{currentFilm.name}</Text>
+                        <Text style={styles.mainInfoTextItem3}>{currentFilm.countries}. {currentFilm.year} </Text>
                         <View style={{flexDirection:'row'}}>
-                        <View style={styles.mainInfoTextItem4Block}><Text  style={styles.mainInfoTextItem4}>+18</Text></View>
+                        <View style={styles.mainInfoTextItem4Block}><Text  style={styles.mainInfoTextItem4}>{currentFilm.rating}+</Text></View>
                         <View style={{...styles.ranking,display:(isTV?'flex':'none')}}>
                             <View style={styles.rankingItem}>
                                     <Text  style={styles.rankingNumber}>8.1</Text>
@@ -63,33 +69,36 @@ export default function Movie({route,navigation}) {
                        
                     </View>
                 </View>
-                <View style={{display:fullScreen.display}}>
-                    <DrawerItem  label='' icon={()=>
-                        (<View style={styles.button}><Text style={styles.buttonText}>Приобрети подписку</Text></View>)} />
-                    <SeasonCarusel/>
-                    <SeriaCarusel/>
-                    <Text style={styles.aboutText}>После обследования головного мозга Зои получила дар телепатии. Эта суперспособность превращает жизнь в девушки в мюзикл, ведь все желания и мысли людей она слышит в формате музыкального представления. ...</Text>
-                    <DrawerItem label='' icon={()=>(
-                    <View style={{height:20}}>
-                        <Text style={styles.aboutButton}>Подробнее</Text>
-                    </View>)}/>
+            <View stylle={styles.content}>
+               {isLogin?<DrawerItem  label='' onPress={()=>navigation.navigate(isTV?'WatchingTV':'Watching',{src})} icon={()=> 
+                        (<View style={styles.button}><Text style={styles.buttonText}>Смотреть</Text></View>)} />
+                        : <DrawerItem  label='' onPress={()=>navigation.navigate('Watching')} icon={()=> 
+                        (<View style={styles.button}><Text style={styles.buttonText}>Приобрети подписку</Text></View>)} />}
+                   {isLogin&&currentFilm.is_season? <SeriaCarusel SetSelectedSeria={SetSelectedSeria} SetSelectedValue={SetSelectedValue} selectedSeria={selectedSeria} selectedValue={selectedValue} currentFilm={currentFilm}/>:<></>}
+                   {currentFilm.description ? <View> 
+                   { description? <Text style={styles.aboutText}>{currentFilm.description}</Text>:
+                   <Text style={styles.aboutText}>{currentFilm.description.slice(0,100)}...</Text>}
+                    <DrawerItem label='' onPress={()=>setDiscription((item)=>!item)} icon={()=>(
+                    <View style={{height:20}}>                      
+                    {description? <Text style={styles.aboutButton}>Скрыть</Text>:
+                    <Text style={styles.aboutButton}>Подробнее</Text>}
+                    </View>)}/></View>:<></>}
 
                     <View style={{...styles.ranking,display:(isTV?'none':'flex')}}>
                             <View style={styles.rankingItem}>
-                                    <Text  style={styles.rankingNumber}>8.1</Text>
+                                    <Text  style={styles.rankingNumber}>{currentFilm.imdb_rating}</Text>
                                     <Text style={styles.rankingText}>IMDb</Text>
                             </View>
                             <View style={styles.rankingItem}>
-                                    <Text style={styles.rankingNumber}>8</Text>
+                                    <Text style={styles.rankingNumber}>{currentFilm.kinopoisk_rating}</Text>
                                     <Text style={styles.rankingText}>КиноПоиск</Text>
                             </View>
                     </View>  
-                    <JanrCarusel/>
+                    <JanrCarusel janr={currentFilm.genres}/>
                     <Text style={styles.caruselTitle}>Похожие фильмы</Text>
-                    <CardCarusel navigation={navigation} />
+                    <CardCarusel navigation={navigation} navigation={navigation} />
                     <Text style={styles.caruselTitle}>Фильмы которые идут по телеканалам в данный момент</Text>
                     <CardCarusel navigation={navigation}/>
-                </View>
             </View>
         </ScrollView>
         
@@ -110,7 +119,9 @@ const styles = StyleSheet.create({
     justifyContent: isTV?`flex-start`:'space-between',
     paddingLeft:20,
     paddingRight:20,
-    paddingTop:isTV?280:20
+    paddingTop:isTV?280:20,
+    marginTop:150,
+    zIndex:3
    },
    secondImage:{
         height: 200,
