@@ -33,13 +33,13 @@ export default function Login({navigation}) {
                 <View style={styles.inputBlock}>
                     <View style={styles.inputItem}>
                         <Text style={{...styles.titleInput,color:errorColor}}>Абонемент</Text>
-                        <DrawerItem onPress={()=>textInputs[0].focus()} style={styles.focusItem} label='' icon={()=>(
+                        <DrawerItem pressColor='#fff' onPress={()=>textInputs[0].focus()} style={styles.focusItem} label='' icon={()=>(
                            <TextInput ref={(input)=>{textInputs[0]=input}} value={data.abonement} onChangeText={(text)=>changeHandler(text,'abonement')} style={{...styles.input,borderColor:errorColor}} autoCompleteType={'off'} autoCorrect={false}/>
                         )}/>
                     </View>
                     <View style={styles.inputItem}>
                         <Text style={{...styles.titleInput,color:errorColor}}>Пароль</Text>
-                        <DrawerItem  onPress={()=>textInputs[1].focus()} style={styles.focusItem} label='' icon={()=>(
+                        <DrawerItem  pressColor='#fff' onPress={()=>textInputs[1].focus()} style={styles.focusItem} label='' icon={()=>(
                              <TextInput ref={(input)=>{textInputs[1]=input}} secureTextEntry={true} autoCompleteType ='password' value={data.password} onChangeText={(text)=>changeHandler(text,'password')} style={{...styles.input,borderColor:errorColor}} autoCompleteType={'off'} autoCorrect={false}/>
                         )}/>
                     </View>
@@ -48,12 +48,12 @@ export default function Login({navigation}) {
                     <Text style={{...styles.error,opacity:errorColor==='#e5474c'?1:0}}>
                     Аккаунт по указанным параметрам не найден.
                     </Text>
-                    <DrawerItem onPress={()=>login(data,setError,navigation)} style={styles.focusItem} label='' icon={()=>(
+                    <DrawerItem pressColor='#fff' onPress={()=>login(data,setError,navigation)} style={styles.focusItem} label='' icon={()=>(
                         <View style={styles.buttonLogin}>
                             <Text style={styles.buttonText}>Войти</Text>
                         </View>
                     )} />
-                     <DrawerItem onPress={()=>navigation.navigate('Registration')} style={styles.focusItem}  label='' icon={()=>(
+                     <DrawerItem pressColor='#fff' onPress={()=>navigation.navigate('Registration')} style={styles.focusItem}  label='' icon={()=>(
                         <View style={styles.buttonReg}>
                             <Text style={styles.buttonText}>Регистрация</Text>
                         </View>

@@ -68,42 +68,15 @@ const CustomVideoPlayer = ({src}) => {
    
     <View style={styles.stopBlock}>
 
-            {/* <TouchableWithoutFeedback  onPress={()=>{doubleClick('left',doubleClickCounter,removeClickTime,setSkipIcon,status,video,setControl)}}>
-              <View style={styles.skipBloack}>
-                <Image source={require('../../images/leftSkip.png')} style={{...skipIcon.left,...styles.leftButton}}/>
-              </View>
-            </TouchableWithoutFeedback> */}
             <DrawerItem onPress={()=>setIsStop(i=>!i)} pressColor='#fff'  style={{width:75,height:75}} label='' icon={()=>(
                <View style={{...styles.shadow,...stopStyle}}>
                <Image style={styles.stop} source={isStop?require('../../images/startIcon.png'):require('../../images/Pause-button.png')}/>
               </View>  
-            )}/>
-            {/* <TouchableWithoutFeedback onPress={()=>{doubleClick('right',doubleClickCounter,removeClickTime,setSkipIcon,status,video,setControl)}}>
-            <View style={styles.skipBloack}>
-               <Image source={require('../../images/rightSkip.png')} style={{...skipIcon.right,...styles.RightButton}}/>
-            </View>
-            </TouchableWithoutFeedback>     */}
-    
+            )}/> 
     </View>
-    {/* <View style={{...styles.bottomBar,...stopStyle,}}>
-      <DrawerItem label='' pressColor='#fff' style={{width:screenWidth,height:100}}
-      onPress={()=>{setControl((changed)=>!changed)}}
-      icon={()=>(
-        <View style={{...styles.bottomBar,...stopStyle}}>
-         <Controller skipIcon={skipIcon}  isClickControl={isClickControl} stopStyle={stopStyle}  setControl={setControl} video={video} status = {status}/>
-        </View>
-      )}/>
-    </View> */}
     <View style={{...styles.bottomBar,...stopStyle}}>
          <Controller skipIcon={skipIcon}  isClickControl={isClickControl} stopStyle={stopStyle}  setControl={setControl} video={video} status = {status}/>
     </View>
-      {/* <TouchableWithoutFeedback onPress={()=>{
-        setControl((changed)=>!changed)
-      }}>
-        <View style={{...styles.bottomBar,...stopStyle}}>
-          <Controller skipIcon={skipIcon}  isClickControl={isClickControl} stopStyle={stopStyle}  setControl={setControl} video={video} status = {status}/>
-        </View>
-      </TouchableWithoutFeedback>  */}
         <Video
           ref={video}
           rate={1}

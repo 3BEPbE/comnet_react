@@ -69,7 +69,7 @@ const MovieList = ({navigation,route}) => {
   },[route.params])
   const renderItem = (item) => {
     return(
-        <DrawerItem  pressColor={'#000'} style={styles.focusItem} onPress={()=>{navigate(item.item,)}} icon={()=>{
+        <DrawerItem pressColor='#fff'  style={styles.focusItem} onPress={()=>{navigate(item.item,)}} icon={()=>{
             return (<View style={styles.item}>
                      <Image style={styles.image} source={{uri:item.item.thumbnail_small}}/>
                      <Text style={styles.text}>{item.item.name.length>35?<>{item.item.name.slice(0,35)}...</>:item.item.name}</Text>

@@ -17,15 +17,15 @@ export default function Movie({route,navigation}) {
     const [description,setDiscription] = React.useState(false)
     const currentFilm = route.params;
     const [src,setSrc] = React.useState('')
-    const [selectedValue,SetSelectedValue] = React.useState(currentFilm.files[0])
-    const [selectedSeria,SetSelectedSeria] = React.useState(currentFilm.files[0])
+    const [season,setSeason] = React.useState()
+    const [serial,setSerial] = React.useState()
+    
     React.useEffect(()=>{      
-        if(currentFilm.is_season){
+        if(currentFilm.is_season&&season&&serial){
             const fetch = async()=>{ 
                 const actions = await getCurrentMovie(currentFilm.id)
-                const currentVid = await actions.filter((elem)=>{return elem.caption === `Сезон ${selectedValue} серия ${selectedSeria.seria}`})
+                const currentVid = await actions.filter((elem)=>{return elem.caption === `Сезон ${season} серия ${serial.seria}`})
                if(currentVid[0]){
-                 console.log(currentVid)
                  const src =  await getSrc({fileId:currentVid[0].file_id,id:currentVid[0].video_id})
                  setSrc(src)   
                }
@@ -41,7 +41,7 @@ export default function Movie({route,navigation}) {
                 }
             fetch()
         }
-    },[selectedSeria,selectedValue])
+    },[season,serial])
     return(
         <ScrollView style={styles.Page}>
             {isTV?
@@ -70,15 +70,15 @@ export default function Movie({route,navigation}) {
                     </View>
                 </View>
             <View stylle={styles.content}>
-               {isLogin?<DrawerItem  label='' onPress={()=>navigation.navigate(isTV?'WatchingTV':'Watching',{src})} icon={()=> 
+               {isLogin?<DrawerItem pressColor='#fff'  label='' onPress={()=>navigation.navigate(isTV?'WatchingTV':'Watching',{src})} icon={()=> 
                         (<View style={styles.button}><Text style={styles.buttonText}>Смотреть</Text></View>)} />
-                        : <DrawerItem  label='' onPress={()=>navigation.navigate('Watching')} icon={()=> 
+                        : <DrawerItem pressColor='#fff'   label='' onPress={()=>navigation.navigate('Watching')} icon={()=> 
                         (<View style={styles.button}><Text style={styles.buttonText}>Приобрети подписку</Text></View>)} />}
-                   {isLogin&&currentFilm.is_season? <SeriaCarusel SetSelectedSeria={SetSelectedSeria} SetSelectedValue={SetSelectedValue} selectedSeria={selectedSeria} selectedValue={selectedValue} currentFilm={currentFilm}/>:<></>}
+                   {isLogin&&currentFilm.is_season? <SeriaCarusel season={season} serial={serial} setSeason={setSeason} setSerial={setSerial} currentFilm={currentFilm}/>:<></>}
                    {currentFilm.description ? <View> 
                    { description? <Text style={styles.aboutText}>{currentFilm.description}</Text>:
                    <Text style={styles.aboutText}>{currentFilm.description.slice(0,100)}...</Text>}
-                    <DrawerItem label='' onPress={()=>setDiscription((item)=>!item)} icon={()=>(
+                    <DrawerItem pressColor='#fff' label='' onPress={()=>setDiscription((item)=>!item)} icon={()=>(
                     <View style={{height:20}}>                      
                     {description? <Text style={styles.aboutButton}>Скрыть</Text>:
                     <Text style={styles.aboutButton}>Подробнее</Text>}
@@ -119,7 +119,7 @@ const styles = StyleSheet.create({
     justifyContent: isTV?`flex-start`:'space-between',
     paddingLeft:20,
     paddingRight:20,
-    paddingTop:isTV?280:20,
+    paddingTop:isTV?80:20,
     marginTop:150,
     zIndex:3
    },

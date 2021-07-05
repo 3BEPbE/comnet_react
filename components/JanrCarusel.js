@@ -7,20 +7,21 @@ import { DrawerItem } from '@react-navigation/drawer'
 const { width: screenWidth } = Dimensions.get('window')
 
 export default function Janr({janr}) {
-
+    
     const carouselItems = janr.split(',')
     const ref = React.useRef(null);
+    
 
     const renderItem = React.useCallback(({ item, index }) => (
-    <DrawerItem style={{marginRight:-13}} label='' icon={()=>(     
-    <View style={{...styles.seasonButton,backgroundColor:'#373737'}}>
+    <DrawerItem pressColor='#fff' style={{marginRight:-13}} label='' icon={()=>(     
+    <View style={{...styles.seasonButton}}>
         <Text style={styles.seasonButtonText}>{item.replace(/\s/g, '')}</Text>
     </View>  )}/>
         
     ), []);
     return (
         <View style={styles.seasonButtonBlock}>
-                <Carousel
+               { janr? <Carousel
                     layout="default"
                     ref={ref}
                     data={carouselItems}
@@ -32,7 +33,7 @@ export default function Janr({janr}) {
                     onSnapToItem={(index) => {console}}
                     inactiveSlideOpacity={1}
                     inactiveSlideScale={1}
-                />
+                />:<></>}
         </View>
   
     );

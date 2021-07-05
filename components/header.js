@@ -1,6 +1,7 @@
 import {TouchableHighlight,Text,Image, View,TouchableOpacity } from 'react-native'
 import HeaderStyle from '../styles/headerStyle'
 import React from 'react'
+import { Datas } from '../context/context'
 import { DrawerItem } from '@react-navigation/drawer'
 export const options = {
         title:'',
@@ -15,9 +16,9 @@ export const HeaderRight = ({navigation}) => (
             
       
 )
-export const HeaderLeft = ({navigation}) => {
+export const HeaderLeft = ({navigation,setOpenBurger}) => {
     return(
-    <DrawerItem  pressColor='#fff' activeBackgroundColor='#1c1e21'  style={{width:40,height:40}} onPress={() =>  navigation.openDrawer()} label='' icon={()=>( 
+    <DrawerItem  pressColor='#fff' activeBackgroundColor='#1c1e21'  style={{width:40,height:40}} onPress={() =>  {setOpenBurger(true);navigation.openDrawer()}} label='' icon={()=>( 
         <View acceptsKeyboardFocus={true} onFocus={() => setFocused(true)} style={HeaderStyle.burger} >
             <View style={HeaderStyle.burgerItem}></View>
             <View style={HeaderStyle.burgerItem}></View>

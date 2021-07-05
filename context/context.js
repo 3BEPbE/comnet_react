@@ -22,48 +22,49 @@ export const ContextProvider = (props) => {
       const Options = {
         Movie:{
           ...options,
-          headerRight:()=>(<HeaderRight navigation={navigation}/>),
-          headerLeft:()=>(<HeaderLeft navigation={navigation}/>)
+          headerRight:()=>(<HeaderRight  navigation={navigation}/>),
+          headerLeft:()=>(<HeaderLeft setOpenBurger={setOpenBurger} navigation={navigation}/>)
         },
         Home:{
           ...options,
-          headerTitle:()=>(<HeaderCenter  navigation={navigation}/>),
-          headerLeft:()=>(<HeaderLeft  navigation={navigation}/>)
+          headerTitle:()=>(<HeaderCenter   navigation={navigation}/>),
+          headerLeft:()=>(<HeaderLeft setOpenBurger={setOpenBurger} navigation={navigation}/>)
         },
         MovieList:{
           ...options,
           headerRight:()=>(<HeaderRight navigation={navigation}/>),
-          headerLeft:()=>(<HeaderLeft navigation={navigation}/>)
+          headerLeft:()=>(<HeaderLeft setOpenBurger={setOpenBurger} navigation={navigation}/>)
         },
         Profile:{
           ...options,
           headerRight:()=>(<HeaderRight navigation={navigation}/>),
-          headerLeft:()=>(<HeaderLeft navigation={navigation}/>)
+          headerLeft:()=>(<HeaderLeft setOpenBurger={setOpenBurger} navigation={navigation}/>)
         },
         TV:{
           ...options,
           headerRight:()=>(<HeaderRight navigation={navigation}/>),
-          headerLeft:()=>(<HeaderLeft navigation={navigation}/>)
+          headerLeft:()=>(<HeaderLeft setOpenBurger={setOpenBurger} navigation={navigation}/>)
         },
         Channel:{
           ...options,
           headerRight:()=>(<HeaderRight navigation={navigation}/>),
-          headerLeft:()=>(<HeaderLeft navigation={navigation}/>)
+          headerLeft:()=>(<HeaderLeft setOpenBurger={setOpenBurger} navigation={navigation}/>)
         },
         Change:{
           ...options,
           headerRight:()=>(<HeaderRight navigation={navigation}/>),
-          headerLeft:()=>(<HeaderLeft navigation={navigation}/>)
+          headerLeft:()=>(<HeaderLeft setOpenBurger={setOpenBurger} navigation={navigation}/>)
         },
         Search:{
           ...options,
-          headerLeft:()=>(<HeaderLeft navigation={navigation}/>),
+          headerLeft:()=>(<HeaderLeft setOpenBurger={setOpenBurger} navigation={navigation}/>),
           headerRight:()=>(<HeaderRight navigation={navigation}/>)
         }
       }
-
       return Options[position]
     }
+    const [isOpenBurger,setOpenBurger] = React.useState(false)
+
     const storeData = async (key,value) => {
       try {
         const jsonValue = JSON.stringify(value)
@@ -223,7 +224,9 @@ export const ContextProvider = (props) => {
             serials,
             getSerialas,
             getFilms,
-            getCurrentMovie
+            getCurrentMovie,
+            isOpenBurger,
+            setOpenBurger
           }}>
             {children}
         </Datas.Provider>

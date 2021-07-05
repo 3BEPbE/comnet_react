@@ -57,8 +57,8 @@ export const Controller = ({status,setControl,stopStyle,video,skipIcon}) => {
           minimumTrackTintColor="#ff4f12"
           maximumTrackTintColor="#fff"
           thumbTintColor='#fff'
-          onValueChange={()=>setControl((a)=>!a)}
-          onSlidingComplete={(sec)=>{setSliderVal(sec)}}
+          onValueChange={(sec)=>{setControl((a)=>!a);setSliderVal(sec)}}
+     
         />:<></>}
 
         </>
