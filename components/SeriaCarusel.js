@@ -7,54 +7,63 @@ import Carusel from '../components/SerialCaruselTv'
 const { width: screenWidth,height:screenHeight } = Dimensions.get('window')
 const isTV = screenWidth>1000
 
-export default function SerialCarusel({currentFilm,setSerial,setSeason,serial,season}) {
+export default function SerialCarusel({currentFilm,currentSeria,setCurrentSeria,currentSeason,setCurrentSeason}) {
 
   const [list1,setList1] = React.useState(false)
   const [list2,setList2] = React.useState(false)
-  const [tvseason,setTvseason] = React.useState()
-  const [selectedValue,SetSelectedValue] = React.useState(currentFilm.files[0])
-  const [selectedSeria,SetSelectedSeria] = React.useState(currentFilm.files[0])
+
+  const [season,setSeason] = React.useState()
+  const [serial,setSerial] = React.useState()
 
   const [unSoretedSerial,setUnsortedSerial] = React.useState([])
     React.useEffect(()=>{
       let array = currentFilm.files.map((item)=>item.name.split(' '))
-      SetSelectedValue(array[0][1])
+      setCurrentSeason(array[0][1])
       setUnsortedSerial(array.map((item)=>{
-        return {seria:item[3],
+        return {
+                seria:item[3],
                 season:item[1]
               }
       }))
     },[])
     React.useEffect(()=>{
       if(unSoretedSerial){
-        setTvseason([...new Set(unSoretedSerial.map((item)=>item.season))][0])
         setSeason([...new Set(unSoretedSerial.map((item)=>item.season))])
       }
     },[unSoretedSerial])
 
     React.useEffect(()=>{
-      if(selectedValue){
-        let selectedSeasonSeria =  unSoretedSerial.filter(item=>item.season===selectedValue)
-        let sorted = selectedSeasonSeria.sort((a, b) => Number(a.seria) - Number(b.seria))
+      if(currentSeason){
+        let selectedSeasonSeria =  unSoretedSerial.filter(item=>item.season===currentSeason).map(i=>i.seria)
+        let sorted = selectedSeasonSeria.sort((a, b) => Number(a) - Number(b))
+        setCurrentSeria([sorted[0]])
         setSerial(sorted)
       }
-    },[selectedValue])
-
+    },[currentSeason])
     return (
       <>
+       <View style={{flexDirection:'row'}}>
      { isTV?<>
      
-      {list1?<Carusel setList1={setList1} season={season}/>:
+      {list1?<Carusel setData={setCurrentSeason} setList1={setList1} data={season}/>:
               <DrawerItem onPress={()=>setList1(true)} icon={()=>(
-              <View style={{width:150,height:40,justifyContent:'center',alignItems:'center',backgroundColor:'#fff'}} >
-                <Text style={{color:'#000',fontSize:22}}>{tvseason} сезон</Text>
+              <View style={styles.button} >
+                <Text style={{color:'#000',fontSize:22}}>{currentSeason} сезон</Text>
               </View>
             )} label=''/>}
+
+       {list2?<Carusel setData={setCurrentSeria}  setList1={setList2} data={serial}/>:
+          <DrawerItem onPress={()=>setList2(true)} icon={()=>(
+          <View style={styles.button} >
+            <Text style={{color:'#000',fontSize:22}}>{currentSeria} seria</Text>
+          </View>
+        )} label=''/>} 
+     
+     
         </>:<>
       <Picker
-          ref={(i)=>console.log(i?i.props:'')}
-          selectedValue={selectedValue}
-          onValueChange={hand => SetSelectedValue(hand)}
+          selectedValue={currentSeason}
+          onValueChange={hand => setCurrentSeason(hand)}
           style={styles.itemStyle}
           mode="dropdown"
           itemStyle={{ color:'red', fontWeight:'900', fontSize: 18, padding:30}}>
@@ -63,16 +72,17 @@ export default function SerialCarusel({currentFilm,setSerial,setSeason,serial,se
           )) }
         </Picker>
           <Picker
-          selectedValue={selectedSeria}
-          onValueChange={hand => SetSelectedSeria(hand)}
+          selectedValue={currentSeria}
+          onValueChange={hand => setCurrentSeria(hand)}
           style={styles.itemStyle}
           mode="dropdown"
           itemStyle={{ color:'red', fontWeight:'900', fontSize: 18, padding:30}}>
           {serial && serial.map((e,i)=>(
-              <Picker.Item key={i} label={`${e.seria} серия`} value={e} />
+              <Picker.Item key={i} label={`${e} серия`} value={e} />
           )) }
         </Picker>
      </>}
+     </View>
        </>
     );
   };
@@ -91,4 +101,10 @@ const styles = StyleSheet.create({
       paddingLeft:10,
       borderRadius:50,
     },
+  button:{
+    width:150,height:40,
+    justifyContent:'center',
+    alignItems:'center',
+    backgroundColor:'#fff'
+  }
   });

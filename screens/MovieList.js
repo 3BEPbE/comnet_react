@@ -10,29 +10,17 @@ const { width: screenWidth } = Dimensions.get('window')
 
 const MovieList = ({navigation,route}) => {
 
-  const {getSerialas,getFilms} = React.useContext(Datas)
+  const {getFilms} = React.useContext(Datas)
   const [page,setPage] = React.useState(1)
   const [data,setData] = React.useState({currentPage:0, data:[] })
   const [isLoading,setLoading] = React.useState(false)
-  
   const navigate = (item)=>{
       navigation.navigate('Movie',item)
   }
   
   React.useEffect(()=>{
-      if(route.params.name === 'serial'){
-      const fetch = async ()=>{
-      let serials = await getSerialas(page)
-      await setData({
-                currentPage:page,
-                data:[...data.data,...serials]
-            })
-      await setLoading(false)
-      }
-      fetch()
-    }else{
-      const fetch = async ()=>{
-        let serials = await getFilms(page)
+   const fetch = async ()=>{
+        let serials = await getFilms(page,route.params)
         await setData({
                   currentPage:page,
                   data:[...data.data,...serials]
@@ -40,24 +28,15 @@ const MovieList = ({navigation,route}) => {
         await setLoading(false)
         }
         fetch()
-    }
+    
   },[page])
   
   React.useEffect(()=>{
- 
-    if(route.params.name === 'serial'){
       const fetch = async ()=>{
-        let serial = await getSerialas(1)
-        await setData({
-                  currentPage:1,
-                  data:serial
-              })
-        await setLoading(false)
-        }
-        fetch()
-    }else{
-      const fetch = async ()=>{
-        let films = await getFilms(1)
+        let films = await getFilms(1,route.params)
+
+        console.log(films[0])
+
         await setData({
                   currentPage:1,
                   data:films
@@ -65,8 +44,9 @@ const MovieList = ({navigation,route}) => {
         await setLoading(false)
         }
         fetch()
-    }
   },[route.params])
+
+
   const renderItem = (item) => {
     return(
         <DrawerItem pressColor='#fff'  style={styles.focusItem} onPress={()=>{navigate(item.item,)}} icon={()=>{

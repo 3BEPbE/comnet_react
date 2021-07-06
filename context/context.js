@@ -108,7 +108,45 @@ export const ContextProvider = (props) => {
               console.log(e)
           })
     }
-    const getFilms = (page)=>{
+    const getJanr = (params) =>{
+      if(isLogin){
+        return axios({
+          method: 'POST',
+          url:`http://172.16.236.84/api/auth/genre/list`,//28 123457
+          data:{
+            limit:isTV?24:12,
+            categories:0,
+            authkey:token,
+            season:0,
+            ...params
+          }
+          }).then((e)=>{
+              return(e.data['0'].genres)
+              
+          }).catch((e)=>{
+              console.log(e)
+          })
+      }else{
+        return axios({
+          method: 'POST',
+          url:`http://172.16.236.84/api/noauth/genre/list`,//28 123457
+          data:{
+            limit:isTV?24:12,
+            page:0,
+            season:0,
+            ...params
+          }
+          }).then((e)=>{
+              return(e.data['0'].genres)
+              
+          }).catch((e)=>{
+              console.log(e)
+          })
+      }
+    }
+
+    const getFilms = (page,params)=>{
+      console.log(params)
       if(isLogin){
        return axios({
           method: 'POST',
@@ -117,7 +155,7 @@ export const ContextProvider = (props) => {
             limit:isTV?24:20,
             page,
             authkey:token,
-            season:0
+            season:1
           }
           }).then((e)=>{
               return(e.data['0'].videos)
@@ -132,7 +170,7 @@ export const ContextProvider = (props) => {
           data:{
             limit:isTV?24:20,
             page,
-            season:0
+            ...params
           }
           }).then((e)=>{ 
               return(e.data['0'].videos)  
@@ -142,41 +180,6 @@ export const ContextProvider = (props) => {
       }
     }
     
-    const getSerialas = (page)=>{
-      if(isLogin){
-       return axios({
-          method: 'POST',
-          url:`http://172.16.236.84/api/auth/video/list?`,//28 123457
-          data:{
-            limit:isTV?24:20,
-            page,
-            authkey:token,
-            season:1
-            
-          }
-          }).then((e)=>{
-              return(e.data['0'].videos)
-              
-          }).catch((e)=>{
-              console.log(e)
-          })
-      }else{
-       return axios({
-          method: 'POST',
-          url:`http://172.16.236.84/api/noauth/video/list?`,//28 123457
-          data:{
-            limit:isTV?24:20,
-            page,
-            season:1
-          }
-          }).then((e)=>{ 
-              return(e.data['0'].videos)
-              
-          }).catch((e)=>{
-              console.log(e)
-          })
-      }
-    }
 
     const getCurrentMovie = async(id)=>{
      return axios({
@@ -222,11 +225,11 @@ export const ContextProvider = (props) => {
             storeData,
             isLogin,
             serials,
-            getSerialas,
             getFilms,
             getCurrentMovie,
             isOpenBurger,
-            setOpenBurger
+            setOpenBurger,
+            getJanr
           }}>
             {children}
         </Datas.Provider>

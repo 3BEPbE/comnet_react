@@ -7,11 +7,15 @@ import {Datas} from './../context/context'
 const { width: screenWidth } = Dimensions.get('window')
 const isTV = screenWidth >950
 
-export default function BigCardCarusel({season,setList1}) {
-    const [activeIndex, setActiveIndex] = React.useState(0);
+export default function SerialCaruselTV({setData,setList1,data}) {
     const ref = React.useRef(null);
+    const clickItem = (currentSeason) =>{
+      setList1(false)
+      setData(currentSeason)   
+    }
+
     const renderItem = React.useCallback(({ item, index }) => (
-        <DrawerItem onPress={()=>{setList1(false)}} pressColor={'#fff'}  style={{height:50,width:165}}   label=''  icon={()=>(
+        <DrawerItem onPress={()=>clickItem(item)} pressColor='#000'  style={{height:50,width:165}}   label=''  icon={()=>(
             <View  style={styles.mainBlockItem}>
                 <Text style={styles.title}>{item} сезон</Text>
             </View>
@@ -24,14 +28,13 @@ export default function BigCardCarusel({season,setList1}) {
             layout="default"
             vertical={true}
             ref={ref}
-            data={season}
+            data={data}
             sliderWidth={150}
             itemWidth={150}
             itemHeight={40}
-            sliderHeight={240}
+            sliderHeight={40*data.length}
             renderItem={renderItem}
             activeSlideAlignment="start"
-            onSnapToItem={(index) => setActiveIndex(index)}
             inactiveSlideOpacity={1}
             inactiveSlideScale={1}
           />
@@ -46,14 +49,14 @@ const styles = StyleSheet.create({
         width:150,
         alignItems:'center',
         justifyContent:'center',
-        backgroundColor:'red'
+        backgroundColor:'#fff',
     },
     mainBlock:{
       marginBottom:20,
     },
     title:{
         fontSize:16,
-        color:'#fff',
+        color:'#000',
     }
     
   });

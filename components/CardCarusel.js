@@ -7,11 +7,22 @@ import {Datas} from './../context/context'
 const { width: screenWidth } = Dimensions.get('window')
 const isTV = screenWidth >950
 
-export default function BigCardCarusel(props) {
-    const {serials} = React.useContext(Datas)
-    const [activeIndex, setActiveIndex] = React.useState(0);
-    const ref = React.useRef(null);
-    const renderItem = React.useCallback(({ item, index }) => (
+export default function CardCarusel({navigation,gid}) {
+
+    const {getFilms} = React.useContext(Datas)
+
+    const [data,setData] = React.useState([])
+
+    React.useEffect(()=>{
+      const fetch =async()=>{
+        let data = await getFilms(0,{gid})
+        setData(data)
+      }
+      fetch()
+    },[])
+    const renderItem = React.useCallback(({ item, index }) => {
+   
+      return(
         <DrawerItem  pressColor={'#fff'}  style={{marginRight:-15}}   label='' onPress={()=>{props.navigation.navigate('Movie', { id:item.id })}} icon={()=>(
             <View  style={styles.mainBlockItem}>
                 <ImageBackground source={{uri:item.thumbnail_small}} style={styles.imgBlocl}>
@@ -19,23 +30,21 @@ export default function BigCardCarusel(props) {
                 <Text style={styles.title}>{item.name}</Text>
             </View>
         )}/>
-    ), []);
+    )}, []);
   
     return (
         <View style={styles.mainBlock}>
-          <Carousel
+          {data?<Carousel
             layout="default"
-            ref={ref}
-            data={serials}
+            data={data}
             sliderWidth={screenWidth}
             itemWidth={isTV?250:screenWidth/2-20}
             sliderHeight={240}
             renderItem={renderItem}
             activeSlideAlignment="start"
-            onSnapToItem={(index) => setActiveIndex(index)}
             inactiveSlideOpacity={1}
             inactiveSlideScale={1}
-          />
+          />:<></>}
         </View>
   
     );

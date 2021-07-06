@@ -5,32 +5,38 @@ import BigCardCarusel from '../components/BigCardCarusel'
 import CardCarusel from '../components/CardCarusel'
 import { Datas } from '../context/context';
 const { width: screenWidth,height: screenHeight } = Dimensions.get('window')
-
+const themes = ['Amediateka','Комедия','Мелодрама','Ужасы']
 export default function Home(props) {
-    const {serials} = React.useContext(Datas)
+    const {getJanr} = React.useContext(Datas)
+
+    const [janr,setJanr] = React.useState()
+
+
+    React.useEffect(()=>{
+        const fetch = async()=>{
+            let janr = await getJanr()
+            console.log(janr)
+          //  setJanr(janr.filter((item)=>themes.some((i)=>i===item.name)))
+        }
+        fetch()
+    },[])
 
     return (
         <ScrollView style={styles.home}>
-            <View style={{justifyContent:'center',alignItems:"center"}}>
-                {serials.length?<><BigCardCarusel/>
-                <Text style={styles.titleBlock}>Лучшие подборки </Text>
-                <CardCarusel navigation ={props.navigation}/>
+            <View>
+                <>
+                <BigCardCarusel/>
+                {janr && janr.map(item=>(
+                <View key={item.id}>
                 <View style={styles.newsBlock} >
-                    <Text style={styles.newsText}>Новинки</Text>
-                    <DrawerItem pressColor='#fff' style={{marginTop:-10,marginBottom:-20,}} label='' icon={()=>(<Text style={styles.newsLink}>{'Ещё >'}</Text>)}/>
+                    <Text style={styles.newsText}>{item.name}</Text>
+                    <DrawerItem  pressColor='#fff' style={{marginTop:-10,marginBottom:-20,}} label='' icon={()=>(<Text style={styles.newsLink}>{'Ещё >'}</Text>)}/>
                 </View>
-                <CardCarusel navigation ={props.navigation} />
-                <Text style={styles.titleBlock}>Фильмы по жанрам</Text>
-                <CardCarusel navigation ={props.navigation}/>
-                <Text style={styles.titleBlock}>Амедиатека</Text>
-                <CardCarusel navigation ={props.navigation}/>
-                <Text style={styles.titleBlock}>Мегого </Text>
-                <CardCarusel navigation ={props.navigation}/>
-                <Text style={styles.titleBlock}>Tvcom Play</Text>
-                <CardCarusel navigation ={props.navigation}/>
-                <Text style={styles.titleBlock}>Лидеры</Text>
-                <CardCarusel navigation ={props.navigation}/>
-             </>:<View style={{width:screenWidth,height:screenHeight-150,alignItems:'center',justifyContent:'center'}}><ActivityIndicator  size="large" color='#fff' /></View>}
+                <CardCarusel gid={item.id} navigation ={props.navigation}/>
+                </View>
+                ))}
+             </>
+              {/* :<View style={{width:screenWidth,height:screenHeight-150,alignItems:'center',justifyContent:'center'}}><ActivityIndicator  size="large" color='#fff' /></View>} */}
              </View>
         </ScrollView>
   

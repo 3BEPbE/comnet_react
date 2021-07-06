@@ -26,13 +26,13 @@ const links =[
     {
         label:'Фильмы',
         navigation:'MovieList',
-        params:'film',
+        params:{season:0},
         icon:require('../images/burgerMenuIcon4.png')
     },
     {
         label:'Сериалы',
         navigation:'MovieList',
-        params:'serial',
+        params:{season:1},
         icon:require('../images/burgerMenuIcon5.png')
     },
     {
@@ -83,7 +83,7 @@ export  function BurgerMenu(props) {
                     {links.map(e=>(
                         <DrawerItem pressColor='#fff'  key={e.label} {...props} style={styles.link} icon={()=>(
                         <Image style={styles.icon} source={e.icon}/>)}
-                        onPress={() => {setTimeout(()=>{setOpenBurger(false)},500);props.navigation.navigate(e.navigation,{name:e.params})}} inactiveTintColor ='#fff' label={e.label}/>
+                        onPress={() => {setTimeout(()=>{setOpenBurger(false)},500);props.navigation.navigate(e.navigation,e.params)}} inactiveTintColor ='#fff' label={e.label}/>
                     ))}
                     <DrawerItem pressColor='#fff'  key={'Узбекские'} {...props} style={styles.link} icon={()=>(
                         <Image style={styles.icon} source={require('../images/burgerMenuIcon10.png')}/>)}
@@ -111,7 +111,7 @@ export  function BurgerMenuGuest(props) {
                     {links.map(e=>(
                         <DrawerItem pressColor='#fff'  key={e.label} {...props} style={styles.link} icon={()=>(
                         <Image style={styles.icon} source={e.icon}/>)}
-                        onPress={() =>{ props.navigation.navigate('MovieList',{name:e.params});setTimeout(()=>{setOpenBurger(false)},500)}} inactiveTintColor ='#fff' label={e.label}/>
+                        onPress={() =>{ props.navigation.navigate('MovieList',e.params);setTimeout(()=>{setOpenBurger(false)},500)}} inactiveTintColor ='#fff' label={e.label}/>
                     ))}
                     <DrawerItem pressColor='#fff' key={'Узбекские'} {...props} style={styles.link} icon={()=>(
                         <Image style={styles.icon} source={require('../images/burgerMenuIcon10.png')}/>)}
