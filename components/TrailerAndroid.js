@@ -1,20 +1,22 @@
-import { View ,StyleSheet,Dimensions} from 'react-native';
+import { View ,StyleSheet,Dimensions,Image} from 'react-native';
 import React from 'react';
 import { Video } from 'expo-av';
 import { LinearGradient } from 'expo-linear-gradient';
 
 const { width: screenWidth } = Dimensions.get('window')
-const TrailerAndroid = () => {
-    const video = React.useRef(null);
-    React.useEffect(()=>{
-      video.current.playAsync()
-    },[video])
+const TrailerAndroid = ({src}) => {
+    // const video = React.useRef(null);
+    
+    // React.useEffect(()=>{
+    //   video.current.playAsync()
+    // },[video])
   return (
     <>
     <View style={styles.container}>
         <LinearGradient style={styles.gradient} colors={['transparent', '#000000c4','#000000c4']}>
         </LinearGradient>
-        <Video
+        <Image source={{uri:src}} style={styles.video}/>
+        {/* <Video
           ref={video}
           style={styles.video}
           source={{
@@ -24,7 +26,7 @@ const TrailerAndroid = () => {
           resizeMode="cover"
           isLooping
           isMuted={true}
-        />
+        /> */}
         </View>
       </>
 
@@ -35,24 +37,23 @@ export default TrailerAndroid
 
 const styles = StyleSheet.create({
     container:{
-      width:screenWidth+100,
+      width:screenWidth,
       height:100,
       position:'relative'
     },
     video:{
         display:'flex',
         flexDirection:'row',
-        height:screenWidth+100,
-        width:screenWidth+100,
-        resizeMode:'cover',
+        height:screenWidth+80,
+        width:screenWidth,
         resizeMode:'cover',
 
    },
    gradient:{
     position:'absolute',
     zIndex:2,
-    top:0,left:50,right:0,bottom:0,
-    width:screenWidth+100,
+    top:0,left:0,right:0,bottom:0,
+    width:screenWidth,
     height:screenWidth+100,
    }
 })

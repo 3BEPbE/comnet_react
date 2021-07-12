@@ -55,7 +55,7 @@ export default function SerialCarusel({currentFilm,currentSeria,setCurrentSeria,
        {list2?<Carusel setData={setCurrentSeria}  setList1={setList2} data={serial}/>:
           <DrawerItem onPress={()=>setList2(true)} icon={()=>(
           <View style={styles.button} >
-            <Text style={{color:'#000',fontSize:22}}>{currentSeria} seria</Text>
+            <Text style={{color:'#000',fontSize:22}}>{currentSeria} серия</Text>
           </View>
         )} label=''/>} 
      

@@ -13,16 +13,17 @@ const { width: screenWidth,height:screenHeight } = Dimensions.get('window')
 const isTV = 1000<screenWidth
 
 export default function Movie({route,navigation}) {
-    const {isLogin,getCurrentMovie,getSrc} = React.useContext(Datas) 
+    const {isLogin,getCurrentMovie,getSrc,checkToken} = React.useContext(Datas) 
     const [description,setDiscription] = React.useState(false)
     const currentFilm = route.params;
     const [src,setSrc] = React.useState('')
-  
     const [currentSeason,setCurrentSeason] = React.useState()
     const [currentSeria,setCurrentSeria] = React.useState()
-    
+
     React.useEffect(()=>{      
-        if(currentFilm.is_season&&currentSeason&&currentSeria){
+        if(isLogin){
+            checkToken()
+            if(currentFilm.is_season&&currentSeason&&currentSeria){
             const fetch = async()=>{ 
                 const actions = await getCurrentMovie(currentFilm.id)
                 const currentVid = await actions.filter((elem)=>{return elem.caption === `Сезон ${currentSeason} серия ${currentSeria}`})
@@ -33,21 +34,13 @@ export default function Movie({route,navigation}) {
 
                 }
             fetch()
-        }
-        else{
-            const fetch = async()=>{ 
-                const actions = await getCurrentMovie(currentFilm.id)
-                const src =  await getSrc({fileId:actions[0].fileId,id:actions[0].video_id})   
-                setSrc(src)
-                }
-            fetch()
-        }
+        }}
     },[currentSeason,currentSeria])
     return(
         <ScrollView style={styles.Page}>
             {isTV?
-            <View style={{alignItems:'center'}}><Trailer /></View>:
-            <View style={{alignItems:'center'}}><TrailerAndroid navigation={navigation}/></View>
+            <View style={{alignItems:'center'}}><Trailer src={currentFilm.thumbnail_big} /></View>:
+            <View style={{alignItems:'center'}}><TrailerAndroid src={currentFilm.thumbnail_big} navigation={navigation}/></View>
             }
                 <View style={styles.mainInfo}>
                     <Image style={styles.secondImage} source={{uri:currentFilm.thumbnail_small}}></Image>
@@ -58,11 +51,11 @@ export default function Movie({route,navigation}) {
                         <View style={styles.mainInfoTextItem4Block}><Text  style={styles.mainInfoTextItem4}>{currentFilm.rating}+</Text></View>
                         <View style={{...styles.ranking,display:(isTV?'flex':'none')}}>
                             <View style={styles.rankingItem}>
-                                    <Text  style={styles.rankingNumber}>8.1</Text>
+                                    <Text  style={styles.rankingNumber}>{currentFilm.imdb_rating}</Text>
                                     <Text style={styles.rankingText}>IMDb</Text>
                             </View>
                             <View style={styles.rankingItem}>
-                                    <Text style={styles.rankingNumber}>8</Text>
+                                    <Text style={styles.rankingNumber}>{currentFilm.kinopoisk_rating}</Text>
                                     <Text style={styles.rankingText}>КиноПоиск</Text>
                             </View>
                         </View> 
@@ -73,7 +66,7 @@ export default function Movie({route,navigation}) {
             <View stylle={styles.content}>
                {isLogin?<DrawerItem pressColor='#fff' style={{zIndex:2}} label='' onPress={()=>navigation.navigate(isTV?'WatchingTV':'Watching',{src})} icon={()=> 
                         (<View style={styles.button}><Text style={styles.buttonText}>Смотреть</Text></View>)} />
-                        : <DrawerItem pressColor='#fff'   label='' onPress={()=>navigation.navigate('Watching')} icon={()=> 
+                        : <DrawerItem pressColor='#fff' style={{zIndex:2,marginTop:20}}   label='' onPress={()=>navigation.navigate('Watching')} icon={()=> 
                         (<View style={styles.button}><Text style={styles.buttonText}>Приобрети подписку</Text></View>)} />}
                    {isLogin&&currentFilm.is_season? <SeriaCarusel currentSeria={currentSeria} setCurrentSeria={setCurrentSeria} currentSeason={currentSeason} setCurrentSeason={setCurrentSeason} currentFilm={currentFilm}/>:<></>}
                    {currentFilm.description ? <View> 
@@ -97,7 +90,7 @@ export default function Movie({route,navigation}) {
                     </View>  
                     <JanrCarusel janr={currentFilm.genres}/>
                     <Text style={styles.caruselTitle}>Похожие фильмы</Text>
-                    <CardCarusel navigation={navigation} navigation={navigation} />
+                    <CardCarusel navigation={navigation}/>
                     <Text style={styles.caruselTitle}>Фильмы которые идут по телеканалам в данный момент</Text>
                     <CardCarusel navigation={navigation}/>
             </View>

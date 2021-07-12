@@ -1,42 +1,62 @@
-import React from 'react';
+import React, { PureComponent } from 'react';
 import { View ,StyleSheet,Text,Dimensions,ImageBackground} from 'react-native';
 import Carousel from 'react-native-snap-carousel';
 import {DrawerItem} from '@react-navigation/drawer'
 import {Datas} from '../context/context'
-import { getSpecificOrientation } from 'react-native-orientation';
+
 
 const { width: screenWidth } = Dimensions.get('window')
 let isTV = screenWidth>950
 
-export default function BigCardCaruselgetSerialasgetSerialas() {
-    const {getSerialas,serials} = React.useContext(Datas)
-    const ref = React.useRef(null);
+class Post extends PureComponent {
+    constructor(props){
+       super(props);
+       this.item = props.item
+       this.index = props.index
+       this.navigation = props.navigation
+    }
+
+    render() { return( 
+        <DrawerItem pressColor='#fff' onPress={()=>{this.navigation.navigate('Movie',this.item)}} label='' icon={()=>{
+            return(<ImageBackground source={{uri:this.item.thumbnail_big}} style={styles.imgBlocl}>
+              <ImageBackground source={require('../images/corusulGradient.png')} style={styles.textBlock}>
+                  <View style={styles.ranking}>
+                      <View style={styles.rankingItem}>
+                              <Text  style={styles.rankingNumber}>{this.item.imdb_rating}</Text>
+                              <Text style={styles.rankingText}>IMDb</Text>
+                      </View>
+                      <View style={styles.rankingItem}>
+                              <Text style={styles.rankingNumber}>{this.item.kinopoisk_rating}</Text>
+                              <Text style={styles.rankingText}>КиноПоиск</Text>
+                      </View>
+                  </View>
+                  <View style={styles.nameBlock}><Text style={styles.name}>{this.item.name}</Text></View>
+                  <Text style={styles.about}>{this.item.description && this.item.description.slice(0,100)}...</Text>
+              </ImageBackground>    
+          </ImageBackground>)
+          }}/>
+    ) }
+  }
+
+
+export default function BigCardCarusel({gid,navigation}) {
+    const {getFilms} = React.useContext(Datas)
+
+    const [data,setData] = React.useState([])
+ 
     React.useEffect(()=>{
-    //  getSerialas(1)
-    },[])
+        const fetch =async()=>{
+          let data = await getFilms(1,{gid,season:0})
+          setData(data)
+        }
+        fetch()
+      },[])
    
 
     
     const renderItem = React.useCallback(({ item, index }) => {
       return(
-            <DrawerItem pressColor={'#fff'} label='' icon={()=>{
-              return(<ImageBackground source={{uri:item.thumbnail_big}} style={styles.imgBlocl}>
-                <ImageBackground source={require('../images/corusulGradient.png')} style={styles.textBlock}>
-                    <View style={styles.ranking}>
-                        <View style={styles.rankingItem}>
-                                <Text  style={styles.rankingNumber}>{item.imdb_rating}</Text>
-                                <Text style={styles.rankingText}>IMDb</Text>
-                        </View>
-                        <View style={styles.rankingItem}>
-                                <Text style={styles.rankingNumber}>{item.kinopoisk_rating}</Text>
-                                <Text style={styles.rankingText}>КиноПоиск</Text>
-                        </View>
-                    </View>
-                    <View style={styles.nameBlock}><Text style={styles.name}>{item.name}</Text></View>
-                    <Text style={styles.about}>{item.description && item.description.slice(0,100)}...</Text>
-                </ImageBackground>    
-            </ImageBackground>)
-            }}/>
+           <Post navigation={navigation} item={item} index={index}/>
             
     )}, []);
   
@@ -44,14 +64,14 @@ export default function BigCardCaruselgetSerialasgetSerialas() {
         <View style={{ marginTop:20,marginBottom:20}}>
           <Carousel
             layout="default"
-            ref={ref}
-            data={serials}
+            data={data}
             sliderWidth={screenWidth}
             itemWidth={isTV?screenWidth:screenWidth}
             sliderHeight={isTV?700:300}
             renderItem={renderItem}
             activeSlideAlignment={'center'}
             inactiveSlideScale={0.93}
+            initialNumToRender={7}
           />
         </View>
   

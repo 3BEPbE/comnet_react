@@ -1,10 +1,15 @@
 import React from 'react';
-import { View ,StyleSheet,Text,ImageBackground,Image} from 'react-native';
+import { View ,StyleSheet,Text,ImageBackground,Image,Dimensions} from 'react-native';
 import {
     DrawerContentScrollView,
     DrawerItem
 } from '@react-navigation/drawer'
+import { useIsDrawerOpen } from '@react-navigation/drawer';
 import { Datas } from '../context/context';
+
+const { width: screenWidth } = Dimensions.get('window')
+
+let isTV = screenWidth>950
 
 const links =[
     {
@@ -59,17 +64,23 @@ const links =[
 
 
 export  function BurgerMenu(props) {
-    const {storeData,getData,isOpenBurger,setOpenBurger} = React.useContext(Datas)
+    
+
+    const {storeData,getData} = React.useContext(Datas)
     const exit = () =>{
         props.navigation.closeDrawer();
         storeData('token',null)  
         getData('token')
     }
+    const isDrawerOpen = useIsDrawerOpen();
+    
+   
+    
     return(
     <>  
-            {isOpenBurger?<DrawerContentScrollView style={styles.content} {...props} >
+            {isDrawerOpen||!isTV?<DrawerContentScrollView style={styles.content} {...props} >
                 <ImageBackground style={styles.bcImage} source={require('../images/burgerMenu-bc.png')}>
-                    <DrawerItem pressColor='#fff'  onPress={()=>{props.navigation.navigate('Profile');setTimeout(()=>{setOpenBurger(false)},500)}} style={{marginTop:30}} label='' icon={()=>(     
+                    <DrawerItem pressColor='#fff'  onPress={()=>{props.navigation.navigate('Profile')}} style={{marginTop:30}} label='' icon={()=>(     
                     <View style={styles.profileBlock}>
                             <><Image source={require('../images/burgerMenuProfile.png')} style={styles.profileImage}/></>
                             <View>
@@ -83,42 +94,48 @@ export  function BurgerMenu(props) {
                     {links.map(e=>(
                         <DrawerItem pressColor='#fff'  key={e.label} {...props} style={styles.link} icon={()=>(
                         <Image style={styles.icon} source={e.icon}/>)}
-                        onPress={() => {setTimeout(()=>{setOpenBurger(false)},500);props.navigation.navigate(e.navigation,e.params)}} inactiveTintColor ='#fff' label={e.label}/>
+                        onPress={() => {props.navigation.navigate(e.navigation,e.params)}} inactiveTintColor ='#fff' label={e.label}/>
                     ))}
                     <DrawerItem pressColor='#fff'  key={'Узбекские'} {...props} style={styles.link} icon={()=>(
                         <Image style={styles.icon} source={require('../images/burgerMenuIcon10.png')}/>)}
-                        onPress={() => {alert('useless');setTimeout(()=>{setOpenBurger(false)},500)}} inactiveTintColor ='#fff' label={'Узбекские'}/>
+                        onPress={() => {alert('useless')}} inactiveTintColor ='#fff' label={'Узбекские'}/>
                     <DrawerItem pressColor='#fff'  key={'Выйти'} {...props} style={styles.link} icon={()=>(
                         <Image style={styles.icon} source={require('../images/burgerMenuIcon11.png')}/>)}
-                        onPress={() => {setTimeout(()=>{setOpenBurger(false)},500);exit()}} inactiveTintColor ='#fff' label={'Выйти'}/>
+                        onPress={() => {exit()}} inactiveTintColor ='#fff' label={'Выйти'}/>
                 </View>
-            </DrawerContentScrollView>:<></>}
+            </DrawerContentScrollView>:<DrawerContentScrollView style={styles.content} {...props} >
+                      </DrawerContentScrollView>}
             
     </>
     )
 }
 export  function BurgerMenuGuest(props) {
-    const {isOpenBurger,setOpenBurger} = React.useContext(Datas)
+    const isDrawerOpen = useIsDrawerOpen();
     return(
-        <>
-            {isOpenBurger?<DrawerContentScrollView style={styles.content} {...props} >
+        <> 
+            {isDrawerOpen||!isTV?
+                 <DrawerContentScrollView style={styles.content} {...props} >
                 <View style={styles.bcImage} >
                 </View>
                 <DrawerItem pressColor='#fff'  key={'Войти'} {...props} style={styles.link} icon={()=>(
                         <Image style={styles.icon} source={require('../images/burgerMenuIcon11.png')}/>)}
-                        onPress={() => {props.navigation.navigate('Login');setTimeout(()=>{setOpenBurger(false)},500)}} inactiveTintColor ='#fff' label={'Войти'}/>
+                        onPress={() => {props.navigation.navigate('Login')}} inactiveTintColor ='#fff' label={'Войти'}/>
                 <View style={styles.list}>
                     {links.map(e=>(
                         <DrawerItem pressColor='#fff'  key={e.label} {...props} style={styles.link} icon={()=>(
                         <Image style={styles.icon} source={e.icon}/>)}
-                        onPress={() =>{ props.navigation.navigate('MovieList',e.params);setTimeout(()=>{setOpenBurger(false)},500)}} inactiveTintColor ='#fff' label={e.label}/>
+                        onPress={() =>{ props.navigation.navigate('MovieList',e.params)}} inactiveTintColor ='#fff' label={e.label}/>
                     ))}
                     <DrawerItem pressColor='#fff' key={'Узбекские'} {...props} style={styles.link} icon={()=>(
                         <Image style={styles.icon} source={require('../images/burgerMenuIcon10.png')}/>)}
-                        onPress={() => {setTimeout(()=>{setOpenBurger(false)},500);alert('useless')}} inactiveTintColor ='#fff' label={'Узбекские'}/>
+                        onPress={()=>{alert('useless')}} inactiveTintColor ='#fff' label={'Узбекские'}/>
                    
                 </View>
-            </DrawerContentScrollView>:<></>}
+                </DrawerContentScrollView>
+                :  <View style={styles.content} {...props} >
+                      </View>
+            }
+          
         </>   
     
     )

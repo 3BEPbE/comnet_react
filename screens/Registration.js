@@ -32,32 +32,30 @@ export default function Registration(props) {
                 <View style={styles.textBlock}>
                     <Text style={styles.infoText}>Регистрация</Text>      
                 </View>
-                <View style={styles.blockButton}>
-                    <DrawerItem onPress={()=>{
+                    <DrawerItem  pressColor='#fff' onPress={()=>{
                         setStatus({log:!status.log,reg:false})
-                    }} style={styles.focusItem} label='' icon={()=>(
+                    }} style={{...styles.focusItem,marginTop:20}} label='' icon={()=>(
                         <View style={{...styles.button,backgroundColor:status.log?'#E41A4B':'transparent'}}>
                             <Text style={styles.buttonText}>Я абонент Comnet</Text>
                         </View>
                     )} />
-                     <DrawerItem onPress={()=>{
+                     <DrawerItem pressColor='#fff' onPress={()=>{
                         setStatus({log:false,reg:!status.reg})
                         }} style={styles.focusItem}  label='' icon={()=>(
                         <View style={{...styles.button,backgroundColor:status.reg?'#E41A4B':'transparent'}}>
                             <Text style={styles.buttonText}>Я не абонент Comnet</Text>
                         </View>
                     )} />
-                </View>
                 <View style={{...styles.inputBlock,display:status.log?'flex':'none'}}>
                     <View style={styles.inputItem}>
                         <Text style={styles.titleInput}>Номер телефона*</Text>
-                        <DrawerItem onPress={()=>textInputs[0].focus()} style={styles.focusItem2} label='' icon={()=>(
+                        <DrawerItem pressColor='#fff' onPress={()=>textInputs[0].focus()} style={styles.focusItem2} label='' icon={()=>(
                            <TextInput ref={(input)=>{textInputs[0]=input}} style={styles.input} autoCompleteType={'off'} autoCorrect={false}/>
                         )}/>
                     </View>
                     <View style={styles.inputItem}>
                         <Text style={styles.titleInput}>Логин Comnet*</Text>
-                        <DrawerItem onPress={()=>textInputs[1].focus()} style={styles.focusItem2} label='' icon={()=>(
+                        <DrawerItem pressColor='#fff' onPress={()=>textInputs[1].focus()} style={styles.focusItem2} label='' icon={()=>(
                              <TextInput ref={(input)=>{textInputs[1]=input}} style={styles.input} autoCompleteType={'off'} autoCorrect={false}/>
                         )}/>
                     </View>
@@ -65,18 +63,18 @@ export default function Registration(props) {
                 <View style={{...styles.inputBlock,display:status.reg?'flex':'none'}}>
                     <View style={styles.inputItem}>
                         <Text style={styles.titleInput}>Номер телефона*</Text>
-                        <DrawerItem onPress={()=>textInputs[2].focus()} style={styles.focusItem2} label='' icon={()=>(
+                        <DrawerItem pressColor='#fff' onPress={()=>textInputs[2].focus()} style={styles.focusItem2} label='' icon={()=>(
                            <TextInput value={data.number} onChangeText={(e)=>changeNumber(e)} ref={(input)=>{textInputs[2]=input}}  style={styles.input} autoCompleteType={'off'} autoCorrect={false}/>
                         )}/>
                     </View>
                     <View style={styles.aksiya}>
-                        <DrawerItem onPress={()=>{
+                        <DrawerItem pressColor='#fff' onPress={()=>{
                             if(aksiya.one.backgroundColor==='#E41A4B'){
                                 setAksiya({one:{backgroundColor:'transparent'},two:{backgroundColor:'transparent'}});return}
                             setAksiya({one:{backgroundColor:'#E41A4B'},two:{backgroundColor:'transparent'}});}} 
                             style={styles.aksiyaFocus} label='' icon={()=>(
                                 <View style={{...styles.aksiyaBtn,...aksiya.one}}><Text style={styles.aksiyaText1}>Использовать Промокод</Text></View>)}/>
-                        <DrawerItem 
+                        <DrawerItem pressColor='#fff'
                             onPress={()=>
                                {if(aksiya.two.backgroundColor==='#E41A4B'){
                                 setAksiya({one:{backgroundColor:'transparent'},two:{backgroundColor:'transparent'}});return}
@@ -90,7 +88,7 @@ export default function Registration(props) {
                         onPress={() => {
                             setChecked(!checked);
                         }}/> 
-                        <DrawerItem label='' style={{width:300}} icon={()=>(       
+                        <DrawerItem pressColor='#fff' label='' style={{width:300}} icon={()=>(       
                         <View style={styles.agreeTextBlock}>    
                             <Text style={styles.textAgree1}>Я принимаю<Text style={styles.textAgree2}> условия пользовательского соглашения</Text></Text>
 
@@ -154,11 +152,9 @@ const styles = StyleSheet.create({
         justifyContent:'center'
     },
     focusItem:{
-        width:screenWidth-40,
-        marginLeft:isTV?40:0,
-        padding:0,
-        alignItems:'center',
-        justifyContent:'center'
+        width:isTV?300:screenWidth-45,
+        marginLeft:isTV?0:0,
+        top:0,left:0,right:0,bottom:0,
     },
     input:{
         width:isTV?400:screenWidth-40,
@@ -173,8 +169,8 @@ const styles = StyleSheet.create({
         marginTop:70
     },
     button:{
-        width:isTV?400:screenWidth-60,
-        marginLeft:isTV?40:70,
+        width:isTV?300:screenWidth-60,
+        marginLeft:isTV?0:0,
         height:50,
         alignItems:'center',
         justifyContent:'center',

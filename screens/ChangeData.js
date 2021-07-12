@@ -2,9 +2,14 @@ import React from 'react';
 import { View ,StyleSheet,Text,TouchableWithoutFeedback, ScrollView,Image,TextInput} from 'react-native';
 import { Button } from 'react-native-paper';
 import { DrawerItem } from '@react-navigation/drawer'
+import { Datas } from '../context/context';
 
 export default function ChangData(props) {
 
+    const { checkToken} =React.useContext(Datas)
+    React.useEffect(()=>{
+        checkToken()
+    },[])
     const [data,setData] = React.useState({
         name:'',
         surname:'',

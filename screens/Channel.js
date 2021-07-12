@@ -5,20 +5,40 @@ import JanrCarusel from '../components/JanrCarusel';
 import CardCarusel from '../components/CardCarusel'
 import ChannelCarusel from '../components/ChannelCarusel'
 import { DrawerItem } from '@react-navigation/drawer'
+import { Datas } from '../context/context';
 
 const { width: screenWidth,height:screenHeight } = Dimensions.get('window')
 const isTV = screenWidth>900
 export default function Channel({route,navigation}) {
+    const currentFilm = route.params
+    const { checkToken,getChannelSrc} =React.useContext(Datas)
+    const [src,setSrc] = React.useState('')
 
+    React.useEffect(()=>{
+        const fetch = async () =>{
+            let src = await getChannelSrc(currentFilm.id)
+            setSrc(src.uri)
+        }
+        fetch()
+        checkToken()
+    },[])
+
+    const converter = (sec)=>{
+        var d = new Date(sec*1000+5*60*1000*60);
+        var time = d; 
+        let hour = `${time.getUTCHours()}`.length===1?`0${time.getUTCHours()}`:time.getUTCHours()
+        let minute =  `${time.getUTCMinutes()}`.length===1?`0${time.getUTCMinutes()}`:time.getUTCMinutes()
+        return [`${hour}:${minute}`,]
+    }
     return(
         <ScrollView style={styles.container}>
-            <Text style={styles.channelName}>Первый канал смотреть онлайн</Text>
-            <Text style={styles.channelType} >Новости, Кино, Эфирные</Text>
+            <Text style={styles.channelName}>{currentFilm.name} смотреть онлайн</Text>
+            {/* <Text style={styles.channelType} >Новости, Кино, Эфирные</Text> */}
             <ImageBackground source={require('../images/example.jpg')} style={styles.image}>
                 <LinearGradient style={styles.ImageBlock}  colors={['transparent', '#00000067']}>
                     <View>
-                        <Text style={styles.imageText}>Просмотр доступен бесплатно после авторизации</Text>
-                        <DrawerItem pressColor='#fff' style={{marginLeft:20,marginRight:180,height:70}} label='' icon={()=>(
+                        {/* <Text style={styles.imageText}>Просмотр доступен бесплатно после авторизации</Text> */}
+                        <DrawerItem onPress={()=>{isTV?navigation.navigate('WatchingTV',{src}):navigation.navigate('Watching',{src})}} pressColor='#fff'  style={{marginLeft:20,marginRight:180,height:70}} label='' icon={()=>(
                           <View style={styles.imageButton}>
                               <Text style={styles.imageButtonText}>Смотреть бесплатно</Text>
                           </View>
@@ -27,17 +47,17 @@ export default function Channel({route,navigation}) {
                     </View>
                 </LinearGradient>
             </ImageBackground>
-            <Text style={styles.mainData}>17:00 - 18:00</Text>
-            <Text style={styles.mainData}>"Человек и закон" с Алексеем Пимановым</Text>
+            <Text style={styles.mainData}>{converter(currentFilm.program_begin_time)} - {converter(currentFilm.program_end_time)}</Text>
+            <Text style={styles.mainData}>{currentFilm.program_name}</Text>
             <View style={styles.senzura}>
                 <Text style={styles.senzuraText}>
-                    16+
+                   {currentFilm.program_rating}+
                 </Text>
             </View>
             <Text style={styles.info}>
-                Владимир Путин принимает участие в пленарном заседании на Петербургском экономическом форуме
+            {currentFilm.program_description}
             </Text>
-            <JanrCarusel/>
+            {/* <JanrCarusel/> */}
 
             <View style={styles.timeTable}>
                 {[1,2,3,4].map((item)=>(

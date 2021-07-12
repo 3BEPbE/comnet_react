@@ -1,24 +1,54 @@
-import React from 'react';
-import { SafeAreaView, View, FlatList, StyleSheet, Text, ActivityIndicator,Image,Dimensions } from 'react-native';
+import React,{Component} from 'react';
+import { SafeAreaView, View, FlatList, StyleSheet, Text, ActivityIndicator,Image,Dimensions,ScrollView } from 'react-native';
 import { Datas } from '../context/context';
 import { DrawerItem } from '@react-navigation/drawer';
 
 const { width: screenWidth } = Dimensions.get('window')
+const isTV = screenWidth>950
 
- const isTV = screenWidth>950
+class Post extends Component {
+  constructor(props){
+     super(props);
+     this.item = props
+     this.navigation =props.navigation
+  }
+  render() { 
+    return( 
+        <DrawerItem pressColor='#fff'  style={styles.focusItem} onPress={()=>{this.navigation.navigate( 'Movie',this.item.item)}} icon={()=>(
+          (<View style={styles.item}>
+                  <Image style={styles.image} source={{uri: this.item.item.thumbnail_small}}/>
+                  <Text style={styles.text}>{ this.item.item.name.length>35?<>{ this.item.item.name.slice(0,35)}...</>: this.item.item.name}</Text>
+            </View>)
+      )} label=''/>)
+    }
+  }
+
 
 
 const MovieList = ({navigation,route}) => {
 
-  const {getFilms} = React.useContext(Datas)
+  const {getFilms,checkToken,isLogin} = React.useContext(Datas)
   const [page,setPage] = React.useState(1)
   const [data,setData] = React.useState({currentPage:0, data:[] })
   const [isLoading,setLoading] = React.useState(false)
-  const navigate = (item)=>{
-      navigation.navigate('Movie',item)
+ 
+  const isCloseToBottom = ({layoutMeasurement, contentOffset, contentSize}) => {
+    const paddingToBottom = 20;
+    return layoutMeasurement.height + contentOffset.y >=
+      contentSize.height - paddingToBottom;
+  };
+  const onScroll = ({nativeEvent})=>{
+    checkToken()
+    if (isCloseToBottom(nativeEvent)) {
+      if (isLoading) return;
+       setLoading(true)
+       setPage((lastpage)=>lastpage+1)
+    }
   }
-  
   React.useEffect(()=>{
+    if(isLogin){
+      checkToken()
+    }
    const fetch = async ()=>{
         let serials = await getFilms(page,route.params)
         await setData({
@@ -33,10 +63,8 @@ const MovieList = ({navigation,route}) => {
   
   React.useEffect(()=>{
       const fetch = async ()=>{
+        checkToken()
         let films = await getFilms(1,route.params)
-
-        console.log(films[0])
-
         await setData({
                   currentPage:1,
                   data:films
@@ -45,52 +73,30 @@ const MovieList = ({navigation,route}) => {
         }
         fetch()
   },[route.params])
-
-
-  const renderItem = (item) => {
-    return(
-        <DrawerItem pressColor='#fff'  style={styles.focusItem} onPress={()=>{navigate(item.item,)}} icon={()=>{
-            return (<View style={styles.item}>
-                     <Image style={styles.image} source={{uri:item.item.thumbnail_small}}/>
-                     <Text style={styles.text}>{item.item.name.length>35?<>{item.item.name.slice(0,35)}...</>:item.item.name}</Text>
-                   </View>)
-         }} label=''/>
-  )};
   return (
     <SafeAreaView style={styles.container}>
+      <ScrollView
+        onScroll={(props)=>{onScroll(props)}}scrollEventThrottle={400}>
 
-      {isTV?
-      <FlatList
-      removeClippedSubviews={true}
-      style={{flexDirection:'column',marginTop:10}}
-      contentContainerStyle= {{alignItems:'center'}}
-      numColumns={6}
-      data={data.data}
-      renderItem={renderItem}
-      keyExtractor={(item,i) => i}
-      onEndReachedThreshold={0.5}
-      onEndReached={({ distanceFromEnd }) => {
-          if (distanceFromEnd < 0&&!isLoading) return;
-          setLoading(true)
-          setPage((lastpage)=>lastpage+1)
-      }}
-    />:
-      <FlatList
-        removeClippedSubviews={true}
-        style={{flexDirection:'column',marginTop:10}}
-        contentContainerStyle= {{alignItems:'center'}}
-        numColumns={2}
-        data={data.data}
-        renderItem={renderItem}
-        keyExtractor={(item,i) => i}
-        onEndReachedThreshold={0.5}
-        onEndReached={({ distanceFromEnd }) => {
-            if (distanceFromEnd < 0&&!isLoading) return;
-            setLoading(true)
-            setPage((lastpage)=>lastpage+1)
-        }}
-      />}
-      {isLoading?<ActivityIndicator size="large" color='#fff'/>:<></>}
+        <View style={{
+        flexWrap:'wrap',
+        width:screenWidth,
+        flexDirection:'row',
+        justifyContent:'center'
+        }}>
+        
+        {data.data && data.data.map((item,i)=>(
+          <DrawerItem pressColor='#fff' key={i}  style={styles.focusItem} onPress={()=>{navigation.navigate( 'Movie',item)}} icon={()=>(
+            (<View style={styles.item}>
+                    <Image style={styles.image} source={{uri: item.thumbnail_small}}/>
+                    <Text style={styles.text}>{item.name.length>35?<>{item.name.slice(0,35)}...</>:item.name}</Text>
+              </View>)
+        )} label=''/>
+        ))}
+
+        </View>
+        {isLoading?<ActivityIndicator size="large" color='#fff'/>:<></>}
+      </ScrollView>
     </SafeAreaView>
   );
 }
@@ -102,11 +108,12 @@ const styles = StyleSheet.create({
   },
   item:{
       width:170,
-      height:240,  
+      height:250,  
   },
   image:{
     width:180,
-    height:200,
+    height:210,
+    resizeMode:'stretch'
   },
   focusItem:{
     top:0,bottom:0,left:0,right:0,

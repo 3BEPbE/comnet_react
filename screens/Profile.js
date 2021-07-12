@@ -5,7 +5,11 @@ import {Datas} from '../context/context'
 import { DrawerItem } from '@react-navigation/drawer' 
 
 export default function Profile(props) {
-    const {test} = React.useContext(Datas)
+    const {test,checkToken} = React.useContext(Datas)
+    
+    React.useEffect(()=>{
+        checkToken()
+    },[])
     return(
         <ScrollView style={styles.Container}>
             <View style={styles.personalData}>

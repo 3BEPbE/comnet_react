@@ -1,13 +1,16 @@
 import React from 'react';
 import { View ,StyleSheet,Text,Dimensions,Image, TouchableWithoutFeedback} from 'react-native';
 import { Video } from 'expo-av'
-
+import { Datas } from '../context/context';
 import {converter} from '../components/Video/timeHelper'
 
 const { width: screenWidth,height:screenHeight } = Dimensions.get('window')
 const isTV = 1000<screenWidth
 export default function FullScreen(props) {
-   
+    const { checkToken} =React.useContext(Datas)
+    React.useEffect(()=>{
+        checkToken()
+    },[])
     const video = React.useRef(null);
     const [status, setStatus] = React.useState(props.route.params.status);
     const [isPausedStyle,setisPaused] = React.useState({style:{opacity:1}})

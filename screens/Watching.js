@@ -7,10 +7,11 @@ import { Datas } from '../context/context';
 
 export default function Watching({route}){
   
-  const {setStatusHidden} = React.useContext(Datas)
+  const {setStatusHidden,checkToken} = React.useContext(Datas)
   React.useEffect(()=>{
+    checkToken()
     setStatusHidden(true)
-  },)
+  },[])
   
   return(
     <View style={styles.container}>

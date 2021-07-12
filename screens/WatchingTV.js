@@ -6,10 +6,12 @@ const isTV = 1000<screenWidth
 import { Datas } from '../context/context';
 
 export default function WatchingTV({route}){
-  const {setStatusHidden} = React.useContext(Datas)
+  const {setStatusHidden,checkToken} = React.useContext(Datas)
+
   React.useEffect(()=>{
     setStatusHidden(true)
-  },)
+    checkToken()
+  },[])
   
   return(
     <View style={styles.container}>

@@ -1,15 +1,14 @@
-import React,{PureComponent} from 'react';
+import React,{Component} from 'react';
 import { View ,StyleSheet,Text,Dimensions,ImageBackground, TouchableWithoutFeedback} from 'react-native';
 import Carousel from 'react-native-snap-carousel';
 import { DrawerItem } from '@react-navigation/drawer'
 import {Datas} from './../context/context'
 
-
 const { width: screenWidth } = Dimensions.get('window')
 const isTV = screenWidth >950
 
 
-class Post extends PureComponent {
+class Post extends Component {
   constructor(props){
      super(props);
      this.item = props.item
@@ -26,37 +25,35 @@ class Post extends PureComponent {
     }
   }
 
-export default function CardCarusel({navigation,gid}) {
+export default function SearchCarusel({navigation,data,text}) {
+    
+    const renderItem = React.useCallback(({ item, index }) => {return(<Post item ={item} navigation={navigation} index={index}/>)},[]);
 
-    const {getFilms} = React.useContext(Datas)
-    const [data,setData] = React.useState([])
+    const [caruselComp,setCarusel]=React.useState(<></>)
 
     React.useEffect(()=>{
-      const fetch =async()=>{
-        let data = await getFilms(1,{gid,season:0})
-        setData(data)
-      }
-      fetch()
-    },[])
-    const renderItem = React.useCallback(({ item, index }) => {
-   
-      return(
-      <Post item ={item} navigation={navigation} index={index}/>
-    )}, []);
-      
-    return (
-        <View style={styles.mainBlock}>
-          {data?<Carousel
+        setCarusel(<Carousel
             layout="default"
             data={data}
             sliderWidth={screenWidth}
             itemWidth={isTV?250:screenWidth/2-20}
             sliderHeight={260}
-            renderItem={renderItem}
+            renderItem={({item})=>
+                (<DrawerItem  pressColor={'#fff'}  style={{width:isTV?230:screenWidth/2-15}}   label='' onPress={()=>{navigation.navigate('Movie', item)}} icon={()=>(
+                    <View  style={styles.mainBlockItem}>
+                        <ImageBackground resizeMode={'stretch'} source={{uri:item.thumbnail_small}} style={styles.imgBlocl}>
+                        </ImageBackground>
+                        <Text style={styles.title}>{item.name.length>25?`${item.name.slice(0,25)}...`:item.name}</Text>
+                    </View>)}/>)
+            }
             activeSlideAlignment="start"
             inactiveSlideOpacity={1}
             inactiveSlideScale={1}
-          />:<></>}
+          />)
+    },[text])
+    return (
+        <View style={styles.mainBlock}>
+          {data?caruselComp:<></>}
         </View>
   
     );

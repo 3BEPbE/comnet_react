@@ -7,16 +7,16 @@ import { Datas } from '../context/context';
 const { width: screenWidth,height: screenHeight } = Dimensions.get('window')
 const themes = ['Amediateka','Комедия','Мелодрама','Ужасы']
 export default function Home(props) {
-    const {getJanr} = React.useContext(Datas)
+    const {getJanr,checkToken} = React.useContext(Datas)
 
     const [janr,setJanr] = React.useState()
 
 
     React.useEffect(()=>{
+        checkToken()
         const fetch = async()=>{
             let janr = await getJanr()
-            console.log(janr)
-          //  setJanr(janr.filter((item)=>themes.some((i)=>i===item.name)))
+            setJanr(janr.filter((item)=>themes.some((i)=>i===item.name)))
         }
         fetch()
     },[])
@@ -25,12 +25,12 @@ export default function Home(props) {
         <ScrollView style={styles.home}>
             <View>
                 <>
-                <BigCardCarusel/>
+               {/* {janr && <BigCardCarusel navigation={props.navigation} gid={janr[0].id}/>} */}
                 {janr && janr.map(item=>(
                 <View key={item.id}>
                 <View style={styles.newsBlock} >
                     <Text style={styles.newsText}>{item.name}</Text>
-                    <DrawerItem  pressColor='#fff' style={{marginTop:-10,marginBottom:-20,}} label='' icon={()=>(<Text style={styles.newsLink}>{'Ещё >'}</Text>)}/>
+                    <DrawerItem onPress={()=>{props.navigation.navigate('MovieList',{gid:item.id,season:0})}} pressColor='#fff' style={{marginTop:-10,marginBottom:-20,}} label='' icon={()=>(<Text style={styles.newsLink}>{'Ещё >'}</Text>)}/>
                 </View>
                 <CardCarusel gid={item.id} navigation ={props.navigation}/>
                 </View>

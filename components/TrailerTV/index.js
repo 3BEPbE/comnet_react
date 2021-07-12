@@ -1,18 +1,22 @@
 import { View ,StyleSheet,Dimensions,Image, TouchableWithoutFeedback} from 'react-native';
 import React from 'react';
 import { Video } from 'expo-av';
+
 import { LinearGradient } from 'expo-linear-gradient';
 const { width: screenWidth,height:screenHeight } = Dimensions.get('window')
 const isTV = 1000<screenWidth
-const Trailer = () => {
-    const video = React.useRef(null);
-    React.useEffect(()=>{
-        video.current.playAsync()
-    },[video])
+
+const Trailer = ({src}) => {
+
+
+    // const video = React.useRef(null);
+    // React.useEffect(()=>{
+    //     video.current.playAsync()
+    // },[video])
   return (
     <>
     <View style={styles.stopBlock}>
-                <Video
+                {/* <Video
                     ref={video}
                     style={{...styles.firstImage}}
                     source={{
@@ -22,7 +26,8 @@ const Trailer = () => {
                     resizeMode="contain"
                     isMuted={true}
                     isLooping
-                />
+                /> */}
+          <Image source={{uri:src}} style={styles.firstImage}/>
         <LinearGradient style={{ position:'absolute',
      top: -350, left: 0, right: 0, bottom: 0,width:screenWidth,height:screenHeight,}} colors={['transparent', '#000000c4','#000000c4']}>
         </LinearGradient>
@@ -38,8 +43,8 @@ const styles = StyleSheet.create({
     firstImage:{
         display:'flex',
         flexDirection:'row',
-         height:isTV?screenHeight/1:screenWidth-150,
-         width:isTV?screenWidth/1:screenWidth,
+        height:screenHeight,
+        width:screenWidth,
         resizeMode:'cover',
         resizeMode:'cover',
         

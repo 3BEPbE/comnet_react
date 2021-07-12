@@ -17,15 +17,28 @@ import TV from './screens/TV'
 import Channel from './screens/Channel';
 import {BurgerMenu,BurgerMenuGuest} from './components/BuregerMenu'
 import {ContextProvider, Datas} from './context/context'
-
+import { LogBox } from 'react-native';
+import { useIsDrawerOpen } from '@react-navigation/drawer';
 
 const Stack = createStackNavigator()
 const Drawer = createDrawerNavigator();
 
 function stack({ navigation }) {
-  const {createOption} = React.useContext(Datas)
+  const {createOption,checkToken,getData} = React.useContext(Datas)
+  const isDrawerOpen = useIsDrawerOpen();
+
+  const [initialRoute,setRoute] = React.useState(()=>{
+    if(!getData('token')){
+      return 'Login'
+    }else{
+      return 'Home'
+    }
+  })
+  React.useEffect(()=>{
+    checkToken()
+  },[isDrawerOpen])
   return (
-      <Stack.Navigator initialRouteName='Home'>
+      <Stack.Navigator initialRouteName={initialRoute}>
         <Stack.Screen options={createOption(navigation,"Home")}    name="Home"    component={Home} />
         <Stack.Screen options={createOption(navigation,"MovieList")} name="MovieList" component={MovieList} />
         <Stack.Screen options={createOption(navigation,"Profile")} name="Profile" component={Profile} />
@@ -36,28 +49,21 @@ function stack({ navigation }) {
         <Stack.Screen options={createOption(navigation,"Search")}  name="Search"  component={Search} />
         <Stack.Screen options={{headerShown:false}}  name="Watching"  component={Watching} />
         <Stack.Screen options={{headerShown:false}}  name="WatchingTV"  component={WatchingTV} />
-      
-     
+        <Stack.Screen options={createOption(navigation,"Search")}  name="Login"  component={Login} />
+        <Stack.Screen options={createOption(navigation,"Search")}  name="Registration"  component={Registration} />
       </Stack.Navigator>
   );
 }
 
 const DrawerNav = (props) =>{
-  const {isStatusHidden,getData,isLogin} = React.useContext(Datas)
-  const [initialRoute,setRoute] = React.useState(()=>{
-    if(!getData('token')){
-      return 'Login'
-    }else{
-      return 'BurgerNavigation'
-    }
-  })
-
+  const {isStatusHidden,isLogin} = React.useContext(Datas)
+  
+  LogBox.ignoreAllLogs()
+  
   return(
     <>
       <NavigationContainer>
-        <Drawer.Navigator initialRouteName={initialRoute} drawerContent={props =>(!isLogin?<BurgerMenuGuest {...props}/>:<BurgerMenu {...props}/>)}>
-          <Drawer.Screen options={{ swipeEnabled: false,gestureEnabled:false }}  name="Login"  component={Login} />
-          <Drawer.Screen options={{ swipeEnabled: false,gestureEnabled:false }}  name="Registration"  component={Registration} /> 
+        <Drawer.Navigator drawerContent={props =>(!isLogin?<BurgerMenuGuest {...props}/>:<BurgerMenu {...props}/>)}> 
           <Drawer.Screen  name="BurgerNavigation"  component={stack} />
         </Drawer.Navigator>
       </NavigationContainer>

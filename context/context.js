@@ -4,6 +4,7 @@ import {options,HeaderLeft,HeaderRight,HeaderCenter} from '../components/header'
 import axios from 'axios'
 import { Dimensions } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import * as Network from 'expo-network';
 
 const { width: screenWidth } = Dimensions.get('window')
 const isTV = screenWidth>950
@@ -23,47 +24,46 @@ export const ContextProvider = (props) => {
         Movie:{
           ...options,
           headerRight:()=>(<HeaderRight  navigation={navigation}/>),
-          headerLeft:()=>(<HeaderLeft setOpenBurger={setOpenBurger} navigation={navigation}/>)
+          headerLeft:()=>(<HeaderLeft  navigation={navigation}/>)
         },
         Home:{
           ...options,
           headerTitle:()=>(<HeaderCenter   navigation={navigation}/>),
-          headerLeft:()=>(<HeaderLeft setOpenBurger={setOpenBurger} navigation={navigation}/>)
+          headerLeft:()=>(<HeaderLeft navigation={navigation}/>)
         },
         MovieList:{
           ...options,
           headerRight:()=>(<HeaderRight navigation={navigation}/>),
-          headerLeft:()=>(<HeaderLeft setOpenBurger={setOpenBurger} navigation={navigation}/>)
+          headerLeft:()=>(<HeaderLeft  navigation={navigation}/>)
         },
         Profile:{
           ...options,
           headerRight:()=>(<HeaderRight navigation={navigation}/>),
-          headerLeft:()=>(<HeaderLeft setOpenBurger={setOpenBurger} navigation={navigation}/>)
+          headerLeft:()=>(<HeaderLeft  navigation={navigation}/>)
         },
         TV:{
           ...options,
           headerRight:()=>(<HeaderRight navigation={navigation}/>),
-          headerLeft:()=>(<HeaderLeft setOpenBurger={setOpenBurger} navigation={navigation}/>)
+          headerLeft:()=>(<HeaderLeft  navigation={navigation}/>)
         },
         Channel:{
           ...options,
           headerRight:()=>(<HeaderRight navigation={navigation}/>),
-          headerLeft:()=>(<HeaderLeft setOpenBurger={setOpenBurger} navigation={navigation}/>)
+          headerLeft:()=>(<HeaderLeft  navigation={navigation}/>)
         },
         Change:{
           ...options,
           headerRight:()=>(<HeaderRight navigation={navigation}/>),
-          headerLeft:()=>(<HeaderLeft setOpenBurger={setOpenBurger} navigation={navigation}/>)
+          headerLeft:()=>(<HeaderLeft  navigation={navigation}/>)
         },
         Search:{
           ...options,
-          headerLeft:()=>(<HeaderLeft setOpenBurger={setOpenBurger} navigation={navigation}/>),
+          headerLeft:()=>(<HeaderLeft  navigation={navigation}/>),
           headerRight:()=>(<HeaderRight navigation={navigation}/>)
         }
       }
       return Options[position]
     }
-    const [isOpenBurger,setOpenBurger] = React.useState(false)
 
     const storeData = async (key,value) => {
       try {
@@ -80,8 +80,10 @@ export const ContextProvider = (props) => {
         
         if(jsonValue!=='null'){
           setToken(JSON.parse(jsonValue).token)
+        
           setLogin(true)
         }else{
+          console.log(jsonValue)
           setLogin(false)
         }
         return jsonValue != null ? JSON.parse(jsonValue) : null;
@@ -102,7 +104,7 @@ export const ContextProvider = (props) => {
               }else{
                   storeData('token',{token:e.data[0].authkey})
                   getData('token')
-                  navigation.navigate('BurgerNavigation')
+                  navigation.navigate('Home')
               }
           }).catch((e)=>{
               console.log(e)
@@ -144,18 +146,17 @@ export const ContextProvider = (props) => {
           })
       }
     }
-
+    
     const getFilms = (page,params)=>{
-      console.log(params)
       if(isLogin){
        return axios({
           method: 'POST',
           url:`http://172.16.236.84/api/auth/video/list?`,//28 123457
           data:{
-            limit:isTV?24:20,
+            limit:isTV?28:20,
             page,
             authkey:token,
-            season:1
+            ...params
           }
           }).then((e)=>{
               return(e.data['0'].videos)
@@ -168,7 +169,7 @@ export const ContextProvider = (props) => {
           method: 'POST',
           url:`http://172.16.236.84/api/noauth/video/list?`,//28 123457
           data:{
-            limit:isTV?24:20,
+            limit:isTV?28:20,
             page,
             ...params
           }
@@ -180,6 +181,10 @@ export const ContextProvider = (props) => {
       }
     }
     
+    const getIPaddress = async() => {
+     let ip = await Network.getIpAddressAsync();
+    }
+ 
 
     const getCurrentMovie = async(id)=>{
      return axios({
@@ -213,6 +218,92 @@ export const ContextProvider = (props) => {
             console.log(e)
         })
     }
+
+    const searchFilm = (text) =>{
+      if(isLogin){
+        return axios({
+           method: 'POST',
+           url:`http://172.16.236.84/api/authsearch`,//28 123457
+           data:{
+             authkey:token,
+             search:text
+           }
+           }).then((e)=>{
+              
+            return(e.data['0'].videos)
+               
+           }).catch((e)=>{
+               console.log(e)
+           })
+       }else{
+        return axios({
+           method: 'POST',
+           url:`http://172.16.236.84/api/noauthsearch`,//28 123457
+           data:{
+             search:text
+           }
+           }).then((e)=>{ 
+            return(e.data['0'].videos) 
+           }).catch((e)=>{
+               console.log(e)
+           })
+       }
+    }
+
+    const checkToken = ()=>{
+      if(isLogin){
+        axios({
+          method: 'POST',
+          url:`http://172.16.236.84/api/auth/status`,//28 123457
+          data:{
+            authkey:token,
+          }
+          }).then((e)=>{
+            if(e.data['0'].status===1){
+              storeData('token',null)  
+               setLogin(false)
+              console.log(1)
+            }
+           return(e.data['0'])
+              
+          }).catch((e)=>{
+              console.log(e)
+          })
+      }
+    }
+    const getChannel = () =>{
+      if(isLogin){
+       return axios({
+          method: 'POST',
+          url:`http://172.16.236.84/api/auth/channel/list`,
+          data:{
+            authkey:token,
+          }
+          }).then((e)=>{
+           return(e.data['0'].channels)
+              
+          }).catch((e)=>{
+              console.log(e)
+          })
+      }
+    }
+    const getChannelSrc = (id) =>{
+      if(isLogin){
+        return axios({
+           method: 'POST',
+           url:`http://172.16.236.84/api/auth/channel/uri`,
+           data:{
+             authkey:token,
+             id
+           }
+           }).then((e)=>{
+            return(e.data['0'])
+               
+           }).catch((e)=>{
+               console.log(e)
+           })
+       }
+    }
     return(
         <Datas.Provider
           value = {{
@@ -223,13 +314,15 @@ export const ContextProvider = (props) => {
             getData,
             getSrc,
             storeData,
+            checkToken,
             isLogin,
             serials,
             getFilms,
             getCurrentMovie,
-            isOpenBurger,
-            setOpenBurger,
-            getJanr
+            getJanr,
+            searchFilm,
+            getChannel,
+            getChannelSrc
           }}>
             {children}
         </Datas.Provider>
