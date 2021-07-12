@@ -1,9 +1,4 @@
-import React from 'react'
-import {Dimensions} from 'react-native'
-import * as ScreenOrientation from 'expo-screen-orientation';
-import {Datas} from '../../context/context'
 
-const { width: screenWidth,height:screenHeight } = Dimensions.get('window')
 
 export const converter = (sec) => {
     let secund = Math.floor(sec/1000)
@@ -17,6 +12,7 @@ export const converter = (sec) => {
 
 export const leftSkip = (status,video,removeClickTime,setSkipIcon) =>{
     let time = status.positionMillis - 10*1000
+
     if(time<0){
       time=0
     }

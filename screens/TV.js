@@ -10,19 +10,19 @@ export default function TV(props) {
     const {checkToken,isLogin,getChannel} = React.useContext(Datas)
 
     const [data,setData] = React.useState([])
-    React.useEffect(()=>{
-        checkToken()
-    },[])
+
     React.useEffect(()=>{
         if(!isLogin){
-            props.navigate.navigation('Home')
+            props.navigation.navigate('Home')
         }
     },[isLogin])
 
     React.useEffect(()=>{
         const fetch = async () => {
+            checkToken()
             const data = await getChannel()
             setData(data)
+            
         }
         fetch()
     },[])
@@ -76,7 +76,7 @@ const styles = StyleSheet.create({
     },
     icon:{
         height:85,
-        width:86,
+        width:85,
         resizeMode:'center'
       
     },

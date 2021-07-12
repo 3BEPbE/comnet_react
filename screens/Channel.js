@@ -6,6 +6,7 @@ import CardCarusel from '../components/CardCarusel'
 import ChannelCarusel from '../components/ChannelCarusel'
 import { DrawerItem } from '@react-navigation/drawer'
 import { Datas } from '../context/context';
+import ListProgram from '../components/ListProgram';
 
 const { width: screenWidth,height:screenHeight } = Dimensions.get('window')
 const isTV = screenWidth>900
@@ -22,7 +23,6 @@ export default function Channel({route,navigation}) {
         fetch()
         checkToken()
     },[])
-
     const converter = (sec)=>{
         var d = new Date(sec*1000+5*60*1000*60);
         var time = d; 
@@ -34,18 +34,18 @@ export default function Channel({route,navigation}) {
         <ScrollView style={styles.container}>
             <Text style={styles.channelName}>{currentFilm.name} смотреть онлайн</Text>
             {/* <Text style={styles.channelType} >Новости, Кино, Эфирные</Text> */}
-            <ImageBackground source={require('../images/example.jpg')} style={styles.image}>
-                <LinearGradient style={styles.ImageBlock}  colors={['transparent', '#00000067']}>
+            <ImageBackground resizeMode='contain' source={{uri:currentFilm.icon}} style={styles.image}>
+                <View style={styles.ImageBlock}  >
                     <View>
                         {/* <Text style={styles.imageText}>Просмотр доступен бесплатно после авторизации</Text> */}
-                        <DrawerItem onPress={()=>{isTV?navigation.navigate('WatchingTV',{src}):navigation.navigate('Watching',{src})}} pressColor='#fff'  style={{marginLeft:20,marginRight:180,height:70}} label='' icon={()=>(
+                        <DrawerItem onPress={()=>{isTV?navigation.navigate('WatchingTV',{src}):navigation.navigate('Watching',{uri:src,overrideFileExtensionAndroid:'m3u8'})}} pressColor='#fff'  style={{marginLeft:20,marginRight:180,height:70}} label='' icon={()=>(
                           <View style={styles.imageButton}>
                               <Text style={styles.imageButtonText}>Смотреть бесплатно</Text>
                           </View>
                         )}/>
                       
                     </View>
-                </LinearGradient>
+                </View>
             </ImageBackground>
             <Text style={styles.mainData}>{converter(currentFilm.program_begin_time)} - {converter(currentFilm.program_end_time)}</Text>
             <Text style={styles.mainData}>{currentFilm.program_name}</Text>
@@ -60,22 +60,7 @@ export default function Channel({route,navigation}) {
             {/* <JanrCarusel/> */}
 
             <View style={styles.timeTable}>
-                {[1,2,3,4].map((item)=>(
-                    <DrawerItem key={item} pressColor='#fff' style={{marginLeft:10}} icon={()=>(
-                        <View style={styles.timeTableItem}>
-                        <View style={styles.timeTableInfo}> 
-                            <View style={styles.timeTableTextblock}>
-                                <Text style={styles.timetext1}>"Человек и закон" с Алексеем Пимановым</Text>
-                                <Text style={styles.timetext3}>17:00</Text>
-                            </View>
-                            <Text style={styles.timetext2}>Новости, Кино, Эфирные</Text>
-                        </View>
-                        <View style={{...styles.progress,width:item===1?screenWidth/100*60:'0%'}}>
-                        </View>
-                    </View>
-                    )} label=''/>
-                 
-                ))}
+                <ListProgram currentFilm={currentFilm}/>
             </View>
             <ImageBackground style={styles.advertise} source={require('../images/channelExample.png')}>
                     <Text style={styles.advertiseText}>Смотри в приложении</Text>

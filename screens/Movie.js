@@ -34,6 +34,13 @@ export default function Movie({route,navigation}) {
 
                 }
             fetch()
+        }else{
+            const fetch = async()=>{           
+                const actions = await getCurrentMovie(currentFilm.id)
+                const src =  await getSrc({fileId:actions[0].fileId,id:actions[0].video_id})   
+                setSrc(src)
+                }
+            fetch()
         }}
     },[currentSeason,currentSeria])
     return(
@@ -64,7 +71,7 @@ export default function Movie({route,navigation}) {
                     </View>
                 </View>
             <View stylle={styles.content}>
-               {isLogin?<DrawerItem pressColor='#fff' style={{zIndex:2}} label='' onPress={()=>navigation.navigate(isTV?'WatchingTV':'Watching',{src})} icon={()=> 
+               {isLogin?<DrawerItem pressColor='#fff' style={{zIndex:2}} label='' onPress={()=>navigation.navigate(isTV?'WatchingTV':'Watching',{uri:src})} icon={()=> 
                         (<View style={styles.button}><Text style={styles.buttonText}>Смотреть</Text></View>)} />
                         : <DrawerItem pressColor='#fff' style={{zIndex:2,marginTop:20}}   label='' onPress={()=>navigation.navigate('Watching')} icon={()=> 
                         (<View style={styles.button}><Text style={styles.buttonText}>Приобрети подписку</Text></View>)} />}

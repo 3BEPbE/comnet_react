@@ -7,7 +7,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 
 const { width: screenWidth,height:screenHeight } = Dimensions.get('window')
 const isTV = 1000<screenWidth
-const CustomVideoPlayer = ({src}) => {
+const CustomVideoPlayer = ({params}) => {
     const [isStop,setIsStop] = React.useState(true)
     const video = React.useRef(null);
     const [status, setStatus] = React.useState({});
@@ -98,7 +98,8 @@ const CustomVideoPlayer = ({src}) => {
           rate={1}
           style={styles.firstImage}
           source={{
-            uri: src,
+            ...params,
+            
           }}
           useNativeControls ={false}
           resizeMode="contain"
@@ -115,7 +116,7 @@ export default CustomVideoPlayer
 const styles = StyleSheet.create({
     firstImage:{
       width:screenHeight,
-      height:screenHeight,
+      height:screenWidth,
       zIndex:3,
       transform:[{rotate:'90deg'}]
 

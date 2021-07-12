@@ -80,10 +80,8 @@ export const ContextProvider = (props) => {
         
         if(jsonValue!=='null'){
           setToken(JSON.parse(jsonValue).token)
-        
           setLogin(true)
         }else{
-          console.log(jsonValue)
           setLogin(false)
         }
         return jsonValue != null ? JSON.parse(jsonValue) : null;
@@ -262,7 +260,6 @@ export const ContextProvider = (props) => {
             if(e.data['0'].status===1){
               storeData('token',null)  
                setLogin(false)
-              console.log(1)
             }
            return(e.data['0'])
               
@@ -304,6 +301,24 @@ export const ContextProvider = (props) => {
            })
        }
     }
+    const getProgramList = (id) => {
+      if(isLogin){
+        return axios({
+           method: 'POST',
+           url:`http://172.16.236.84/api/auth/channel/program`,
+           data:{
+             authkey:token,
+             id,
+             limit:10
+           }
+           }).then((e)=>{
+            return(e.data['0'].programs)
+               
+           }).catch((e)=>{
+               console.log(e)
+           })
+       }
+    }
     return(
         <Datas.Provider
           value = {{
@@ -322,7 +337,8 @@ export const ContextProvider = (props) => {
             getJanr,
             searchFilm,
             getChannel,
-            getChannelSrc
+            getChannelSrc,
+            getProgramList
           }}>
             {children}
         </Datas.Provider>
