@@ -15,7 +15,7 @@ export default function WatchingTV({route}){
   
   return(
     <View style={styles.container}>
-      <VideoPlayerTV src={route.params.src}/>
+      <VideoPlayerTV params={route.params}/>
     </View>
   )
 } 

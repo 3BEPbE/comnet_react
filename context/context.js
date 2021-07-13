@@ -301,18 +301,35 @@ export const ContextProvider = (props) => {
            })
        }
     }
-    const getProgramList = (id) => {
+    const getTimeShift = (cid,pid) => {
       if(isLogin){
         return axios({
            method: 'POST',
-           url:`http://172.16.236.84/api/auth/channel/program`,
+           url:`http://172.16.236.84/api/auth/archive/url`,
            data:{
              authkey:token,
-             id,
-             limit:10
+             pid,
+             cid
            }
            }).then((e)=>{
-            return(e.data['0'].programs)
+            return(e.data['0'])
+               
+           }).catch((e)=>{
+               console.log(e)
+           })
+       }
+    }
+    const getProgramListByDay = (cid) =>{
+      if(isLogin){
+        return axios({
+           method: 'POST',
+           url:`http://172.16.236.84/api/auth/epg/range`,
+           data:{
+             authkey:token,
+             cid,
+           }
+           }).then((e)=>{
+            return(e.data['0'])
                
            }).catch((e)=>{
                console.log(e)
@@ -338,7 +355,8 @@ export const ContextProvider = (props) => {
             searchFilm,
             getChannel,
             getChannelSrc,
-            getProgramList
+            getProgramListByDay,
+            getTimeShift
           }}>
             {children}
         </Datas.Provider>

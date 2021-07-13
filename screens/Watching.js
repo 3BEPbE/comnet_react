@@ -12,7 +12,7 @@ export default function Watching({route}){
     checkToken()
     setStatusHidden(true)
   },[])
-  
+  console.log(route)
   return(
     <View style={styles.container}>
       <VideoPlayer params={route.params}/>

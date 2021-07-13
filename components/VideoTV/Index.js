@@ -7,12 +7,11 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { DrawerItem } from '@react-navigation/drawer';
 const { width: screenWidth,height:screenHeight } = Dimensions.get('window')
 const isTV = 1000<screenWidth
-const CustomVideoPlayer = ({src}) => {
+const CustomVideoPlayer = ({params}) => {
     const [isStop,setIsStop] = React.useState(true)
     const video = React.useRef(null);
     const [status, setStatus] = React.useState({});
     const [isClickControl,setControl] = React.useState(false)
-    
     const [stopStyle,setStopStyle] = React.useState({
       opacity:1
     })
@@ -24,8 +23,6 @@ const CustomVideoPlayer = ({src}) => {
         opacity:0
       }
     })
-    let doubleClickCounter = React.useRef(0)
-    let removeClickTime = React.useRef()
     let timerRef = React.useRef(null);
 
     React.useEffect(()=>{
@@ -74,7 +71,7 @@ const CustomVideoPlayer = ({src}) => {
               </View>  
             )}/> 
     </View>
-    <View style={{...styles.bottomBar,...stopStyle}}>
+    <View style={{...styles.bottomBar,...stopStyle,display:params.isChannel?'none':'flex'}}>
          <Controller skipIcon={skipIcon}  isClickControl={isClickControl} stopStyle={stopStyle}  setControl={setControl} video={video} status = {status}/>
     </View>
         <Video
@@ -83,7 +80,8 @@ const CustomVideoPlayer = ({src}) => {
           style={styles.firstImage}
           isMuted={false}
           source={{
-            uri: src,
+            ...params.vid,
+            
           }}
           useNativeControls ={false}
           resizeMode="cover"

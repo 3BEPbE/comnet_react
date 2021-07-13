@@ -38,7 +38,7 @@ export default function Channel({route,navigation}) {
                 <View style={styles.ImageBlock}  >
                     <View>
                         {/* <Text style={styles.imageText}>Просмотр доступен бесплатно после авторизации</Text> */}
-                        <DrawerItem onPress={()=>{isTV?navigation.navigate('WatchingTV',{src}):navigation.navigate('Watching',{uri:src,overrideFileExtensionAndroid:'m3u8'})}} pressColor='#fff'  style={{marginLeft:20,marginRight:180,height:70}} label='' icon={()=>(
+                        <DrawerItem onPress={()=>{isTV?navigation.navigate('WatchingTV',{vid:{uri:src,overrideFileExtensionAndroid:'m3u8'},isChannel:true}):navigation.navigate('Watching',{vid:{uri:src,overrideFileExtensionAndroid:'m3u8'},isChannel:true})}} pressColor='#fff'  style={{marginLeft:20,marginRight:180,height:70}} label='' icon={()=>(
                           <View style={styles.imageButton}>
                               <Text style={styles.imageButtonText}>Смотреть бесплатно</Text>
                           </View>
@@ -60,7 +60,7 @@ export default function Channel({route,navigation}) {
             {/* <JanrCarusel/> */}
 
             <View style={styles.timeTable}>
-                <ListProgram currentFilm={currentFilm}/>
+                <ListProgram navigation={navigation} currentFilm={currentFilm}/>
             </View>
             <ImageBackground style={styles.advertise} source={require('../images/channelExample.png')}>
                     <Text style={styles.advertiseText}>Смотри в приложении</Text>
