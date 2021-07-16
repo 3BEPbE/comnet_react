@@ -5,12 +5,12 @@ const { width: screenWidth,height:screenHeight } = Dimensions.get('window')
 const isTV = 1000<screenWidth
 import { Datas } from '../context/context';
 
-export default function WatchingTV({route}){
+export default function WatchingTV({route,navigation}){
   const {setStatusHidden,checkToken} = React.useContext(Datas)
 
   React.useEffect(()=>{
     setStatusHidden(true)
-    checkToken()
+    checkToken(navigation)
   },[])
   
   return(

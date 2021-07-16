@@ -8,7 +8,7 @@ export default function ChangData(props) {
 
     const { checkToken} =React.useContext(Datas)
     React.useEffect(()=>{
-        checkToken()
+        checkToken(props.navigation)
     },[])
     const [data,setData] = React.useState({
         name:'',

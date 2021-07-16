@@ -28,8 +28,7 @@ const ListProgram = ({currentFilm,navigation}) => {
         const fetch = async () =>{
             let data = await getProgramListByDay(currentFilm.id)
             setData(Object.values(data))
-            setDays(Object.keys(data))
-            
+            setDays(Object.keys(data))          
         }
         fetch()
     },[])
@@ -53,9 +52,9 @@ const ListProgram = ({currentFilm,navigation}) => {
         if(currentFilm.program_begin_time>=item.begin_time){
             const url = await getTimeShift(currentFilm.id,item.id) 
             if(isTV){
-                navigation.navigate('WatchingTV',{vid:{uri:url.uri,overrideFileExtensionAndroid:'m3u8'},isChannel:false})
+                navigation.navigate('WatchingTV',{vid:{uri:url.uri,overrideFileExtensionAndroid:'m3u8'},isChannel:true})
             }else{
-                navigation.navigate('Watching',{vid:{uri:url.uri,overrideFileExtensionAndroid:'m3u8'},isChannel:false})
+                navigation.navigate('Watching',{vid:{uri:url.uri,overrideFileExtensionAndroid:'m3u8'},isChannel:true})
             }
         }
     }
@@ -73,10 +72,10 @@ const ListProgram = ({currentFilm,navigation}) => {
                             <Text style={styles.timetext1}>{item.name}</Text>
                             <Text style={styles.timetext3}>{converter(item.begin_time)}</Text>
                         </View>
-                        <View style={{flexDirection:'row'}}>
-                        <Text style={styles.timetext2}>Новости, Кино, Эфирные</Text>
+                        <View style={styles.block}>
+                        <Text style={styles.timetext2}>{item.category}</Text>
                             {currentFilm.program_begin_time>=item.begin_time?
-                        <Image style={{marginLeft:30,marginTop:-5}} source={require('../images/burgerMenuIcon5.png')}/>:<></>}
+                        <Image style={styles.icon} source={require('../images/burgerMenuIcon5.png')}/>:<></>}
                         </View>
                     </View>
                      <View style={{...styles.progress,width:currentFilm.program_id===item.id?width:'0%'}}>
@@ -94,11 +93,11 @@ const styles = StyleSheet.create({
     timeTableItem:{
         position:'relative',
         width:screenWidth-40,
-        height:65,
+        height:75,
         backgroundColor:'#373737',
         justifyContent:'center',
         borderRadius:7,
-        paddingTop:5
+        paddingTop:0
     },
     progress:{
        position:'absolute' ,
@@ -123,10 +122,20 @@ const styles = StyleSheet.create({
     },
     timetext2:{
         color: 'rgba(254, 254, 254, 0.5)',
-        fontSize:14
+        fontSize:14,
+        width:screenWidth/1.5
     },
     timetext3:{
         color:'#fff',
         fontSize:14
     },
+    icon:{
+        height:15,
+        width:15
+    },
+    block:{
+        flexDirection:'row',
+        justifyContent:'space-between',
+        marginTop:5
+    }
 })

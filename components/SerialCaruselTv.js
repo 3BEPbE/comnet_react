@@ -2,12 +2,11 @@ import React from 'react';
 import { View ,StyleSheet,Text,Dimensions,ImageBackground, TouchableWithoutFeedback} from 'react-native';
 import Carousel from 'react-native-snap-carousel';
 import { DrawerItem } from '@react-navigation/drawer'
-import {Datas} from './../context/context'
 
 const { width: screenWidth } = Dimensions.get('window')
 const isTV = screenWidth >950
 
-export default function SerialCaruselTV({setData,setList1,data}) {
+export default function SerialCaruselTV({setData,setList1,data,text}) {
     const ref = React.useRef(null);
     const clickItem = (currentSeason) =>{
       setList1(false)
@@ -17,7 +16,7 @@ export default function SerialCaruselTV({setData,setList1,data}) {
     const renderItem = React.useCallback(({ item, index }) => (
         <DrawerItem onPress={()=>clickItem(item)} pressColor='#000'  style={{height:50,width:165}}   label=''  icon={()=>(
             <View  style={styles.mainBlockItem}>
-                <Text style={styles.title}>{item} сезон</Text>
+                <Text style={styles.title}>{item} {text}</Text>
             </View>
         )}/>
     ), []);

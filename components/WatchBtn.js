@@ -13,7 +13,7 @@ const WatchBtn = ({isLogin,src,navigation}) =>{
             (<View style={styles.button}>
                 <Text style={styles.buttonText}>Смотреть</Text>
             </View>)} />
-        : <DrawerItem pressColor='#fff' style={{zIndex:2,marginTop:20}}   label='' onPress={()=>navigation.navigate('Watching')} icon={()=> 
+        : <DrawerItem pressColor='#fff' style={{zIndex:2,marginTop:20}}   label='' onPress={()=>navigation.navigate('Profile')} icon={()=> 
             (<View style={styles.button}>
                 <Text style={styles.buttonText}>Приобрети подписку</Text>
             </View>)} />}

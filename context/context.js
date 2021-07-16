@@ -5,6 +5,7 @@ import axios from 'axios'
 import { Dimensions } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as Network from 'expo-network';
+import { Alert } from 'react-native';
 
 const { width: screenWidth } = Dimensions.get('window')
 const isTV = screenWidth>950
@@ -90,7 +91,7 @@ export const ContextProvider = (props) => {
       }
     }
   
-    const login = async(data,setError,navigation) => {
+    const login = async(data,setError,navigation,routeName) => {
       axios({
           method: 'POST',
           url:`http://172.16.236.84/api/login`,//28 123457
@@ -102,7 +103,7 @@ export const ContextProvider = (props) => {
               }else{
                   storeData('token',{token:e.data[0].authkey})
                   getData('token')
-                  navigation.navigate('Home')
+                  navigation.navigate(routeName)
               }
           }).catch((e)=>{
               console.log(e)
@@ -219,15 +220,15 @@ export const ContextProvider = (props) => {
 
     const searchFilm = (text) =>{
       if(isLogin){
+        console.log(text)
         return axios({
            method: 'POST',
-           url:`http://172.16.236.84/api/authsearch`,//28 123457
+           url:`http://172.16.236.84/api/auth/search`,//28 123457
            data:{
              authkey:token,
              search:text
            }
            }).then((e)=>{
-              
             return(e.data['0'].videos)
                
            }).catch((e)=>{
@@ -248,7 +249,23 @@ export const ContextProvider = (props) => {
        }
     }
 
-    const checkToken = ()=>{
+    const AlertBusyToken = (navigation) =>{
+      Alert.alert(
+        "Уважаемый зритель!",
+        "Вход в Ваш аккаунт выполнен на другом устройстве. Для одновременного просмотра на нескольких устройствах необходимо подключить услугу “Мультидоступ”.",
+        [
+          {
+            text: "Отмена",
+            onPress: () => navigation.navigate('Home'),
+            style: "cancel"
+          },
+          { text: "Подключить", onPress: () => navigation.navigate('Login',{routeName:"Profile"}) }
+        ],
+        { cancelable: false }
+      );
+    }
+
+    const checkToken = (navigation)=>{
       if(isLogin){
         axios({
           method: 'POST',
@@ -259,7 +276,8 @@ export const ContextProvider = (props) => {
           }).then((e)=>{
             if(e.data['0'].status===1){
               storeData('token',null)  
-               setLogin(false)
+              setLogin(false)
+              AlertBusyToken(navigation)
             }
            return(e.data['0'])
               
@@ -309,7 +327,7 @@ export const ContextProvider = (props) => {
            data:{
              authkey:token,
              pid,
-             cid
+             cid,
            }
            }).then((e)=>{
             return(e.data['0'])

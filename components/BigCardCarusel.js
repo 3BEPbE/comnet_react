@@ -18,7 +18,7 @@ class Post extends PureComponent {
 
     render() { return( 
         <DrawerItem pressColor='#fff' onPress={()=>{this.navigation.navigate('Movie',this.item)}} label='' icon={()=>{
-            return(<ImageBackground source={{uri:this.item.thumbnail_big}} style={styles.imgBlocl}>
+            return(<ImageBackground resizeMode='stretch' source={require('../images/example.jpg')} style={styles.imgBlocl}>
               <ImageBackground source={require('../images/corusulGradient.png')} style={styles.textBlock}>
                   <View style={styles.ranking}>
                       <View style={styles.rankingItem}>
@@ -67,7 +67,7 @@ export default function BigCardCarusel({gid,navigation}) {
             data={data}
             sliderWidth={screenWidth}
             itemWidth={isTV?screenWidth:screenWidth}
-            sliderHeight={isTV?700:300}
+            sliderHeight={isTV?700:310}
             renderItem={renderItem}
             activeSlideAlignment={'center'}
             inactiveSlideScale={0.93}
@@ -82,7 +82,7 @@ const styles = StyleSheet.create({
     imgBlocl:{
         borderRadius: 8,
         overflow:'hidden',
-        height: (isTV?280*1.77:300),
+        height: (isTV?280*1.77:310),
         display:'flex',
         justifyContent:'flex-end', 
         width:screenWidth-40,

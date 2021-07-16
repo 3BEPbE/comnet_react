@@ -66,11 +66,11 @@ const styles = StyleSheet.create({
     },
     TariffsPrice:{
         fontSize:14,
-        color:'#E41A4B'
+        color:'#fff'
     },
     TariffsName:{
         fontSize:15,
-        color:'#E41A4B',
+        color:'#fff',
         fontWeight:'bold',
         marginBottom:8
     },

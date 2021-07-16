@@ -12,17 +12,18 @@ const { width: screenWidth,height:screenHeight } = Dimensions.get('window')
 const isTV = screenWidth>900
 export default function Channel({route,navigation}) {
     const currentFilm = route.params
-    const { checkToken,getChannelSrc} =React.useContext(Datas)
+    const { checkToken,getChannelSrc,isLogin} =React.useContext(Datas)
     const [src,setSrc] = React.useState('')
 
     React.useEffect(()=>{
+        checkToken(navigation)
         const fetch = async () =>{
             let src = await getChannelSrc(currentFilm.id)
             setSrc(src.uri)
         }
         fetch()
-        checkToken()
-    },[])
+    },[isLogin])
+
     const converter = (sec)=>{
         var d = new Date(sec*1000+5*60*1000*60);
         var time = d; 
@@ -38,9 +39,10 @@ export default function Channel({route,navigation}) {
                 <View style={styles.ImageBlock}  >
                     <View>
                         {/* <Text style={styles.imageText}>Просмотр доступен бесплатно после авторизации</Text> */}
-                        <DrawerItem onPress={()=>{isTV?navigation.navigate('WatchingTV',{vid:{uri:src,overrideFileExtensionAndroid:'m3u8'},isChannel:true}):navigation.navigate('Watching',{vid:{uri:src,overrideFileExtensionAndroid:'m3u8'},isChannel:true})}} pressColor='#fff'  style={{marginLeft:20,marginRight:180,height:70}} label='' icon={()=>(
+                        <DrawerItem onPress={()=>{isTV?navigation.navigate('WatchingTV',{vid:{uri:src,overrideFileExtensionAndroid:'m3u8'},isChannel:true}):navigation.navigate('Watching',{vid:{uri:src,overrideFileExtensionAndroid:'m3u8'},isChannel:true})}} 
+                        pressColor='#fff' style={styles.imageButtonFocus}  label='' icon={()=>(
                           <View style={styles.imageButton}>
-                              <Text style={styles.imageButtonText}>Смотреть бесплатно</Text>
+                              <Text style={styles.imageButtonText}>Смотреть</Text>
                           </View>
                         )}/>
                       
@@ -122,16 +124,19 @@ const styles = StyleSheet.create({
         lineHeight:22,
         marginBottom:20
     },
+    imageButtonFocus:{
+        width:200,
+        height:55,
+        marginTop:20
+    },
     imageButton:{
         height:45,
-        marginLeft:-5,
         width:190,
         backgroundColor:'#E41A4B',
         borderRadius:7,
         overflow:'hidden',
         justifyContent:'center',
         alignItems:'center',
-        marginBottom:25
     },
     imageButtonText:{
         color:'#fff',

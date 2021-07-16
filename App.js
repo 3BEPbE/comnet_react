@@ -35,7 +35,7 @@ function stack({ navigation }) {
     }
   })
   React.useEffect(()=>{
-    checkToken()
+    checkToken(navigation)
   },[isDrawerOpen])
   return (
       <Stack.Navigator initialRouteName={initialRoute}>

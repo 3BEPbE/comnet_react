@@ -13,7 +13,7 @@ export default function Search({navigation}) {
     const {searchFilm,checkToken} = React.useContext(Datas)
     const textInputs = []
     React.useEffect(()=>{
-        checkToken()
+        checkToken(navigation)
     },[])
     const changeHandler = async(text) => {
         setText(text)

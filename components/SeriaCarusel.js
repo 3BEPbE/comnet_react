@@ -45,14 +45,14 @@ export default function SerialCarusel({currentFilm,currentSeria,setCurrentSeria,
        <View style={{flexDirection:'row'}}>
      { isTV?<>
      
-      {list1?<Carusel setData={setCurrentSeason} setList1={setList1} data={season}/>:
+      {list1?<Carusel setData={setCurrentSeason} text='сезон'   setList1={setList1} data={season}/>:
               <DrawerItem onPress={()=>setList1(true)} icon={()=>(
               <View style={styles.button} >
                 <Text style={{color:'#000',fontSize:22}}>{currentSeason} сезон</Text>
               </View>
             )} label=''/>}
 
-       {list2?<Carusel setData={setCurrentSeria}  setList1={setList2} data={serial}/>:
+       {list2?<Carusel setData={setCurrentSeria} text='серия'  setList1={setList2} data={serial}/>:
           <DrawerItem onPress={()=>setList2(true)} icon={()=>(
           <View style={styles.button} >
             <Text style={{color:'#000',fontSize:22}}>{currentSeria} серия</Text>

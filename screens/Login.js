@@ -5,7 +5,7 @@ import {Datas} from '../context/context'
 
 const { width: screenWidth } = Dimensions.get('window')
 
-export default function Login({navigation}) {
+export default function Login({navigation,route}) {
 
     const {login} = React.useContext(Datas)
 
@@ -22,7 +22,7 @@ export default function Login({navigation}) {
     }
     const textInputs = []
 
-  
+    console.log()
 
     return(
         <ScrollView style={styles.container}>
@@ -51,7 +51,7 @@ export default function Login({navigation}) {
                 <Text style={{...styles.error,opacity:errorColor==='#e5474c'?1:0}}>
                 Аккаунт по указанным параметрам не найден.
                 </Text>
-                <DrawerItem pressColor='#fff' onPress={()=>login(data,setError,navigation)} style={styles.focusItem} label='' icon={()=>(
+                <DrawerItem pressColor='#fff' onPress={()=>login(data,setError,navigation,route.params.routeName)} style={styles.focusItem} label='' icon={()=>(
                     <View style={styles.buttonLogin}>
                         <Text style={styles.buttonText}>Войти</Text>
                     </View>

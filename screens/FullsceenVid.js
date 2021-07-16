@@ -9,7 +9,7 @@ const isTV = 1000<screenWidth
 export default function FullScreen(props) {
     const { checkToken} =React.useContext(Datas)
     React.useEffect(()=>{
-        checkToken()
+        checkToken(props.navigation)
     },[])
     const video = React.useRef(null);
     const [status, setStatus] = React.useState(props.route.params.status);

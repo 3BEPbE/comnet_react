@@ -19,12 +19,14 @@
     "expo": "~41.0.1",
     "expo-av": "^9.1.2",
     "expo-linear-gradient": "~9.1.0",
+    "expo-network": "~3.1.1",
     "expo-screen-orientation": "~3.1.0",
     "expo-splash-screen": "~0.10.2",
     "expo-status-bar": "~1.0.4",
     "expo-updates": "~0.5.4",
     "expo-video-player": "^1.6.1",
     "link": "^0.1.5",
+    "m3u8-to-mp4": "^1.0.0",
     "react": "16.13.1",
     "react-dom": "16.13.1",
     "react-native": "^0.63.4",
@@ -45,8 +47,7 @@
     "react-native-vlc-media-player": "^1.0.35",
     "react-native-web": "~0.13.12",
     "react-native-webview": "^11.6.2",
-    "react-native-youtube-iframe": "^2.1.0",
-    "expo-network": "~3.1.1"
+    "react-native-youtube-iframe": "^2.1.0"
   },
   "devDependencies": {
     "@babel/core": "^7.9.0"

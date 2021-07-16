@@ -7,25 +7,25 @@ import { Datas } from '../context/context';
 const { width: screenWidth,height: screenHeight } = Dimensions.get('window')
 const themes = ['Amediateka','Комедия','Мелодрама','Ужасы']
 export default function Home(props) {
-    const {getJanr,checkToken} = React.useContext(Datas)
+    const {getJanr,checkToken,isLogin} = React.useContext(Datas)
 
     const [janr,setJanr] = React.useState()
 
 
     React.useEffect(()=>{
-        checkToken()
+        checkToken(props.navigation)
         const fetch = async()=>{
             let janr = await getJanr()
             setJanr(janr.filter((item)=>themes.some((i)=>i===item.name)))
         }
         fetch()
-    },[])
+    },[isLogin])
 
     return (
         <ScrollView style={styles.home}>
             <View>
                 <>
-               {/* {janr && <BigCardCarusel navigation={props.navigation} gid={janr[0].id}/>} */}
+               {janr && <BigCardCarusel navigation={props.navigation} gid={janr[0].id}/>}
                 {janr && janr.map(item=>(
                 <View key={item.id}>
                 <View style={styles.newsBlock} >

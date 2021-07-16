@@ -23,7 +23,7 @@ export default function Movie({route,navigation}) {
 
     React.useEffect(()=>{      
         if(isLogin){
-            checkToken()
+            checkToken(navigation)
             if(currentFilm.is_season&&currentSeason&&currentSeria){
             const fetch = async()=>{ 
                 const actions = await getCurrentMovie(currentFilm.id)

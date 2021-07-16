@@ -8,7 +8,7 @@ export default function Profile(props) {
     const {test,checkToken} = React.useContext(Datas)
     
     React.useEffect(()=>{
-        checkToken()
+        checkToken(props.navigation)
     },[])
     return(
         <ScrollView style={styles.Container}>

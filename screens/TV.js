@@ -12,14 +12,8 @@ export default function TV(props) {
     const [data,setData] = React.useState([])
 
     React.useEffect(()=>{
-        if(!isLogin){
-            props.navigation.navigate('Home')
-        }
-    },[isLogin])
-
-    React.useEffect(()=>{
         const fetch = async () => {
-            checkToken()
+            checkToken(props.navigation)
             const data = await getChannel()
             setData(data)
             

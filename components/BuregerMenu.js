@@ -15,11 +15,13 @@ const links =[
     {
         label:'Просмотреные',
         navigation:'MovieList',
+        params:{favorited:0,viewed:1,season:null},
         icon:require('../images/burgerMenuIcon1.png')
     },
     {
         label:'Избранные',
         navigation:'MovieList',
+        params:{favorited:1,viewed:0,season:null},
         icon:require('../images/burgerMenuIcon2.png')
     },
     {
@@ -31,13 +33,13 @@ const links =[
     {
         label:'Фильмы',
         navigation:'MovieList',
-        params:{season:0},
+        params:{favorited:null,viewed:null,season:0},
         icon:require('../images/burgerMenuIcon4.png')
     },
     {
         label:'Сериалы',
         navigation:'MovieList',
-        params:{season:1},
+        params:{favorited:null,viewed:null,season:1},
         icon:require('../images/burgerMenuIcon5.png')
     },
     {
@@ -62,10 +64,12 @@ const links =[
     },
 ]
 
+const ClearParams = (navigation) =>{
+    navigation.setParams({})
+}
 
 export  function BurgerMenu(props) {
     
-
     const {storeData,getData} = React.useContext(Datas)
     const exit = () =>{
         props.navigation.closeDrawer();
@@ -94,7 +98,7 @@ export  function BurgerMenu(props) {
                     {links.map(e=>(
                         <DrawerItem pressColor='#fff'  key={e.label} {...props} style={styles.link} icon={()=>(
                         <Image style={styles.icon} source={e.icon}/>)}
-                        onPress={() => {props.navigation.navigate(e.navigation,e.params)}} inactiveTintColor ='#fff' label={e.label}/>
+                        onPress={() => {props.navigation.setParams({});props.navigation.navigate(e.navigation,e.params)}} inactiveTintColor ='#fff' label={e.label}/>
                     ))}
                     <DrawerItem pressColor='#fff'  key={'Узбекские'} {...props} style={styles.link} icon={()=>(
                         <Image style={styles.icon} source={require('../images/burgerMenuIcon10.png')}/>)}
@@ -109,8 +113,9 @@ export  function BurgerMenu(props) {
     </>
     )
 }
-export  function BurgerMenuGuest(props) {
+export  function BurgerMenuGuest(props,) {
     const isDrawerOpen = useIsDrawerOpen();
+    
     return(
         <> 
             {isDrawerOpen||!isTV?
@@ -119,12 +124,12 @@ export  function BurgerMenuGuest(props) {
                 </View>
                 <DrawerItem pressColor='#fff'  key={'Войти'} {...props} style={styles.link} icon={()=>(
                         <Image style={styles.icon} source={require('../images/burgerMenuIcon11.png')}/>)}
-                        onPress={() => {props.navigation.navigate('Login')}} inactiveTintColor ='#fff' label={'Войти'}/>
+                        onPress={() => {props.navigation.navigate('Login',{routeName:'Home'})}} inactiveTintColor ='#fff' label={'Войти'}/>
                 <View style={styles.list}>
                     {links.map(e=>(
                         <DrawerItem pressColor='#fff'  key={e.label} {...props} style={styles.link} icon={()=>(
                         <Image style={styles.icon} source={e.icon}/>)}
-                        onPress={() =>{ props.navigation.navigate('MovieList',e.params)}} inactiveTintColor ='#fff' label={e.label}/>
+                        onPress={() =>{props.navigation.setParams({}); props.navigation.navigate('MovieList',e.params)}} inactiveTintColor ='#fff' label={e.label}/>
                     ))}
                     <DrawerItem pressColor='#fff' key={'Узбекские'} {...props} style={styles.link} icon={()=>(
                         <Image style={styles.icon} source={require('../images/burgerMenuIcon10.png')}/>)}

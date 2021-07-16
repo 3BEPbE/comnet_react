@@ -6,23 +6,6 @@ import { DrawerItem } from '@react-navigation/drawer';
 const { width: screenWidth } = Dimensions.get('window')
 const isTV = screenWidth>950
 
-class Post extends Component {
-  constructor(props){
-     super(props);
-     this.item = props
-     this.navigation =props.navigation
-  }
-  render() { 
-    return( 
-        <DrawerItem pressColor='#fff'  style={styles.focusItem} onPress={()=>{this.navigation.navigate( 'Movie',this.item.item)}} icon={()=>(
-          (<View style={styles.item}>
-                  <Image style={styles.image} source={{uri: this.item.item.thumbnail_small}}/>
-                  <Text style={styles.text}>{ this.item.item.name.length>35?<>{ this.item.item.name.slice(0,35)}...</>: this.item.item.name}</Text>
-            </View>)
-      )} label=''/>)
-    }
-  }
-
 
 
 const MovieList = ({navigation,route}) => {
@@ -31,14 +14,13 @@ const MovieList = ({navigation,route}) => {
   const [page,setPage] = React.useState(1)
   const [data,setData] = React.useState({currentPage:0, data:[] })
   const [isLoading,setLoading] = React.useState(false)
- 
   const isCloseToBottom = ({layoutMeasurement, contentOffset, contentSize}) => {
     const paddingToBottom = 20;
     return layoutMeasurement.height + contentOffset.y >=
       contentSize.height - paddingToBottom;
   };
   const onScroll = ({nativeEvent})=>{
-    checkToken()
+    checkToken(navigation)
     if (isCloseToBottom(nativeEvent)) {
       if (isLoading) return;
        setLoading(true)
@@ -47,7 +29,7 @@ const MovieList = ({navigation,route}) => {
   }
   React.useEffect(()=>{
     if(isLogin){
-      checkToken()
+      checkToken(navigation)
     }
    const fetch = async ()=>{
         let serials = await getFilms(page,route.params)
@@ -63,7 +45,7 @@ const MovieList = ({navigation,route}) => {
   
   React.useEffect(()=>{
       const fetch = async ()=>{
-        checkToken()
+        checkToken(navigation)
         let films = await getFilms(1,route.params)
         await setData({
                   currentPage:1,
@@ -82,7 +64,7 @@ const MovieList = ({navigation,route}) => {
         flexWrap:'wrap',
         width:screenWidth,
         flexDirection:'row',
-        justifyContent:'center'
+        justifyContent:isTV?'flex-start':'center'
         }}>
         
         {data.data && data.data.map((item,i)=>(

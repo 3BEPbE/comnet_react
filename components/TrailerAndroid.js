@@ -46,7 +46,7 @@ const styles = StyleSheet.create({
         flexDirection:'row',
         height:screenWidth+80,
         width:screenWidth,
-        resizeMode:'cover',
+        resizeMode:'stretch',
 
    },
    gradient:{

@@ -84,7 +84,7 @@ const CustomVideoPlayer = ({params}) => {
             
           }}
           useNativeControls ={false}
-          resizeMode="cover"
+          resizeMode="stretch"
           isLooping
           onPlaybackStatusUpdate={status => setStatus(() => status)}
         />
