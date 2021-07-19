@@ -15,13 +15,13 @@ const links =[
     {
         label:'Просмотреные',
         navigation:'MovieList',
-        params:{favorited:0,viewed:1,season:null},
+        params:{favorited:0,viewed:1,season:null,gid:null},
         icon:require('../images/burgerMenuIcon1.png')
     },
     {
         label:'Избранные',
         navigation:'MovieList',
-        params:{favorited:1,viewed:0,season:null},
+        params:{favorited:1,viewed:0,season:null,gid:null},
         icon:require('../images/burgerMenuIcon2.png')
     },
     {
@@ -33,23 +33,25 @@ const links =[
     {
         label:'Фильмы',
         navigation:'MovieList',
-        params:{favorited:null,viewed:null,season:0},
+        params:{favorited:null,viewed:null,season:0,gid:null},
         icon:require('../images/burgerMenuIcon4.png')
     },
     {
         label:'Сериалы',
         navigation:'MovieList',
-        params:{favorited:null,viewed:null,season:1},
+        params:{favorited:null,viewed:null,season:1,gid:null},
         icon:require('../images/burgerMenuIcon5.png')
     },
     {
         label:'Амедиатека',
         navigation:'MovieList',
+        params:{favorited:null,viewed:null,season:null,gid:91},
         icon:require('../images/burgerMenuIcon6.png')
     },
     {
         label:'Мегого',
         navigation:'MovieList',
+        params:{favorited:null,viewed:null,season:null,gid:91},
         icon:require('../images/burgerMenuIcon7.png')
     },
     {
@@ -60,23 +62,48 @@ const links =[
     {
         label:'Детям',
         navigation:'MovieList',
+        params:{favorited:null,viewed:null,season:null,gid:24},
         icon:require('../images/burgerMenuIcon9.png')
     },
 ]
 
-const ClearParams = (navigation) =>{
-    navigation.setParams({})
-}
+const payImage = [
+    {image:require('../images/pay1.png')},
+    {image:require('../images/pay9.png')},
+    {image:require('../images/pay11.png')},
+    {image:require('../images/pay2.png')},
+    {image:require('../images/pay3.png')},
+    {image:require('../images/pay4.png')},
+    {image:require('../images/pay6.png')},
+    {image:require('../images/pay5.png')},
+    {image:require('../images/pay10.png')},
+    {image:require('../images/pay8.png')},
+    {image:require('../images/pay12.png')},
+    {image:require('../images/pay7.png')},
+]
 
 export  function BurgerMenu(props) {
     
-    const {storeData,getData} = React.useContext(Datas)
+    const {storeData,getData,getUserInfo} = React.useContext(Datas)
+    const [data,setData] = React.useState()
+    const [janr,setJanr] = React.useState()
+
     const exit = () =>{
         props.navigation.closeDrawer();
         storeData('token',null)  
         getData('token')
     }
     const isDrawerOpen = useIsDrawerOpen();
+
+    React.useEffect(()=>{
+        const fetch = async() => {
+            let data = await getUserInfo()
+            if(data){setData({...data,payImage})}
+           
+        }
+        fetch()
+    },[])
+
     
    
     
@@ -84,11 +111,11 @@ export  function BurgerMenu(props) {
     <>  
             {isDrawerOpen||!isTV?<DrawerContentScrollView style={styles.content} {...props} >
                 <ImageBackground style={styles.bcImage} source={require('../images/burgerMenu-bc.png')}>
-                    <DrawerItem pressColor='#fff'  onPress={()=>{props.navigation.navigate('Profile')}} style={{marginTop:30}} label='' icon={()=>(     
+                    <DrawerItem pressColor='#fff'  onPress={()=>{props.navigation.navigate('Profile',data)}} style={{marginTop:30}} label='' icon={()=>(     
                     <View style={styles.profileBlock}>
                             <><Image source={require('../images/burgerMenuProfile.png')} style={styles.profileImage}/></>
                             <View>
-                                <Text style={styles.name}>Имя Фамилия</Text>
+                                <Text style={styles.name}>{data && data.firstname} {data && data.lastname}</Text>
                                 <Text style={styles.status}>Активный</Text>
                             </View>
                     </View>)}/>

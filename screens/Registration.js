@@ -88,10 +88,9 @@ export default function Registration(props) {
                         onPress={() => {
                             setChecked(!checked);
                         }}/> 
-                        <DrawerItem pressColor='#fff' label='' style={{width:300}} icon={()=>(       
+                    <DrawerItem pressColor='#fff' label='' style={{width:300}} icon={()=>(       
                         <View style={styles.agreeTextBlock}>    
                             <Text style={styles.textAgree1}>Я принимаю<Text style={styles.textAgree2}> условия пользовательского соглашения</Text></Text>
-
                         </View>)}/>
                 </View>
                
@@ -187,6 +186,7 @@ const styles = StyleSheet.create({
         flexDirection:'row',
         alignItems:'center',
         marginBottom:40,
+        width:screenWidth-40
     },
     agreeTextBlock:{
         flexDirection:'row',

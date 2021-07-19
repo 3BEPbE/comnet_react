@@ -1,9 +1,9 @@
 import React,{Component} from 'react';
-import { SafeAreaView, View, FlatList, StyleSheet, Text, ActivityIndicator,Image,Dimensions,ScrollView } from 'react-native';
+import { SafeAreaView, View, StyleSheet, Text, ActivityIndicator,Image,Dimensions,ScrollView } from 'react-native';
 import { Datas } from '../context/context';
 import { DrawerItem } from '@react-navigation/drawer';
 
-const { width: screenWidth } = Dimensions.get('window')
+const { width: screenWidth,height:screenHeight } = Dimensions.get('window')
 const isTV = screenWidth>950
 
 
@@ -12,7 +12,7 @@ const MovieList = ({navigation,route}) => {
 
   const {getFilms,checkToken,isLogin} = React.useContext(Datas)
   const [page,setPage] = React.useState(1)
-  const [data,setData] = React.useState({currentPage:0, data:[] })
+  const [data,setData] = React.useState({currentPage:0, data:false })
   const [isLoading,setLoading] = React.useState(false)
   const isCloseToBottom = ({layoutMeasurement, contentOffset, contentSize}) => {
     const paddingToBottom = 20;
@@ -35,7 +35,7 @@ const MovieList = ({navigation,route}) => {
         let serials = await getFilms(page,route.params)
         await setData({
                   currentPage:page,
-                  data:[...data.data,...serials]
+                  data:data.data?[...data.data,...serials]:[...serials]
               })
         await setLoading(false)
         }
@@ -67,14 +67,14 @@ const MovieList = ({navigation,route}) => {
         justifyContent:isTV?'flex-start':'center'
         }}>
         
-        {data.data && data.data.map((item,i)=>(
+        {data.data ? data.data.map((item,i)=>(
           <DrawerItem pressColor='#fff' key={i}  style={styles.focusItem} onPress={()=>{navigation.navigate( 'Movie',item)}} icon={()=>(
             (<View style={styles.item}>
                     <Image style={styles.image} source={{uri: item.thumbnail_small}}/>
                     <Text style={styles.text}>{item.name.length>35?<>{item.name.slice(0,35)}...</>:item.name}</Text>
               </View>)
         )} label=''/>
-        ))}
+        )): <View style={{width:screenWidth,height:screenHeight-150,alignItems:'center',justifyContent:'center'}}><ActivityIndicator  size="large" color='#fff' /></View>}
 
         </View>
         {isLoading?<ActivityIndicator size="large" color='#fff'/>:<></>}

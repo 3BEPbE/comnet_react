@@ -34,8 +34,8 @@ export const ContextProvider = (props) => {
         },
         MovieList:{
           ...options,
-          headerRight:()=>(<HeaderRight navigation={navigation}/>),
-          headerLeft:()=>(<HeaderLeft  navigation={navigation}/>)
+          headerTitle:()=>(<HeaderCenter   navigation={navigation}/>),
+          headerLeft:()=>(<HeaderLeft navigation={navigation}/>)
         },
         Profile:{
           ...options,
@@ -354,6 +354,22 @@ export const ContextProvider = (props) => {
            })
        }
     }
+    const getUserInfo = () => {
+      if(isLogin){
+        return axios({
+           method: 'POST',
+           url:`http://172.16.236.84/api/auth/profile/costumer/info`,
+           data:{
+             authkey:token
+           }
+           }).then((e)=>{
+            return(e.data['0'])
+               
+           }).catch((e)=>{
+               console.log(e)
+           })
+       }
+    }
     return(
         <Datas.Provider
           value = {{
@@ -374,7 +390,8 @@ export const ContextProvider = (props) => {
             getChannel,
             getChannelSrc,
             getProgramListByDay,
-            getTimeShift
+            getTimeShift,
+            getUserInfo
           }}>
             {children}
         </Datas.Provider>

@@ -2,29 +2,40 @@ import React from 'react';
 import { View ,StyleSheet,Text,Dimensions,ImageBackground,TouchableOpacity,Platform} from 'react-native';
 import Carousel from 'react-native-snap-carousel';
 import { DrawerItem } from '@react-navigation/drawer'
-
+import { Datas } from '../context/context';
 
 const { width: screenWidth } = Dimensions.get('window')
 
-export default function Janr({janr}) {
+export default function Janr({janrName,navigation}) {
     
-    const carouselItems = janr.split(',')
+    const carouselItems = janrName.split(',')
     const ref = React.useRef(null);
-    
+    const [janrID,setJanrID] = React.useState();
+
+    const {getJanr} = React.useContext(Datas)
+
+    React.useEffect(()=>{
+        const fetch = async()=>{
+            let janr = await getJanr()
+            setJanrID(janr.filter((item)=>carouselItems.some((i)=>i.replace(/\s/g, '')===item.name)))
+        }
+        fetch()
+    },[])
+
 
     const renderItem = React.useCallback(({ item, index }) => (
-    <DrawerItem pressColor='#fff' style={{marginRight:-13}} label='' icon={()=>(     
+    <DrawerItem onPress={()=>navigation.navigate('MovieList',{favorited:null,viewed:null,season:null,gid:item.id},)} pressColor='#fff' style={{marginRight:-13}} label='' icon={()=>(     
     <View style={{...styles.seasonButton}}>
-        <Text style={styles.seasonButtonText}>{item.replace(/\s/g, '')}</Text>
+        <Text style={styles.seasonButtonText}>{item.name}</Text>
     </View>  )}/>
         
     ), []);
     return (
         <View style={styles.seasonButtonBlock}>
-               { janr? <Carousel
+               { janrID? <Carousel
                     layout="default"
                     ref={ref}
-                    data={carouselItems}
+                    data={janrID}
                     sliderWidth={screenWidth}
                     itemWidth={120}
                     sliderHeight={35}

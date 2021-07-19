@@ -95,12 +95,12 @@ const styles = StyleSheet.create({
         padding:15
     },
     about:{
-        width:(isTV?280:320),
+        width:(isTV?280:screenWidth-80),
         fontSize:12,
         color:'#fff'
     },
     name:{
-        width:(isTV?280:320),
+        width:(isTV?280:screenWidth-80),
         fontSize:20,
         color:'#fff',
         fontWeight:'bold',

@@ -6,22 +6,20 @@ import { DrawerItem } from '@react-navigation/drawer'
 const { width: screenWidth } = Dimensions.get('window')
 
 export default function SeasonCarusel(props) {
-    const [activeIndex, setActiveIndex] = React.useState(0);
-    const [carouselItems, setCarouselItems] = React.useState(['Start','Мульти-аккаунт 2','Мульти-аккаунт 2','Мульти-аккаунт 2','Мульти-аккаунт 2','Мульти-аккаунт 2','Мульти-аккаунт 2']);
     const ref = React.useRef(null);
     const renderItem = React.useCallback(({ item, index }) => (
-    <DrawerItem style={{marginRight:-10}} label='' icon={()=>(
+    <DrawerItem pressColor='#fff' style={{marginRight:-10}} label='' icon={()=>(
         <View style={styles.TariffsButton}>
         { props.pay ?<> 
         <View style={styles.dotBlock}>
-             <View style={{...styles.dot,display:item==='Start'?'flex':'none'}}></View>
+             <View style={{...styles.dot,display:item.name==='Start'?'flex':'none'}}></View>
          </View>
          <View style={styles.tarifSection}>
-             <Text style={styles.TariffsName}>{item}</Text>
-             <Text style={styles.TariffsPrice}>15000 сум/месяц</Text>
+             <Text style={styles.TariffsName}>{item.name}</Text>
+             <Text style={styles.TariffsPrice}>{item.price} сум/месяц</Text>
          </View></>:<>
-         <View style={{alignItems:'center'}}>
-             <Image style={styles.payImage} source={require('../images/apelsin.png')}/>
+         <View style={styles.card}>
+             <Image style={styles.payImage} source={item.image}/>
          </View>
          </>}
      </View>
@@ -33,13 +31,12 @@ export default function SeasonCarusel(props) {
                 <Carousel
                     layout="default"
                     ref={ref}
-                    data={carouselItems}
+                    data={props.data?props.data:[]}
                     sliderWidth={screenWidth}
                     itemWidth={190}
                     sliderHeight={90}
                     renderItem={renderItem}
                     activeSlideAlignment="start"
-                    onSnapToItem={(index) => setActiveIndex(index)}
                     inactiveSlideOpacity={1}
                     inactiveSlideScale={1}
                 />
@@ -105,5 +102,9 @@ const styles = StyleSheet.create({
         width:120,
         height:90,
         resizeMode:'contain'
+    },
+    card:{
+        alignItems:'center',
+        backgroundColor:'#fff'
     }
   });

@@ -61,26 +61,26 @@ export default function SerialCarusel({currentFilm,currentSeria,setCurrentSeria,
      
      
         </>:<>
-      <Picker
-          selectedValue={currentSeason}
-          onValueChange={hand => setCurrentSeason(hand)}
-          style={styles.itemStyle}
-          mode="dropdown"
-          itemStyle={{ color:'red', fontWeight:'900', fontSize: 18, padding:30}}>
-          {season && season.map((e,i)=>(
-              <Picker.Item key={i} label={`${e} сезон`} value={e} />
-          )) }
-        </Picker>
+        <View style={styles.border}><Picker
+            selectedValue={currentSeason}
+            onValueChange={hand => setCurrentSeason(hand)}
+            style={styles.itemStyle}
+            mode="dropdown">
+            {season && season.map((e,i)=>(
+                <Picker.Item key={i} label={`${e} сезон`} value={e} />
+            )) }
+        </Picker></View>
+        <View style={styles.border}>
           <Picker
           selectedValue={currentSeria}
           onValueChange={hand => setCurrentSeria(hand)}
           style={styles.itemStyle}
-          mode="dropdown"
-          itemStyle={{ color:'red', fontWeight:'900', fontSize: 18, padding:30}}>
+          mode="dropdown">
           {serial && serial.map((e,i)=>(
               <Picker.Item key={i} label={`${e} серия`} value={e} />
           )) }
         </Picker>
+        </View>
      </>}
      </View>
        </>
@@ -92,19 +92,24 @@ const styles = StyleSheet.create({
     flexDirection:'row'
   },
   itemStyle:{
-      height:50,
-      width:100,
-      marginBottom:10,
-      marginLeft:20,
+      height:45,
+      width:95,
       color:'#fff',
       backgroundColor:'#373737',
-      paddingLeft:10,
-      borderRadius:50,
+      justifyContent:'center',
+      alignItems:'center'
     },
   button:{
-    width:150,height:40,
+    height:40,
     justifyContent:'center',
     alignItems:'center',
-    backgroundColor:'#fff'
+  },
+  border:{
+    marginLeft:20,
+    width:80,
+    borderRadius:7,
+    overflow:'hidden',
+    marginTop:10,
+    marginBottom:20
   }
   });

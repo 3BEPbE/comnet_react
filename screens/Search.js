@@ -69,7 +69,7 @@ const styles = StyleSheet.create({
     },
     input:{
         width:screenWidth-40,
-        fontSize:20,
+        fontSize:18,
         color:'#fff',
         paddingBottom:3,
         marginLeft:5,

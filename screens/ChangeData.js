@@ -1,8 +1,11 @@
 import React from 'react';
-import { View ,StyleSheet,Text,TouchableWithoutFeedback, ScrollView,Image,TextInput} from 'react-native';
+import { View ,StyleSheet,Text, ScrollView,Image,TextInput,Dimensions} from 'react-native';
 import { Button } from 'react-native-paper';
 import { DrawerItem } from '@react-navigation/drawer'
 import { Datas } from '../context/context';
+
+const { width: screenWidth } = Dimensions.get('window')
+const isTV = 900<screenWidth
 
 export default function ChangData(props) {
 
@@ -26,7 +29,7 @@ export default function ChangData(props) {
         <ScrollView style={styles.Container}>
             <View style={styles.personalData}>
                 <Image style={styles.ProfileImage} source={require('../images/burgerMenuProfile.png')}/>
-                <DrawerItem style={{alignItems:'center',justifyContent:'center'}} label='' icon={()=>(
+                <DrawerItem pressColor='#fff' style={{alignItems:'center',justifyContent:'center'}} label='' icon={()=>(
                     <Text style={styles.changePhoto}>Изменить фото</Text>
                 )}/>
                 
@@ -34,25 +37,28 @@ export default function ChangData(props) {
             <View style={styles.forma}>
                 <View style={styles.formItem}>
                     <Text style={styles.titleInput}>Имя</Text>
-                    <DrawerItem onPress={()=>textInputs[0].focus()}  style={{marginLeft:-20,marginRight:-20,marginBottom:-10}} label='' icon={()=>(
+                    <DrawerItem pressColor='#fff' onPress={()=>textInputs[0].focus()}  style={styles.focusInput} label='' icon={()=>(
                     <TextInput  ref={(input)=>{textInputs[0]=input}} autoFocus={true}  autoCompleteType={'off'} autoCorrect={false}  onChangeText={(e)=>{changeHandler(e,'name')}} value={data.name}  style={styles.input}/>)} /> 
                 </View>
                 <View style={styles.formItem} >
                     <Text style={styles.titleInput}>Фамилия</Text>
-                    <DrawerItem onPress={()=>textInputs[1].focus()} style={{marginLeft:-20,marginRight:-20,marginBottom:-10}} label='' icon={()=>(
+                    <DrawerItem pressColor='#fff' onPress={()=>textInputs[1].focus()} style={styles.focusInput} label='' icon={()=>(
                     <TextInput  ref={(input)=>{textInputs[1]=input}}  autoCompleteType={'off'} autoCorrect={false}  onChangeText={(e)=>{changeHandler(e,'surname')}} value={data.surname} style={styles.input}/>)} /> 
                 </View>
                 <View style={styles.formItem}>
                     <Text style={styles.titleInput}>Пароль</Text>
-                    <DrawerItem onPress={()=>textInputs[2].focus()} style={{marginLeft:-20,marginRight:-20,marginBottom:-10}} label='' icon={()=>(
+                    <DrawerItem pressColor='#fff' onPress={()=>textInputs[2].focus()} style={styles.focusInput} label='' icon={()=>(
                     <TextInput  ref={(input)=>{textInputs[2]=input}}  autoCompleteType={'off'} autoCorrect={false}  onChangeText={(e)=>{changeHandler(e,'password')}} value={data.password} style={styles.input}/>)} /> 
                 </View>
                 <View style={styles.formItem}> 
                     <Text style={styles.titleInput}>Повторить Пароль</Text>
-                    <DrawerItem onPress={()=>textInputs[3].focus()} style={{marginLeft:-20,marginRight:-20,marginBottom:-10}} label='' icon={()=>(
+                    <DrawerItem pressColor='#fff' onPress={()=>textInputs[3].focus()} style={styles.focusInput} label='' icon={()=>(
                     <TextInput  ref={(input)=>{textInputs[3]=input}}  autoCompleteType={'off'} autoCorrect={false}  onChangeText={(e)=>{changeHandler(e,'repeatPassword')}} value={data.repeatPassword} multiline  style={styles.input}/>)} /> 
                 </View>
-                <DrawerItem style={{marginLeft:-20,marginRight:-20}} label='' icon={()=>( <View  mode="contained" style={styles.button}><Text style={styles.buttonText}>Сохранить</Text></View>)}/>
+                <View style={{alignItems:'center',justifyContent:'center'}}>
+                <DrawerItem style={styles.focusInput} pressColor='#fff'  label='' icon={()=>( <View  mode="contained" style={styles.button}><Text style={styles.buttonText}>Сохранить</Text></View>)}/>
+                </View>
+                
                
             </View>
         </ScrollView>
@@ -68,8 +74,8 @@ const styles = StyleSheet.create({
     },
     personalData:{
         alignItems:'center',
-        marginTop:20,
-        marginBottom:10
+        marginTop:0,
+        marginBottom:0
        },
        ProfileImage:{
         backgroundColor:'#474747',
@@ -84,10 +90,12 @@ const styles = StyleSheet.create({
            marginLeft:60
        },
        forma:{
-            marginTop:20
+            marginTop:10
        },
        formItem:{
-            marginTop:15
+            marginTop:0,
+            alignItems:'center',
+            justifyContent:'center'
        },
        input:{
            borderBottomColor:'#474747',
@@ -96,11 +104,19 @@ const styles = StyleSheet.create({
            color:'#fff',
            fontSize:20,
            width:'100%',
-           paddingLeft:20
+           paddingLeft:20,
+           width:isTV?screenWidth/2:screenWidth-40, 
+           
+       },
+       focusInput:{
+        width:isTV?screenWidth/2+20:screenWidth-20,
+        marginTop:15
        },
        titleInput:{
            color:'#fff',
-           fontSize:16
+           fontSize:16,
+           width:isTV?screenWidth/2:screenWidth-40,
+           marginBottom:-10
        },
        button:{
            backgroundColor:'#E41A4B',
@@ -108,13 +124,12 @@ const styles = StyleSheet.create({
            textAlign:'center',
            alignItems:'center',
            justifyContent:'center',
-           width: '100%',
-           marginTop:40,
-           marginBottom:60
+           width:isTV?screenWidth/2:screenWidth-40,
+           borderRadius:7
+
        },
        buttonText:{
            color:'#fff',
            fontSize:18
        }
-
   });

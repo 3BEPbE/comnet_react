@@ -5,38 +5,42 @@ import {Datas} from '../context/context'
 import { DrawerItem } from '@react-navigation/drawer' 
 
 export default function Profile(props) {
-    const {test,checkToken} = React.useContext(Datas)
-    
+    const {checkToken,isLogin} = React.useContext(Datas)
+
     React.useEffect(()=>{
         checkToken(props.navigation)
-    },[])
+    },[isLogin])
+    
+    
+    const data = props.route.params
+    
     return(
         <ScrollView style={styles.Container}>
             <View style={styles.personalData}>
                 <Image style={styles.ProfileImage} source={require('../images/burgerMenuProfile.png')}/>
                 <Text style={styles.name}>Имя Фамилия</Text>
-                <Text style={styles.login}>абонемент0012</Text>
+                <Text style={styles.login}>{data && data.firstname} {data && data.lastname}</Text>
             </View>
             <View style={styles.balanceBlock}>
                 <Text style={styles.balanceText}>Баланс:</Text>
-                <Text style={styles.balance}>0.00 сум</Text>
+                <Text style={styles.balance}>{data && data.balance} сум</Text>
             </View>
             <View style={styles.balanceBlock}>
                 <Text style={styles.balanceText}>Ежемесячный платеж:</Text>
-                <Text style={styles.balanceText}>25.000 сум</Text>
+                <Text style={styles.balanceText}>{data && data.monthly_payment} сум</Text>
             </View>
             <Text style={styles.additional}>Доступные пакеты:</Text>
-            <TarifCarusel pay={true}/>
+            <TarifCarusel data={data && data.tariffs} pay={true}/>
             <Text style={styles.additional}>Способы оплаты </Text>
-            <TarifCarusel pay={false}/>
+            <TarifCarusel data={data && data.payImage} pay={false}/>
             <View style={styles.footer}>
-                <DrawerItem style={{marginLeft:-5}} label='' icon={()=>( 
+                <DrawerItem style={{marginLeft:-5}} pressColor='#fff' label='' icon={()=>( 
                     <View style={styles.iconBlock}>
                         <Image style={styles.icon} source={require('../images/changeIcon.png')}></Image>
                         <Text style={styles.iconText}>Изменить</Text>
                     </View>  )} onPress={() => props.navigation.navigate('Change')}/>
                    
-                <DrawerItem style={{marginLeft:-5}} label='' icon={()=>( 
+                <DrawerItem pressColor='#fff' style={{marginLeft:-5}} label='' icon={()=>( 
                     <View style={styles.iconBlock}>
                         <Image style={styles.icon} source={require('../images/burgerMenuIcon11.png')}></Image>
                         <Text style={styles.iconText}>Выйти</Text>

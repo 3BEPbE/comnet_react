@@ -1,5 +1,5 @@
 import React from 'react';
-import { View ,StyleSheet,Text,Dimensions,Image,ScrollView} from 'react-native';
+import { View ,StyleSheet,Text,Dimensions,Image,ScrollView,ActivityIndicator} from 'react-native';
 import SeriaCarusel from '../components/SeriaCarusel'
 import JanrCarusel from '../components/JanrCarusel'
 import CardCarusel from '../components/CardCarusel'
@@ -10,7 +10,7 @@ import { Datas } from '../context/context';
 import Description from '../components/Description';
 import Ranking from '../components/Ranking';
 
-const { width: screenWidth } = Dimensions.get('window')
+const { width: screenWidth,height:screenHeight } = Dimensions.get('window')
 
 const isTV = 900<screenWidth
 
@@ -20,7 +20,6 @@ export default function Movie({route,navigation}) {
     const [src,setSrc] = React.useState('')
     const [currentSeason,setCurrentSeason] = React.useState()
     const [currentSeria,setCurrentSeria] = React.useState()
-
     React.useEffect(()=>{      
         if(isLogin){
             checkToken(navigation)
@@ -45,6 +44,7 @@ export default function Movie({route,navigation}) {
     },[currentSeason,currentSeria])
     return(
         <ScrollView style={styles.Page}>
+        {  src ?  <>
             {isTV?
             <View style={{alignItems:'center'}}><Trailer src={currentFilm.thumbnail_big} /></View>:
             <View style={{alignItems:'center'}}><TrailerAndroid src={currentFilm.thumbnail_big} navigation={navigation}/></View>
@@ -58,7 +58,7 @@ export default function Movie({route,navigation}) {
                             <View style={styles.mainInfoTextItem4Block}><Text style={styles.mainInfoTextItem4}>{currentFilm.rating}+</Text></View>
                             <View style={{display:(isTV?'flex':'none')}}></View><Ranking  currentFilm={currentFilm}/> 
                         </View>
-                       
+                        
                     </View>
                 </View>
             <View stylle={styles.content}>
@@ -66,12 +66,13 @@ export default function Movie({route,navigation}) {
                     {isLogin&&currentFilm.is_season? <SeriaCarusel currentSeria={currentSeria} setCurrentSeria={setCurrentSeria} currentSeason={currentSeason} setCurrentSeason={setCurrentSeason} currentFilm={currentFilm}/>:<></>}
                     <Description currentFilm={currentFilm}/>
                     <View style={{display:(isTV?'none':'flex')}}></View><Ranking  currentFilm={currentFilm}/> 
-                    <JanrCarusel janr={currentFilm.genres}/>
+                    <JanrCarusel navigation={navigation} janrName={currentFilm.genres}/>
                     <Text style={styles.caruselTitle}>Похожие фильмы</Text>
                     <CardCarusel navigation={navigation}/>
                     <Text style={styles.caruselTitle}>Фильмы которые идут по телеканалам в данный момент</Text>
                     <CardCarusel navigation={navigation}/>
             </View>
+            </>:<View style={{width:screenWidth,height:screenHeight-150,alignItems:'center',justifyContent:'center'}}><ActivityIndicator  size="large" color='#fff' /></View>}
         </ScrollView>
         
     )
