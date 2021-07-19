@@ -28,7 +28,7 @@ class Post extends PureComponent {
 
 export default function CardCarusel({navigation,gid}) {
 
-    const {getFilms} = React.useContext(Datas)
+    const {getFilms,isLogin} = React.useContext(Datas)
     const [data,setData] = React.useState([])
 
     React.useEffect(()=>{
@@ -37,7 +37,7 @@ export default function CardCarusel({navigation,gid}) {
         setData(data)
       }
       fetch()
-    },[])
+    },[isLogin])
     const renderItem = React.useCallback(({ item, index }) => {
    
       return(

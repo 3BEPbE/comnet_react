@@ -36,7 +36,7 @@ export default function Home(props) {
                 <CardCarusel gid={item.id} navigation ={props.navigation}/>
                 </View>
                 ))}
-                <Footer/>
+                <Footer navigation={props.navigation}/>
              </> :<View style={{width:screenWidth,height:screenHeight-150,alignItems:'center',justifyContent:'center'}}><ActivityIndicator  size="large" color='#fff' /></View>}
         </ScrollView>
   

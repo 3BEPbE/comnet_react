@@ -8,15 +8,15 @@ const { width: screenWidth } = Dimensions.get('window')
 const icons = [
     {
         image:require('../images/share1.png'),
-        url:()=>Linking.openURL('https://www.instagram.com/comnet_uz/'),
+        url:()=>Linking.openURL('https://www.tiktok.com/@tvcom.uz'),
     },
     {
         image:require('../images/share2.png'),
-        url:()=>Linking.openURL('https://www.instagram.com/comnet_uz/'),
+        url:()=>Linking.openURL('https://www.facebook.com/tvcom.uz/'),
     },
     {
         image:require('../images/share3.png'),
-        url:()=>Linking.openURL('https://www.instagram.com/comnet_uz/'),
+        url:()=>Linking.openURL('https://t.me/comnet_uz'),
     },
     {
         image:require('../images/share4.png'),
@@ -24,11 +24,11 @@ const icons = [
     },
     {
         image:require('../images/share5.png'),
-        url:()=>Linking.openURL('https://www.instagram.com/comnet_uz/'),
+        url:()=>Linking.openURL('https://ok.ru/group/55898902429839'),
     },
 ]
 
-const Footer = () => {
+const Footer = ({navigation}) => {
 
 
     return(
@@ -46,6 +46,11 @@ const Footer = () => {
                     )
                 })}
             </View>
+            <DrawerItem onPress={()=>navigation.navigate('Documents')} style={styles.shareFocus} label='' icon={()=>(
+                <View style={styles.agreeBlock}>
+                    <Text style={styles.agreement}>© 2021 ООО "TVPLUS". Все права защищены.</Text>
+                </View>
+            )}/>
         </View>
     )
 }
@@ -58,7 +63,8 @@ const styles = StyleSheet.create({
         width:screenWidth-40,
         marginLeft:20,
         padding:10,
-        marginTop:20
+        marginTop:20,
+        marginBottom:40
     },
     logo:{
         width:153,
@@ -87,7 +93,7 @@ const styles = StyleSheet.create({
     shareLogo:{
         height:18,
         width:18,
-        resizeMode:'stretch'
+        resizeMode:'contain'
     },
     focus:{
         width:35,
@@ -95,5 +101,18 @@ const styles = StyleSheet.create({
         padding:0,
         marginTop:20,
         marginHorizontal:0,
+    },
+    agreeBlock:{
+        height:80,
+    },
+    agreement:{
+        fontSize:14,
+        color:'#fff'
+    },
+    shareFocus:{
+        marginHorizontal:0,
+        marginVertical:0,
+        marginLeft:-5,
+        height:30,
     }
 })

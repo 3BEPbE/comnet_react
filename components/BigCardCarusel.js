@@ -40,7 +40,7 @@ class Post extends PureComponent {
 
 
 export default function BigCardCarusel({gid,navigation}) {
-    const {getFilms} = React.useContext(Datas)
+    const {getFilms,isLogin} = React.useContext(Datas)
 
     const [data,setData] = React.useState([])
  
@@ -50,7 +50,7 @@ export default function BigCardCarusel({gid,navigation}) {
           setData(data)
         }
         fetch()
-      },[])
+      },[isLogin])
    
 
     

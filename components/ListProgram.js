@@ -50,11 +50,11 @@ const ListProgram = ({currentFilm,navigation}) => {
 
     const getSrcProgram = async(item)=>{
         if(currentFilm.program_begin_time>=item.begin_time){
-            const url = await getTimeShift(currentFilm.id,item.id) 
+            const url = await getTimeShift(currentFilm.id,item.id,item.begin_time,item.end_time) 
             if(isTV){
                 navigation.navigate('WatchingTV',{vid:{uri:url.uri,overrideFileExtensionAndroid:'m3u8'},isChannel:true})
             }else{
-                navigation.navigate('Watching',{vid:{uri:url.uri,overrideFileExtensionAndroid:'m3u8'},isChannel:true})
+                navigation.navigate('WatchingTimeShift',{vid:{uri:url.uri,overrideFileExtensionAndroid:'m3u8'},isChannel:false})
             }
         }
     }

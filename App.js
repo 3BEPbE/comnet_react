@@ -19,6 +19,8 @@ import {BurgerMenu,BurgerMenuGuest} from './components/BuregerMenu'
 import {ContextProvider, Datas} from './context/context'
 import { LogBox } from 'react-native';
 import { useIsDrawerOpen } from '@react-navigation/drawer';
+import Documents from './screens/Documents';
+import WatchingTimeShift from './screens/WatchingTimeShift';
 
 const Stack = createStackNavigator()
 const Drawer = createDrawerNavigator();
@@ -49,8 +51,10 @@ function stack({ navigation }) {
         <Stack.Screen options={createOption(navigation,"Search")}  name="Search"  component={Search} />
         <Stack.Screen options={{headerShown:false}}  name="Watching"  component={Watching} />
         <Stack.Screen options={{headerShown:false}}  name="WatchingTV"  component={WatchingTV} />
+        <Stack.Screen options={{headerShown:false}}  name="WatchingTimeShift"  component={WatchingTimeShift} />
         <Stack.Screen options={createOption(navigation,"Search")}  name="Login"  component={Login} />
         <Stack.Screen options={createOption(navigation,"Search")}  name="Registration"  component={Registration} />
+        <Stack.Screen options={createOption(navigation,"Search")}  name="Documents"  component={Documents} />
       </Stack.Navigator>
   );
 }

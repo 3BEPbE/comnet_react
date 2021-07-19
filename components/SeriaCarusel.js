@@ -5,7 +5,7 @@ import { DrawerItem } from '@react-navigation/drawer';
 import Carusel from '../components/SerialCaruselTv'
 
 const { width: screenWidth,height:screenHeight } = Dimensions.get('window')
-const isTV = screenWidth>1000
+const isTV = screenWidth>900
 
 export default function SerialCarusel({currentFilm,currentSeria,setCurrentSeria,currentSeason,setCurrentSeason}) {
 
