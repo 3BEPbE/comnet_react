@@ -21,9 +21,6 @@ export default function Login({navigation,route}) {
         setData({...newData})
     }
     const textInputs = []
-
-    console.log()
-
     return(
         <ScrollView style={styles.container}>
           <View style={styles.block}>

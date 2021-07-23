@@ -1,5 +1,5 @@
 import React from 'react';
-import { View ,StyleSheet, Text, Dimensions, Image} from 'react-native';
+import { View ,StyleSheet, Text, Dimensions, Image, ActivityIndicator} from 'react-native';
 import { DrawerItem } from '@react-navigation/drawer';
 import { Datas } from '../context/context';
 import DayCarusel from './DayCarusel';
@@ -50,11 +50,10 @@ const ListProgram = ({currentFilm,navigation}) => {
 
     const getSrcProgram = async(item)=>{
         if(currentFilm.program_begin_time>=item.begin_time){
-            const url = await getTimeShift(currentFilm.id,item.id,item.begin_time,item.end_time) 
             if(isTV){
-                navigation.navigate('WatchingTV',{vid:{uri:url.uri,overrideFileExtensionAndroid:'m3u8'},isChannel:true})
+                navigation.navigate('WatchingTimeShiftTV',{pid:currentFilm.id,cid:item.id,begin_time:item.begin_time,end_time:item.end_time})
             }else{
-                navigation.navigate('WatchingTimeShift',{vid:{uri:url.uri,overrideFileExtensionAndroid:'m3u8'},isChannel:false})
+                navigation.navigate('WatchingTimeShift',{pid:currentFilm.id,cid:item.id,begin_time:item.begin_time,end_time:item.end_time})
             }
         }
     }
@@ -63,6 +62,7 @@ const ListProgram = ({currentFilm,navigation}) => {
     
     return(
        <View>
+           {day?<>
            <DayCarusel activeDay={activeDay} setActiveDay={setActiveDay} data={day}/>
            {data?data[activeDay].map((item,i)=>(
             <DrawerItem key={item.id} pressColor='#fff' onPress={()=>{getSrcProgram(item)}}  icon={()=>(
@@ -83,6 +83,7 @@ const ListProgram = ({currentFilm,navigation}) => {
             </View>
             )} label=''/>
          )):<></>}
+         </>:<ActivityIndicator  size="large" color='#fff' />}
     </View>
     )
 }

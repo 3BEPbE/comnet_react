@@ -1,11 +1,11 @@
 import { View ,StyleSheet,Dimensions} from 'react-native';
 import React from 'react';
-import VideoPlayer from '../components/VideoTimeShift/Index'
+import VideoPlayer from '../components/VideoTimeShiftTV/Index'
 const { width: screenWidth } = Dimensions.get('window')
 
 import { Datas } from '../context/context';
 
-export default function WatchingTimeShift({route,navigation}){
+export default function WatchingTimeShiftTV({route,navigation}){
 
   const {setStatusHidden,checkToken,getTimeShift} = React.useContext(Datas)
 

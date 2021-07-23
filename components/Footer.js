@@ -46,7 +46,7 @@ const Footer = ({navigation}) => {
                     )
                 })}
             </View>
-            <DrawerItem onPress={()=>navigation.navigate('Documents')} style={styles.shareFocus} label='' icon={()=>(
+            <DrawerItem pressColor='#fff' onPress={()=>navigation.navigate('Documents')} style={styles.shareFocus} label='' icon={()=>(
                 <View style={styles.agreeBlock}>
                     <Text style={styles.agreement}>© 2021 ООО "TVPLUS". Все права защищены.</Text>
                 </View>

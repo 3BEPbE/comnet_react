@@ -6,31 +6,44 @@ import {doubleClick} from './videoHelper'
 
 const { width: screenWidth,height:screenHeight } = Dimensions.get('window')
 const isTV = 900<screenWidth
-const CustomVideoPlayer = ({params}) => {
+const CustomVideoPlayer = ({data,setData, url,timer,setTimer}) => {
     const [isStop,setIsStop] = React.useState(true)
     const video = React.useRef(null);
     const [status, setStatus] = React.useState({});
-    const [isClickControl,setControl] = React.useState(false)
     const [stopStyle,setStopStyle] = React.useState({
       opacity:1
     })
-    const [skipIcon,setSkipIcon] = React.useState({
-      left:{
-        opacity:0
-      },
-      right:{
-        opacity:0
-      }
-    })
-    let doubleClickCounter = React.useRef(0)
-    let removeClickTime = React.useRef()
     let timerRef = React.useRef(null);
+    const [isClickControl,setControl] = React.useState(false)
 
     React.useEffect(()=>{
       video.current.playAsync()
     },[video])
-    React.useEffect(()=>{
       
+    React.useEffect(()=>{
+      const interval = setInterval(() => {
+        if(status.isPlaying){
+          setTimer((i)=>i+1)
+        }
+      }, 1000);
+      return () => clearInterval(interval);
+    },[status.isPlaying])
+
+    React.useEffect(()=>{
+      clearTimeout(timerRef.current);
+      setStopStyle({opacity:1})
+      timerRef.current = setTimeout(()=>{
+        if(status.isPlaying){
+          setStopStyle({
+            opacity:0
+          })
+        }
+      },3500)
+    },[isClickControl])
+
+
+
+    React.useEffect(()=>{ 
       if(isStop){
         video.current.pauseAsync()
         clearTimeout(timerRef.current);
@@ -44,66 +57,48 @@ const CustomVideoPlayer = ({params}) => {
       },2000)}
       
     },[isStop])
-      
-    React.useEffect(()=>{
-      clearTimeout(timerRef.current);
-      setStopStyle({opacity:1})
-      timerRef.current = setTimeout(()=>{
-        if(status.isPlaying){
-          setStopStyle({
-            opacity:0
-          })
-        }
-      },3500)
-    },[isClickControl])
 
-    let isLoad = status.isBuffering&&isStop
   return (
     <>
-     <View style={{...styles.loadIcon,display:isLoad?'flex':'none'}}>
-        <ActivityIndicator style={{display:isLoad?'flex':'none'}} size="large" color="#fff" />
-     </View>
-   
-    <View style={styles.stopBlock}>
-        
-            <TouchableWithoutFeedback  onPress={()=>{doubleClick('left',doubleClickCounter,removeClickTime,setSkipIcon,status,video,setControl)}}>
-              <View style={styles.skipBloack}>
-                <Image source={require('../../images/leftSkip.png')} style={{...skipIcon.left,...styles.leftButton}}/>
-              </View>
-            </TouchableWithoutFeedback>
-    
-            <TouchableWithoutFeedback onPress={()=>setIsStop((last)=>!last)}>
-              <View style={{...styles.shadow,...stopStyle}}>
+    {/* <View style={{...styles.loadIcon,display:isLoad?'flex':'none'}}>
+       <ActivityIndicator style={{display:isLoad?'flex':'none'}} size="large" color="#fff" />
+    </View> */}
+  
+   <View style={styles.stopBlock}>
+       
+           <TouchableWithoutFeedback  onPress={()=>{setControl((changed)=>!changed)}}>
+             <View style={styles.skipBloack}></View>
+           </TouchableWithoutFeedback>
+           <TouchableWithoutFeedback onPress={()=>setIsStop((last)=>!last)}>
+             <View style={{...styles.shadow,...stopStyle}}>
                 <Image style={styles.stop} source={isStop?require('../../images/startIcon.png'):require('../../images/Pause-button.png')}/>
-              </View>   
-            </TouchableWithoutFeedback>  
-            <TouchableWithoutFeedback onPress={()=>{doubleClick('right',doubleClickCounter,removeClickTime,setSkipIcon,status,video,setControl)}}>
-            <View style={styles.skipBloack}>
-               <Image source={require('../../images/rightSkip.png')} style={{...skipIcon.right,...styles.RightButton}}/>
-            </View>
-            </TouchableWithoutFeedback>    
-    
-    </View>
-      {params.isChannel?<></>:
-      <TouchableWithoutFeedback onPress={()=>{setControl((changed)=>!changed)}}>
-        <View style={{...styles.bottomBar,...stopStyle}}>
-          <Controller skipIcon={skipIcon}  isClickControl={isClickControl} stopStyle={stopStyle}  setControl={setControl} video={video} status = {status}/>
-        </View>
-      </TouchableWithoutFeedback> }
-        <Video
+             </View>   
+           </TouchableWithoutFeedback>  
+           <TouchableWithoutFeedback onPress={()=>{setControl((changed)=>!changed)}}>
+            <View style={styles.skipBloack}></View>
+           </TouchableWithoutFeedback>    
+   
+   </View>
+     
+     <TouchableWithoutFeedback onPress={()=>{setControl((changed)=>!changed)}}>
+       <View style={{...styles.bottomBar,...stopStyle}}>
+         <Controller timer={timer} setTimer={setTimer} data={data} setData={setData} isClickControl={isClickControl} stopStyle={stopStyle}  setControl={setControl} video={video} status = {status}/>
+       </View>
+     </TouchableWithoutFeedback> 
+     <Video
           ref={video}
           rate={1}
           style={styles.firstImage}
           source={{
-            ...params.vid,
-            
+            uri:url,
+            overrideFileExtensionAndroid :'m3u8'
           }}
           useNativeControls ={false}
           resizeMode='stretch'
           isLooping
           onPlaybackStatusUpdate={status => setStatus(() => status)}
         />
-      </>
+     </>
 
   );
 }

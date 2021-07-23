@@ -7,38 +7,41 @@ import {converter, } from './videoHelper'
 
 const { width: screenWidth,height:screenHeight } = Dimensions.get('window')
 
-export const Controller = ({status,setControl,stopStyle,video,skipIcon}) => {
+export const Controller = ({status,setControl,stopStyle,data,setData,timer,setTimer,video}) => {
     
     const [sliderVal,setSliderVal] = React.useState(status.positionMillis)
     React.useEffect(()=>{
       if(stopStyle.opacity){
-        setSliderVal(status.positionMillis)
+        setSliderVal(timer)
       }
     },[stopStyle.opacity])
 
-    React.useEffect(()=>{
-      if(skipIcon.left.opacity){
-        setSliderVal(()=>status.positionMillis-10000)
-      }else if(skipIcon.right.opacity){
-        setSliderVal(()=>status.positionMillis+10000)
-      }
-    },[skipIcon])
-
+    //console.log(timer)
     const [isMute,setMute] = React.useState(false)
     
     React.useEffect(()=>{                           // when slider change complate,video loaded this time
       const  setSlider = async() =>{
-        if(sliderVal!==status.positionMillis&& !skipIcon.left.opacity && !skipIcon.right.opacity){
-          await video.current.setPositionAsync(sliderVal)
+        if(sliderVal!==timer){
+          setTimer(sliderVal)
+          setData((i)=>{
+            const newData = {...i}
+            newData.position = sliderVal+i.begin_time
+            return newData
+          })
         }
       }
      setSlider()
      },[sliderVal])
+
+     React.useEffect(()=>{
+      setControl((change)=>!change)
+      video.current.setIsMutedAsync(isMute)
+    },[isMute])
   
     return(
         <>
          <View style={styles.buttons}>
-          <Text style={styles.time}>{converter(status.positionMillis)}/{converter(status.durationMillis)}</Text>
+          <Text style={styles.time}>{converter(data.begin_time)}/{converter(data.end_time)}</Text>
           <View style={styles.leftSide}>
             <View>
             <TouchableWithoutFeedback onPress={()=>setMute((mute)=>!mute)}>
@@ -52,7 +55,7 @@ export const Controller = ({status,setControl,stopStyle,video,skipIcon}) => {
           value={sliderVal}
           style={styles.slider}
           minimumValue={0}
-          maximumValue={status.durationMillis}
+          maximumValue={data.end_time-data.begin_time}
           minimumTrackTintColor="#ff4f12"
           maximumTrackTintColor="#fff"
           thumbTintColor='#fff'

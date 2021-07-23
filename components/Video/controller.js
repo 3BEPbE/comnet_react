@@ -34,6 +34,11 @@ export const Controller = ({status,setControl,stopStyle,video,skipIcon}) => {
       }
      setSlider()
      },[sliderVal])
+
+     React.useEffect(()=>{
+      setControl((change)=>!change)
+      video.current.setIsMutedAsync(isMute)
+    },[isMute])
   
     return(
         <>

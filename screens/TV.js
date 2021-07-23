@@ -1,8 +1,10 @@
 import React from 'react';
-import { View ,StyleSheet,Text, Dimensions, ScrollView,Image} from 'react-native';
+import { View ,StyleSheet,Text, Dimensions, ScrollView,Image, ActivityIndicator} from 'react-native';
 import { DrawerItem } from '@react-navigation/drawer'
 import { Datas } from '../context/context';
-const { width: screenWidth } = Dimensions.get('window')
+
+
+const { width: screenWidth, height:screenHeight } = Dimensions.get('window')
 const isTV = screenWidth>950
 
 export default function TV(props) {
@@ -32,7 +34,7 @@ export default function TV(props) {
     return(
         <ScrollView style={styles.Container}>
                <View  style={styles.listBlock}>
-                {data ? data.map((item,i)=>(
+                {data[0].program_name ? data.map((item,i)=>(
                         <DrawerItem onPress={()=>{props.navigation.navigate('Channel', item)}}  key={i} style={styles.listFocus}  label='' icon={()=>(
                             <View style={styles.listItem}>
                                 <View style={{width:85,height:85,backgroundColor:'#fff'}}><Image resizeMode='cover'style={styles.icon} source={{uri:item.icon}}/></View>
@@ -42,7 +44,7 @@ export default function TV(props) {
                                     <Text style={styles.tvData}>{converter(item.program_end_time)}</Text>
                                 </View>
                             </View>)}/>
-                    )):<></>}
+                    )):<><View style={{width:screenWidth,height:screenHeight-150,alignItems:'center',justifyContent:'center'}}><ActivityIndicator  size="large" color='#fff' /></View></>}
                 </View>
         </ScrollView>
         

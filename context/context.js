@@ -320,7 +320,6 @@ export const ContextProvider = (props) => {
        }
     }
     const getTimeShift = (cid,pid,begin_time) => {
-
       if(isLogin){
         return axios({
            method: 'POST',
@@ -329,10 +328,9 @@ export const ContextProvider = (props) => {
              authkey:token,
              pid,
              cid,
-             time:begin_time
+             time: Math.trunc(begin_time)
            }
            }).then((e)=>{
-             console.log(e.data['0'])
             return(e.data['0'])
                
            }).catch((e)=>{

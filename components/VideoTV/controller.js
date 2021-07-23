@@ -34,6 +34,11 @@ export const Controller = ({status,setControl,stopStyle,video,skipIcon}) => {
       }
      setSlider()
      },[sliderVal])
+     
+     React.useEffect(()=>{
+      setControl((change)=>!change)
+      video.current.setIsMutedAsync(isMute)
+    },[isMute])
   
     return(
         <>
@@ -41,10 +46,7 @@ export const Controller = ({status,setControl,stopStyle,video,skipIcon}) => {
           <Text style={styles.time}>{converter(status.positionMillis)}/{converter(status.durationMillis)}</Text>
           <View style={styles.leftSide}>
             <View style={{marginRight:16}}>
-              <DrawerItem pressColor='#fff' style={{width:35,height:40,marginTop:-20}}  icon={()=>(  <Image source={isMute?require('../../images/sound0.png'):require('../../images/sound2.png')} style={styles.icon}/>)} label=''/>
-              {/* <TouchableWithoutFeedback  onPress={()=>setMute((mute)=>!mute)}>
-                <Image source={isMute?require('../../images/sound0.png'):require('../../images/sound2.png')} style={styles.icon}/>
-              </TouchableWithoutFeedback> */}
+              <DrawerItem pressColor='#fff' onPress={()=>setMute((mute)=>!mute)} style={{width:35,height:40,marginTop:-20}}  icon={()=>(  <Image source={isMute?require('../../images/sound0.png'):require('../../images/sound2.png')} style={styles.icon}/>)} label=''/>
             </View>      
           </View>
         </View>
