@@ -46,7 +46,7 @@ export default function BigCardCarusel({gid,navigation}) {
  
     React.useEffect(()=>{
         const fetch =async()=>{
-          let data = await getFilms(1,{gid,season:0})
+          let data = await getFilms(1,{gid})
           setData(data)
         }
         fetch()

@@ -6,7 +6,7 @@ import {doubleClick} from './videoHelper'
 import { LinearGradient } from 'expo-linear-gradient';
 import { DrawerItem } from '@react-navigation/drawer';
 const { width: screenWidth,height:screenHeight } = Dimensions.get('window')
-const isTV = 1000<screenWidth
+const isTV = 900<screenWidth
 const CustomVideoPlayer = ({params}) => {
     const [isStop,setIsStop] = React.useState(true)
     const video = React.useRef(null);

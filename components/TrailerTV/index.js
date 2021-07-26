@@ -4,7 +4,7 @@ import { Video } from 'expo-av';
 
 import { LinearGradient } from 'expo-linear-gradient';
 const { width: screenWidth,height:screenHeight } = Dimensions.get('window')
-const isTV = 1000<screenWidth
+const isTV = 900<screenWidth
 
 const Trailer = ({src}) => {
 

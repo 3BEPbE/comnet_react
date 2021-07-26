@@ -22,46 +22,11 @@ export const ContextProvider = (props) => {
 
     const createOption = (navigation,position) => {
       const Options = {
-        Movie:{
-          ...options,
-          headerRight:()=>(<HeaderRight  navigation={navigation}/>),
-          headerLeft:()=>(<HeaderLeft  navigation={navigation}/>)
-        },
         Home:{
           ...options,
           headerTitle:()=>(<HeaderCenter   navigation={navigation}/>),
           headerLeft:()=>(<HeaderLeft navigation={navigation}/>)
         },
-        MovieList:{
-          ...options,
-          headerTitle:()=>(<HeaderCenter   navigation={navigation}/>),
-          headerLeft:()=>(<HeaderLeft navigation={navigation}/>)
-        },
-        Profile:{
-          ...options,
-          headerRight:()=>(<HeaderRight navigation={navigation}/>),
-          headerLeft:()=>(<HeaderLeft  navigation={navigation}/>)
-        },
-        TV:{
-          ...options,
-          headerRight:()=>(<HeaderRight navigation={navigation}/>),
-          headerLeft:()=>(<HeaderLeft  navigation={navigation}/>)
-        },
-        Channel:{
-          ...options,
-          headerRight:()=>(<HeaderRight navigation={navigation}/>),
-          headerLeft:()=>(<HeaderLeft  navigation={navigation}/>)
-        },
-        Change:{
-          ...options,
-          headerRight:()=>(<HeaderRight navigation={navigation}/>),
-          headerLeft:()=>(<HeaderLeft  navigation={navigation}/>)
-        },
-        Search:{
-          ...options,
-          headerLeft:()=>(<HeaderLeft  navigation={navigation}/>),
-          headerRight:()=>(<HeaderRight navigation={navigation}/>)
-        }
       }
       return Options[position]
     }
@@ -94,7 +59,7 @@ export const ContextProvider = (props) => {
     const login = async(data,setError,navigation,routeName) => {
       axios({
           method: 'POST',
-          url:`http://172.16.236.84/api/login`,//28 123457
+          url:`http://172.16.236.97/api/login`,//28 123457
           data
           }).then((e)=>{
               if(e.data.status==='error'||e.data[0].error){
@@ -113,7 +78,7 @@ export const ContextProvider = (props) => {
       if(isLogin){
         return axios({
           method: 'POST',
-          url:`http://172.16.236.84/api/auth/genre/list`,//28 123457
+          url:`http://172.16.236.97/api/auth/genre/list`,//28 123457
           data:{
             limit:isTV?24:12,
             categories:0,
@@ -130,7 +95,7 @@ export const ContextProvider = (props) => {
       }else{
         return axios({
           method: 'POST',
-          url:`http://172.16.236.84/api/noauth/genre/list`,//28 123457
+          url:`http://172.16.236.97/api/noauth/genre/list`,//28 123457
           data:{
             limit:isTV?24:12,
             page:0,
@@ -150,7 +115,7 @@ export const ContextProvider = (props) => {
       if(isLogin){
        return axios({
           method: 'POST',
-          url:`http://172.16.236.84/api/auth/video/list?`,//28 123457
+          url:`http://172.16.236.97/api/auth/video/list?`,//28 123457
           data:{
             limit:isTV?28:20,
             page,
@@ -166,7 +131,7 @@ export const ContextProvider = (props) => {
       }else{
        return axios({
           method: 'POST',
-          url:`http://172.16.236.84/api/noauth/video/list?`,//28 123457
+          url:`http://172.16.236.97/api/noauth/video/list?`,//28 123457
           data:{
             limit:isTV?28:20,
             page,
@@ -188,7 +153,7 @@ export const ContextProvider = (props) => {
     const getCurrentMovie = async(id)=>{
      return axios({
         method: 'POST',
-        url:`http://172.16.236.84/api/auth/video/detail`,//28 123457
+        url:`http://172.16.236.97/api/auth/video/detail`,//28 123457
         data:{
           id,
           authkey:token
@@ -203,7 +168,7 @@ export const ContextProvider = (props) => {
     const getSrc = async(id)=>{
       return axios({
         method: 'POST',
-        url:`http://172.16.236.84/api/auth/video/url`,//28 123457
+        url:`http://172.16.236.97/api/auth/video/url`,//28 123457
         data:{
           id:id.id,
           authkey:token,
@@ -223,7 +188,7 @@ export const ContextProvider = (props) => {
         console.log(text)
         return axios({
            method: 'POST',
-           url:`http://172.16.236.84/api/auth/search`,//28 123457
+           url:`http://172.16.236.97/api/auth/search`,//28 123457
            data:{
              authkey:token,
              search:text
@@ -237,7 +202,7 @@ export const ContextProvider = (props) => {
        }else{
         return axios({
            method: 'POST',
-           url:`http://172.16.236.84/api/noauthsearch`,//28 123457
+           url:`http://172.16.236.97/api/noauthsearch`,//28 123457
            data:{
              search:text
            }
@@ -269,7 +234,7 @@ export const ContextProvider = (props) => {
       if(isLogin){
         axios({
           method: 'POST',
-          url:`http://172.16.236.84/api/auth/status`,//28 123457
+          url:`http://172.16.236.97/api/auth/status`,//28 123457
           data:{
             authkey:token,
           }
@@ -290,7 +255,7 @@ export const ContextProvider = (props) => {
       if(isLogin){
        return axios({
           method: 'POST',
-          url:`http://172.16.236.84/api/auth/channel/list`,
+          url:`http://172.16.236.97/api/auth/channel/list`,
           data:{
             authkey:token,
           }
@@ -306,7 +271,7 @@ export const ContextProvider = (props) => {
       if(isLogin){
         return axios({
            method: 'POST',
-           url:`http://172.16.236.84/api/auth/channel/uri`,
+           url:`http://172.16.236.97/api/auth/channel/uri`,
            data:{
              authkey:token,
              id
@@ -323,7 +288,7 @@ export const ContextProvider = (props) => {
       if(isLogin){
         return axios({
            method: 'POST',
-           url:`http://172.16.236.84/api/auth/archive/url`,
+           url:`http://172.16.236.97/api/auth/archive/url`,
            data:{
              authkey:token,
              pid,
@@ -342,7 +307,7 @@ export const ContextProvider = (props) => {
       if(isLogin){
         return axios({
            method: 'POST',
-           url:`http://172.16.236.84/api/auth/epg/range`,
+           url:`http://172.16.236.97/api/auth/epg/range`,
            data:{
              authkey:token,
              cid,
@@ -359,7 +324,7 @@ export const ContextProvider = (props) => {
       if(isLogin){
         return axios({
            method: 'POST',
-           url:`http://172.16.236.84/api/auth/profile/costumer/info`,
+           url:`http://172.16.236.97/api/auth/profile/costumer/info`,
            data:{
              authkey:token
            }
@@ -371,6 +336,46 @@ export const ContextProvider = (props) => {
            })
        }
     }
+    const getAksiya = () =>{
+       return axios({
+          method: 'GET',
+          url: 'https://serv.comnet.uz/api/slider',
+          headers: {
+            Authorization: 'Bearer 1|dFDYUzyxLftGvZqZSZDS28cRgrGyG2Xmg9TjiuMb',
+          },
+        })
+          .then((response) => {
+            return response.data.data
+          });
+        
+    }
+
+    const getParners = () =>{
+      return axios({
+        method: 'GET',
+        url: 'https://serv.comnet.uz/api/partners',
+        headers: {
+          Authorization: 'Bearer 1|dFDYUzyxLftGvZqZSZDS28cRgrGyG2Xmg9TjiuMb',
+        },
+      })
+        .then((response) => {
+            return response.data.data
+        });
+    }
+    
+    const getDocs = () =>{
+      return axios({
+        method: 'GET',
+        url:`http://172.16.236.97/api/noauth/documents`,
+        }).then((e)=>{
+         return e.data['0']
+            
+        }).catch((e)=>{
+            console.log(e)
+        })
+    }
+
+
     return(
         <Datas.Provider
           value = {{
@@ -392,7 +397,10 @@ export const ContextProvider = (props) => {
             getChannelSrc,
             getProgramListByDay,
             getTimeShift,
-            getUserInfo
+            getUserInfo,
+            getAksiya,
+            getParners,
+            getDocs
           }}>
             {children}
         </Datas.Provider>

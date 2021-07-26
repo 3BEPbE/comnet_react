@@ -44,7 +44,7 @@ export default function Movie({route,navigation}) {
     },[currentSeason,currentSeria])
     return(
         <ScrollView style={styles.Page}>
-        {  src ?  <>
+        {  src|| !isLogin ?  <>
             {isTV?
             <View style={{alignItems:'center'}}><Trailer src={currentFilm.thumbnail_big} /></View>:
             <View style={{alignItems:'center'}}><TrailerAndroid src={currentFilm.thumbnail_big} navigation={navigation}/></View>

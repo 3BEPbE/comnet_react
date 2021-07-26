@@ -93,7 +93,13 @@ export default function Registration(props) {
                             <Text style={styles.textAgree1}>Я принимаю<Text style={styles.textAgree2}> условия пользовательского соглашения</Text></Text>
                         </View>)}/>
                 </View>
-               
+               {status.log || status.reg? <View style={{marginBottom:30}}>
+                    <DrawerItem pressColor='#fff' onPress={()=>navigation.navigate('Registration')} style={styles.focusItem}  label='' icon={()=>(
+                    <View style={styles.buttonReg}>
+                        <Text style={styles.buttonText}>Регистрация</Text>
+                    </View>
+                )} />
+                </View>:<></>}
             </View>
         </ScrollView>
         
@@ -185,7 +191,6 @@ const styles = StyleSheet.create({
     agreeBlock:{
         flexDirection:'row',
         alignItems:'center',
-        marginBottom:40,
         width:screenWidth-40
     },
     agreeTextBlock:{
@@ -229,6 +234,19 @@ const styles = StyleSheet.create({
         color:'#fff',
         width:150,
         textAlign:'center'
-    }
+    },
+    buttonReg:{
+        width:'100%',
+        height:50,
+        backgroundColor:'#E41A4B',
+        alignItems:'center',
+        justifyContent:'center',
+        borderRadius:7,
+        overflow:'hidden',
+    },
+    buttonText:{
+        color:'#fff',
+        fontSize:16
+    },
 
   });

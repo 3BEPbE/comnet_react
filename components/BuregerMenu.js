@@ -15,13 +15,13 @@ const links =[
     {
         label:'Просмотреные',
         navigation:'MovieList',
-        params:{favorited:0,viewed:1,season:null,gid:null},
+        params:{favorited:null,viewed:1,season:null,gid:null},
         icon:require('../images/burgerMenuIcon1.png')
     },
     {
         label:'Избранные',
         navigation:'MovieList',
-        params:{favorited:1,viewed:0,season:null,gid:null},
+        params:{favorited:1,viewed:null,season:null,gid:null},
         icon:require('../images/burgerMenuIcon2.png')
     },
     {
@@ -49,14 +49,13 @@ const links =[
         icon:require('../images/burgerMenuIcon6.png')
     },
     {
-        label:'Мегого',
-        navigation:'MovieList',
-        params:{favorited:null,viewed:null,season:null,gid:91},
-        icon:require('../images/burgerMenuIcon7.png')
+        label:'О компании',
+        navigation:'About',
+        icon:require('../images/burgerMenuIcon8.png')
     },
     {
-        label:'Start',
-        navigation:'MovieList',
+        label:'Акции',
+        navigation:'Aksiya',
         icon:require('../images/burgerMenuIcon8.png')
     },
     {
@@ -66,6 +65,50 @@ const links =[
         icon:require('../images/burgerMenuIcon9.png')
     },
 ]
+const links2 =[
+ 
+    {
+        label:'Телевидение',
+        navigation:'TV',
+        params:'TV',
+        icon:require('../images/burgerMenuIcon3.png')
+    },
+    {
+        label:'Фильмы',
+        navigation:'MovieList',
+        params:{favorited:null,viewed:null,season:0,gid:null},
+        icon:require('../images/burgerMenuIcon4.png')
+    },
+    {
+        label:'Сериалы',
+        navigation:'MovieList',
+        params:{favorited:null,viewed:null,season:1,gid:null},
+        icon:require('../images/burgerMenuIcon5.png')
+    },
+    {
+        label:'Амедиатека',
+        navigation:'MovieList',
+        params:{favorited:null,viewed:null,season:null,gid:91},
+        icon:require('../images/burgerMenuIcon6.png')
+    },
+    {
+        label:'О компании',
+        navigation:'About',
+        icon:require('../images/burgerMenuIcon8.png')
+    },
+    {
+        label:'Акции',
+        navigation:'Aksiya',
+        icon:require('../images/burgerMenuIcon8.png')
+    },
+    {
+        label:'Детям',
+        navigation:'MovieList',
+        params:{favorited:null,viewed:null,season:null,gid:24},
+        icon:require('../images/burgerMenuIcon9.png')
+    },
+]
+
 
 const payImage = [
     {image:require('../images/pay1.png')},
@@ -127,9 +170,6 @@ export  function BurgerMenu(props) {
                         <Image style={styles.icon} source={e.icon}/>)}
                         onPress={() => {props.navigation.setParams({});props.navigation.navigate(e.navigation,e.params)}} inactiveTintColor ='#fff' label={e.label}/>
                     ))}
-                    <DrawerItem pressColor='#fff'  key={'Узбекские'} {...props} style={styles.link} icon={()=>(
-                        <Image style={styles.icon} source={require('../images/burgerMenuIcon10.png')}/>)}
-                        onPress={() => {alert('useless')}} inactiveTintColor ='#fff' label={'Узбекские'}/>
                     <DrawerItem pressColor='#fff'  key={'Выйти'} {...props} style={styles.link} icon={()=>(
                         <Image style={styles.icon} source={require('../images/burgerMenuIcon11.png')}/>)}
                         onPress={() => {exit()}} inactiveTintColor ='#fff' label={'Выйти'}/>
@@ -153,14 +193,11 @@ export  function BurgerMenuGuest(props,) {
                         <Image style={styles.icon} source={require('../images/burgerMenuIcon11.png')}/>)}
                         onPress={() => {props.navigation.navigate('Login',{routeName:'Home'})}} inactiveTintColor ='#fff' label={'Войти'}/>
                 <View style={styles.list}>
-                    {links.map(e=>(
+                    {links2.map(e=>(
                         <DrawerItem pressColor='#fff'  key={e.label} {...props} style={styles.link} icon={()=>(
                         <Image style={styles.icon} source={e.icon}/>)}
-                        onPress={() =>{props.navigation.setParams({}); props.navigation.navigate('MovieList',e.params)}} inactiveTintColor ='#fff' label={e.label}/>
+                        onPress={() => {props.navigation.setParams({});props.navigation.navigate(e.navigation==='TV'?'Login':e.navigation,e.params)}} inactiveTintColor ='#fff' label={e.label}/>
                     ))}
-                    <DrawerItem pressColor='#fff' key={'Узбекские'} {...props} style={styles.link} icon={()=>(
-                        <Image style={styles.icon} source={require('../images/burgerMenuIcon10.png')}/>)}
-                        onPress={()=>{alert('useless')}} inactiveTintColor ='#fff' label={'Узбекские'}/>
                    
                 </View>
                 </DrawerContentScrollView>

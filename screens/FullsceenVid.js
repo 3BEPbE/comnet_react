@@ -5,7 +5,7 @@ import { Datas } from '../context/context';
 import {converter} from '../components/Video/timeHelper'
 
 const { width: screenWidth,height:screenHeight } = Dimensions.get('window')
-const isTV = 1000<screenWidth
+const isTV = 900<screenWidth
 export default function FullScreen(props) {
     const { checkToken} =React.useContext(Datas)
     React.useEffect(()=>{

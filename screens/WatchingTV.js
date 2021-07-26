@@ -2,7 +2,7 @@ import { View ,StyleSheet,Dimensions} from 'react-native';
 import React from 'react';
 import VideoPlayerTV from '../components/VideoTV/Index'
 const { width: screenWidth,height:screenHeight } = Dimensions.get('window')
-const isTV = 1000<screenWidth
+const isTV = 900<screenWidth
 import { Datas } from '../context/context';
 
 export default function WatchingTV({route,navigation}){

@@ -13,7 +13,8 @@ export default function Profile(props) {
     
     
     const data = props.route.params
-    
+
+
     return(
         <ScrollView style={styles.Container}>
             <View style={styles.personalData}>

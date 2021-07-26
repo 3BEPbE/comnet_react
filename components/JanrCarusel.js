@@ -20,7 +20,7 @@ export default function Janr({janrName,navigation}) {
             setJanrID(janr.filter((item)=>carouselItems.some((i)=>i.replace(/\s/g, '')===item.name)))
         }
         fetch()
-    },[])
+    },[carouselItems])
 
 
     const renderItem = React.useCallback(({ item, index }) => (

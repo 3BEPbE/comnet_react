@@ -7,8 +7,8 @@ const { width: screenWidth } = Dimensions.get('window')
 
 export default function SeasonCarusel(props) {
     const ref = React.useRef(null);
-    const renderItem = React.useCallback(({ item, index }) => (
-    <DrawerItem pressColor='#fff' style={{marginRight:-10}} label='' icon={()=>(
+    const renderItem = () => (
+    <DrawerItem pressColor='#fff' style={{marginHorizontal:0,marginVertical:0,width:180}} label='' icon={()=>(
         <View style={styles.TariffsButton}>
         { props.pay ?<> 
         <View style={styles.dotBlock}>
@@ -23,9 +23,7 @@ export default function SeasonCarusel(props) {
          </View>
          </>}
      </View>
-    )} />
-              
-    ), []);
+    )} />)
     return (
         <View style={styles.Tariffs}>
                 <Carousel
@@ -56,7 +54,6 @@ const styles = StyleSheet.create({
         height:90,
         borderRadius:7,
         overflow:'hidden',
-        marginTop:5,
         marginLeft:-8,
         borderColor:'#E41A4B',
         borderWidth:1

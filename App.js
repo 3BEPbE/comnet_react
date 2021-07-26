@@ -22,6 +22,8 @@ import { useIsDrawerOpen } from '@react-navigation/drawer';
 import Documents from './screens/Documents';
 import WatchingTimeShift from './screens/WatchingTimeShift';
 import WatchingTimeShiftTV from './screens/WatchingTimeShiftTV';
+import About from './screens/About';
+import Aksiya from './screens/Aksiya';
 
 const Stack = createStackNavigator()
 const Drawer = createDrawerNavigator();
@@ -42,21 +44,23 @@ function stack({ navigation }) {
   },[isDrawerOpen])
   return (
       <Stack.Navigator initialRouteName={initialRoute}>
-        <Stack.Screen options={createOption(navigation,"Home")}    name="Home"    component={Home} />
-        <Stack.Screen options={createOption(navigation,"MovieList")} name="MovieList" component={MovieList} />
-        <Stack.Screen options={createOption(navigation,"Profile")} name="Profile" component={Profile} />
-        <Stack.Screen options={createOption(navigation,"Movie")}   name="Movie"   component={Movie} />
-        <Stack.Screen options={createOption(navigation,"TV")}      name="TV"      component={TV} />
-        <Stack.Screen options={createOption(navigation,"Channel")} name="Channel"   component={Channel} />
-        <Stack.Screen options={createOption(navigation,"Change")}  name="Change"  component={ChangeData} />
-        <Stack.Screen options={createOption(navigation,"Search")}  name="Search"  component={Search} />
+        <Stack.Screen options={createOption(navigation,"Home")}   name="Home"    component={Home} />
+        <Stack.Screen options={createOption(navigation,"Home")}   name="MovieList" component={MovieList} />
+        <Stack.Screen options={createOption(navigation,"Home")}   name="Profile" component={Profile} />
+        <Stack.Screen options={createOption(navigation,"Home")}   name="Movie"   component={Movie} />
+        <Stack.Screen options={createOption(navigation,"Home")}   name="TV"      component={TV} />
+        <Stack.Screen options={createOption(navigation,"Home")}   name="Channel"   component={Channel} />
+        <Stack.Screen options={createOption(navigation,"Home")}   name="Change"  component={ChangeData} />
+        <Stack.Screen options={createOption(navigation,"Home")}   name="Search"  component={Search} />
         <Stack.Screen options={{headerShown:false}}  name="Watching"  component={Watching} />
         <Stack.Screen options={{headerShown:false}}  name="WatchingTV"  component={WatchingTV} />
         <Stack.Screen options={{headerShown:false}}  name="WatchingTimeShift"  component={WatchingTimeShift} />
         <Stack.Screen options={{headerShown:false}}  name="WatchingTimeShiftTV"  component={WatchingTimeShiftTV} />
-        <Stack.Screen options={createOption(navigation,"Search")}  name="Login"  component={Login} />
-        <Stack.Screen options={createOption(navigation,"Search")}  name="Registration"  component={Registration} />
-        <Stack.Screen options={createOption(navigation,"Search")}  name="Documents"  component={Documents} />
+        <Stack.Screen options={createOption(navigation,"Home")}  name="Login"  component={Login} />
+        <Stack.Screen options={createOption(navigation,"Home")}  name="Registration"  component={Registration} />
+        <Stack.Screen options={createOption(navigation,"Home")}  name="Documents"  component={Documents} />
+        <Stack.Screen options={createOption(navigation,"Home")}  name="About"  component={About} />
+        <Stack.Screen options={createOption(navigation,"Home")}  name="Aksiya"  component={Aksiya} />
       </Stack.Navigator>
   );
 }

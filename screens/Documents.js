@@ -2,6 +2,7 @@ import { DrawerItem } from '@react-navigation/drawer'
 import React from 'react'
 import { Dimensions, Text, View, StyleSheet, ScrollView } from 'react-native'
 import * as Linking from 'expo-linking';
+import { Datas } from '../context/context';
 
 const { width: screenWidth } = Dimensions.get('window')
 const isTV = screenWidth>900
@@ -68,19 +69,31 @@ const arr = [  {
   },]
 
 export default function Documents(){
+ 
+    const {getDocs} = React.useContext(Datas)
+    const [data,setData] = React.useState()
+
+    React.useEffect(()=>{
+        const fetch =async() =>{
+           const data = await getDocs()
+           setData(data)
+        }
+        fetch()
+    },[])
+
     return(
         <ScrollView style={styles.container}>
             <View style={styles.titleBlock}>
                 <Text style={styles.title}>Документы</Text>
             </View>
             <View style={styles.cardBlock}>
-                {arr? arr.map((item,i)=>(
-                    <DrawerItem  pressColor='#fff' style={styles.focus} key={i} label='' icon={()=>(
+                {data ? data.map((item,i)=>(
+                    <DrawerItem onPress={()=>Linking.openURL(item.url)}  pressColor='#fff' style={styles.focus} key={i} label='' icon={()=>(
                     <View style={styles.card}>
                         <View style={styles.angel}>
                         </View>
                         <Text style={styles.docTitle}>{item.title}</Text>
-                        <Text style={styles.docDescription}>{item.description}</Text>
+                        <Text style={styles.docDescription}>{item.desc}</Text>
                     </View>
                     )}/>
                     
