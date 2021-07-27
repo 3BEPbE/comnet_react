@@ -8,31 +8,13 @@ const { width: screenWidth } = Dimensions.get('window')
 const isTV = screenWidth >950
 
 
-class Post extends Component {
-  constructor(props){
-     super(props);
-     this.item = props.item
-     this.index =props.index
-     this.navigation =props.navigation
-  }
-  render() { return( 
-    <DrawerItem  pressColor={'#fff'}  style={{width:isTV?230:screenWidth/2-15}}   label='' onPress={()=>{this.navigation.navigate('Movie', this.item)}} icon={()=>(
-      <View  style={styles.mainBlockItem}>
-          <ImageBackground resizeMode={'stretch'} source={{uri:this.item.thumbnail_small}} style={styles.imgBlocl}>
-          </ImageBackground>
-          <Text style={styles.title}>{this.item.name.length>25?`${this.item.name.slice(0,25)}...`:this.item.name}</Text>
-      </View>)}/>)
-    }
-  }
+export default function SearchCarusel({navigation,data}) {
 
-export default function SearchCarusel({navigation,data,text}) {
-    
-    const renderItem = React.useCallback(({ item, index }) => {return(<Post item ={item} navigation={navigation} index={index}/>)},[]);
 
-    const [caruselComp,setCarusel]=React.useState(<></>)
-
-    React.useEffect(()=>{
-        setCarusel(<Carousel
+    return (
+        <View style={styles.mainBlock}>
+          {data?
+          <Carousel
             layout="default"
             data={data}
             sliderWidth={screenWidth}
@@ -49,11 +31,7 @@ export default function SearchCarusel({navigation,data,text}) {
             activeSlideAlignment="start"
             inactiveSlideOpacity={1}
             inactiveSlideScale={1}
-          />)
-    },[text])
-    return (
-        <View style={styles.mainBlock}>
-          {data?caruselComp:<></>}
+          />:<></>}
         </View>
   
     );

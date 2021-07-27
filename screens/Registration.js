@@ -32,35 +32,7 @@ export default function Registration(props) {
                 <View style={styles.textBlock}>
                     <Text style={styles.infoText}>Регистрация</Text>      
                 </View>
-                    <DrawerItem  pressColor='#fff' onPress={()=>{
-                        setStatus({log:!status.log,reg:false})
-                    }} style={{...styles.focusItem,marginTop:20}} label='' icon={()=>(
-                        <View style={{...styles.button,backgroundColor:status.log?'#E41A4B':'transparent'}}>
-                            <Text style={styles.buttonText}>Я абонент Comnet</Text>
-                        </View>
-                    )} />
-                     <DrawerItem pressColor='#fff' onPress={()=>{
-                        setStatus({log:false,reg:!status.reg})
-                        }} style={styles.focusItem}  label='' icon={()=>(
-                        <View style={{...styles.button,backgroundColor:status.reg?'#E41A4B':'transparent'}}>
-                            <Text style={styles.buttonText}>Я не абонент Comnet</Text>
-                        </View>
-                    )} />
-                <View style={{...styles.inputBlock,display:status.log?'flex':'none'}}>
-                    <View style={styles.inputItem}>
-                        <Text style={styles.titleInput}>Номер телефона*</Text>
-                        <DrawerItem pressColor='#fff' onPress={()=>textInputs[0].focus()} style={styles.focusItem2} label='' icon={()=>(
-                           <TextInput ref={(input)=>{textInputs[0]=input}} style={styles.input} autoCompleteType={'off'} autoCorrect={false}/>
-                        )}/>
-                    </View>
-                    <View style={styles.inputItem}>
-                        <Text style={styles.titleInput}>Логин Comnet*</Text>
-                        <DrawerItem pressColor='#fff' onPress={()=>textInputs[1].focus()} style={styles.focusItem2} label='' icon={()=>(
-                             <TextInput ref={(input)=>{textInputs[1]=input}} style={styles.input} autoCompleteType={'off'} autoCorrect={false}/>
-                        )}/>
-                    </View>
-                </View>
-                <View style={{...styles.inputBlock,display:status.reg?'flex':'none'}}>
+                <View style={styles.inputBlock}>
                     <View style={styles.inputItem}>
                         <Text style={styles.titleInput}>Номер телефона*</Text>
                         <DrawerItem pressColor='#fff' onPress={()=>textInputs[2].focus()} style={styles.focusItem2} label='' icon={()=>(
@@ -93,13 +65,13 @@ export default function Registration(props) {
                             <Text style={styles.textAgree1}>Я принимаю<Text style={styles.textAgree2}> условия пользовательского соглашения</Text></Text>
                         </View>)}/>
                 </View>
-               {status.log || status.reg? <View style={{marginBottom:30}}>
+                <View>
                     <DrawerItem pressColor='#fff' onPress={()=>navigation.navigate('Registration')} style={styles.focusItem}  label='' icon={()=>(
                     <View style={styles.buttonReg}>
                         <Text style={styles.buttonText}>Регистрация</Text>
                     </View>
-                )} />
-                </View>:<></>}
+                    )} />
+                </View>
             </View>
         </ScrollView>
         
@@ -113,7 +85,7 @@ const styles = StyleSheet.create({
         padding:20
     },
     block:{
-        marginTop:120,
+        marginTop:50,
         alignItems:'center'
     },
     textBlock:{
@@ -191,7 +163,8 @@ const styles = StyleSheet.create({
     agreeBlock:{
         flexDirection:'row',
         alignItems:'center',
-        width:screenWidth-40
+        width:screenWidth-40,
+        marginTop:20
     },
     agreeTextBlock:{
         flexDirection:'row',
@@ -243,6 +216,7 @@ const styles = StyleSheet.create({
         justifyContent:'center',
         borderRadius:7,
         overflow:'hidden',
+        marginTop:20
     },
     buttonText:{
         color:'#fff',

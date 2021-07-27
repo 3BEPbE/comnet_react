@@ -185,7 +185,6 @@ export const ContextProvider = (props) => {
 
     const searchFilm = (text) =>{
       if(isLogin){
-        console.log(text)
         return axios({
            method: 'POST',
            url:`http://172.16.236.97/api/auth/search`,//28 123457

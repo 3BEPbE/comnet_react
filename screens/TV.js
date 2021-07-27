@@ -11,7 +11,7 @@ export default function TV(props) {
 
     const {checkToken,isLogin,getChannel} = React.useContext(Datas)
 
-    const [data,setData] = React.useState([])
+    const [data,setData] = React.useState()
 
     React.useEffect(()=>{
         const fetch = async () => {
@@ -34,7 +34,7 @@ export default function TV(props) {
     return(
         <ScrollView style={styles.Container}>
                <View  style={styles.listBlock}>
-                {data[0].program_name ? data.map((item,i)=>(
+                {data? data.map((item,i)=>(
                         <DrawerItem onPress={()=>{props.navigation.navigate('Channel', item)}}  key={i} style={styles.listFocus}  label='' icon={()=>(
                             <View style={styles.listItem}>
                                 <View style={{width:85,height:85,backgroundColor:'#fff'}}><Image resizeMode='cover'style={styles.icon} source={{uri:item.icon}}/></View>
@@ -72,7 +72,7 @@ const styles = StyleSheet.create({
     },
     icon:{
         height:85,
-        width:85,
+        width:86,
         resizeMode:'center'
       
     },
