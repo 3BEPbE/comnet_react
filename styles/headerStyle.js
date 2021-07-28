@@ -2,17 +2,20 @@ import { StyleSheet,} from 'react-native';
 
 const headerBlock = StyleSheet.create({
    header: {
-       backgroundColor: '#0A0A0A',
+       backgroundColor: '#1C1C1C',
+       height:100
     },
     headerLink:{
         color:'#fff',
-        marginLeft:20
+        marginLeft:20,
+        marginTop:-15
     },
     burger:{
         height:18,
         width:22,
         display:'flex',
         justifyContent:'space-between',
+        marginTop:-15
     },
     burgerItem:{
         width:22,
@@ -24,6 +27,7 @@ const headerBlock = StyleSheet.create({
     searchBarIcon:{
         height:18,
         width:22,
+        marginTop:-15
     },
     searchbarBlock:{
         display:'flex',

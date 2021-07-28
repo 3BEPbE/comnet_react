@@ -24,7 +24,7 @@ export const HeaderLeft = ({navigation}) => {
                 <View style={HeaderStyle.burgerItem}></View>
                 <View style={HeaderStyle.burgerItem}></View>
             </View>)}/>
-            <DrawerItem  pressColor='#fff' style={{marginHorizontal:0,width:130}} label='' icon={()=>( <Image style={{width:112,height:32}} source={require('../images/logo.png')}/>)}  onPress={() => navigation.navigate('Home')}/>
+            <DrawerItem  pressColor='#fff' style={{marginHorizontal:0,width:130,marginTop:-15}} label='' icon={()=>( <Image style={{width:112,height:32}} source={require('../images/logo.png')}/>)}  onPress={() => navigation.navigate('Home')}/>
     </View> 
     
 )}

@@ -26,14 +26,14 @@ class Post extends PureComponent {
     }
   }
 
-export default function CardCarusel({navigation,gid}) {
+export default function CardCarusel({navigation,gid,season}) {
 
     const {getFilms,isLogin} = React.useContext(Datas)
     const [data,setData] = React.useState([])
 
     React.useEffect(()=>{
       const fetch =async()=>{
-        let data = await getFilms(1,{gid,season:0})
+        let data = await getFilms(1,{gid,season})
         setData(data)
       }
       fetch()

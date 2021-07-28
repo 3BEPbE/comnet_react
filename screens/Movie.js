@@ -80,7 +80,7 @@ export default function Movie({route,navigation}) {
 const styles = StyleSheet.create({
    Page:{
        flex:1,
-       backgroundColor:'#1C1C1C'
+       backgroundColor:'#0A0A0A'
    },
    content:{
        paddingLeft:0,

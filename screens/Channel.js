@@ -89,7 +89,7 @@ const styles = StyleSheet.create({
    
     container:{
         flex:1,
-        backgroundColor:'#1C1C1C'
+        backgroundColor:'#0A0A0A'
     },
     channelName:{
         fontSize:20,

@@ -106,7 +106,7 @@ export default function Documents(){
 const styles = StyleSheet.create({
     container:{
         flex:1,
-        backgroundColor:'#000',
+        backgroundColor:'#0A0A0A',
     },
     titleBlock:{
         width:screenWidth-40,

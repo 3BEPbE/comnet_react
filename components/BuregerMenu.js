@@ -218,7 +218,7 @@ const styles = StyleSheet.create({
         paddingTop:20
     },
   content:{
-    backgroundColor:'#242424',
+    backgroundColor:'#0A0A0A',
     flex:1,
     marginTop:-40,
   },

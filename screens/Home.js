@@ -6,8 +6,9 @@ import CardCarusel from '../components/CardCarusel'
 import { Datas } from '../context/context';
 import Footer from '../components/Footer';
 
+
 const { width: screenWidth,height: screenHeight } = Dimensions.get('window')
-const themes = ['Amediateka','Комедия','Мелодрама','Ужасы']
+const themes = ['Мультфильм',]
 export default function Home(props) {
     const {getJanr,checkToken,isLogin} = React.useContext(Datas)
 
@@ -18,6 +19,7 @@ export default function Home(props) {
         checkToken(props.navigation)
         const fetch = async()=>{
             let janr = await getJanr()
+            console.log(janr)
             setJanr(janr.filter((item)=>themes.some((i)=>i===item.name)))
         }
         fetch()
@@ -26,14 +28,28 @@ export default function Home(props) {
     return (
         <ScrollView style={styles.home}>
                {janr? <>
-               <BigCardCarusel navigation={props.navigation} gid={janr[0].id}/>
+               <BigCardCarusel  navigation={props.navigation} gid={janr[0].id}/>
+               <View>
+                    <View style={styles.newsBlock} >
+                        <Text style={styles.newsText}>Фильмы</Text>
+                        <DrawerItem onPress={()=>{props.navigation.navigate('MovieList',{gid:null,favorited:null,viewed:null,season:0,})}} pressColor='#fff' style={{marginTop:-10,marginBottom:-20,}} label='' icon={()=>(<Text style={styles.newsLink}>{'Ещё >'}</Text>)}/>
+                    </View>
+                    <CardCarusel season={0} gid={null} navigation ={props.navigation}/>
+                </View>
+                <View>
+                    <View style={styles.newsBlock} >
+                        <Text style={styles.newsText}>Сериалы</Text>
+                        <DrawerItem onPress={()=>{props.navigation.navigate('MovieList',{gid:null,favorited:null,viewed:null,season:1,})}} pressColor='#fff' style={{marginTop:-10,marginBottom:-20,}} label='' icon={()=>(<Text style={styles.newsLink}>{'Ещё >'}</Text>)}/>
+                    </View>
+                    <CardCarusel season={1} gid={null} navigation ={props.navigation}/>
+                </View>
                 { janr.map(item=>(
                 <View key={item.id}>
-                <View style={styles.newsBlock} >
-                    <Text style={styles.newsText}>{item.name}</Text>
-                    <DrawerItem onPress={()=>{props.navigation.navigate('MovieList',{gid:item.id,favorited:null,viewed:null,season:null,})}} pressColor='#fff' style={{marginTop:-10,marginBottom:-20,}} label='' icon={()=>(<Text style={styles.newsLink}>{'Ещё >'}</Text>)}/>
-                </View>
-                <CardCarusel gid={item.id} navigation ={props.navigation}/>
+                    <View style={styles.newsBlock} >
+                        <Text style={styles.newsText}>{item.name}</Text>
+                        <DrawerItem onPress={()=>{props.navigation.navigate('MovieList',{gid:item.id,favorited:null,viewed:null,season:null,})}} pressColor='#fff' style={{marginTop:-10,marginBottom:-20,}} label='' icon={()=>(<Text style={styles.newsLink}>{'Ещё >'}</Text>)}/>
+                    </View>
+                    <CardCarusel gid={item.id} navigation ={props.navigation}/>
                 </View>
                 ))}
                 <Footer navigation={props.navigation}/>
@@ -45,7 +61,7 @@ export default function Home(props) {
 const styles = StyleSheet.create({
     home:{
         flex:1,
-        backgroundColor:'#1C1C1C',
+        backgroundColor:'#0A0A0A',
     },
     titleBlock:{
         fontSize:18,
