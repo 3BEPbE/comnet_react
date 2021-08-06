@@ -1,25 +1,4 @@
 {
-  "name": "AwesomeProject",
-  "displayName": "AwesomeProject",
-  "expo": {
-    "name": "AwesomeProject",
-    "slug": "AwesomeProject",
-    "version": "2.19.6",
-    "splash": {
-      "image": "./images/splashScreen.png",
-      "backgroundColor": "#1C1C1C",
-      "resizMode": "cover"
-    },
-    "orientation":"portrait",
-    "assetBundlePatterns": [
-      "**/*"
-    ],
-    "ios": {
-      "requireFullScreen": true,
-    },
-    "android": {
-      "package": "host.exp.exponent"
-    }
-    
-  }
+  "name": "ReactNativeTvDemo",
+  "displayName": "ReactNativeTvDemo"
 }

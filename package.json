@@ -1,57 +1,56 @@
 {
-  "main": "index.js",
+  "name": "react-native-tv-demo",
+  "version": "0.0.1",
+  "private": true,
   "scripts": {
+    "start": "react-native start",
     "android": "react-native run-android",
-    "ios": "react-native run-ios",
-    "web": "expo start --web",
-    "start": "react-native start"
+    "ios": "react-native run-ios --simulator='Apple TV'",
+    "web": "react-app-rewired start",
+    "web:build": "react-app-rewired build"
   },
   "dependencies": {
-    "@react-native-async-storage/async-storage": "^1.13.0",
-    "@react-native-community/masked-view": "0.1.10",
-    "@react-native-community/netinfo": "6.0.0",
-    "@react-native-community/picker": "^1.8.1",
+    "@react-native-async-storage/async-storage": "^1.15.5",
+    "@react-native-community/masked-view": "^0.1.10",
     "@react-native-community/slider": "^3.0.3",
-    "@react-navigation/drawer": "^5.12.5",
-    "@react-navigation/native": "^5.9.4",
-    "@react-navigation/stack": "^5.14.5",
+    "@react-navigation/drawer": "^6.0.0",
+    "@react-navigation/native": "^6.0.0",
+    "@react-navigation/stack": "^6.0.0",
+    "@react-navigation/web": "^1.0.0-alpha.9",
     "axios": "^0.21.1",
-    "expo": "~41.0.1",
-    "expo-av": "^9.1.2",
-    "expo-linear-gradient": "~9.1.0",
-    "expo-linking": "^2.3.1",
-    "expo-network": "~3.1.1",
-    "expo-screen-orientation": "~3.1.0",
-    "expo-splash-screen": "~0.10.2",
-    "expo-status-bar": "~1.0.4",
-    "expo-updates": "~0.5.4",
-    "expo-video-player": "^1.6.1",
-    "link": "^0.1.5",
-    "m3u8-to-mp4": "^1.0.0",
     "react": "16.13.1",
     "react-dom": "16.13.1",
     "react-native": "^0.63.4",
-    "react-native-custom-picker": "^0.4.0",
-    "react-native-custom-slider": "^1.0.2",
-    "react-native-dom": "^0.5.0",
-    "react-native-gesture-handler": "~1.10.2",
-    "react-native-jw-media-player": "^0.1.55",
-    "react-native-orientation": "^3.1.3",
-    "react-native-paper": "^4.9.1",
-    "react-native-progress": "^4.1.2",
-    "react-native-reanimated": "~2.1.0",
-    "react-native-screens": "~3.0.0",
+    "react-native-gesture-handler": "^1.9.0",
+    "react-native-reanimated": "^1.13.2",
+    "react-native-safe-area-context": "^3.1.9",
+    "react-native-screens": "^2.16.1",
     "react-native-snap-carousel": "^3.9.1",
-    "react-native-unimodules": "~0.13.3",
-    "react-native-vector-icons": "^8.1.0",
-    "react-native-video": "^4.3.0",
-    "react-native-vlc-media-player": "^1.0.35",
-    "react-native-web": "~0.13.12",
-    "react-native-webview": "11.2.3",
-    "react-native-youtube-iframe": "^2.1.0"
+    "react-native-tvfocus": "^0.2.0",
+    "react-native-video": "^5.1.1"
   },
   "devDependencies": {
-    "@babel/core": "^7.9.0"
+    "@babel/core": "^7.12.10",
+    "@babel/runtime": "^7.12.5",
+    "@react-native-community/eslint-config": "^2.0.0",
+    "eslint": "^7.18.0",
+    "metro-react-native-babel-preset": "^0.64.0",
+    "react-app-rewired": "^2.1.8",
+    "react-scripts": "^4.0.1"
   },
-  "private": true
+  "alias": {
+    "react-native": "react-native-web"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  }
 }
