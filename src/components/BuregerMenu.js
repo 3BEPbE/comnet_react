@@ -178,7 +178,6 @@ export  function BurgerMenu(props) {
     )
 }
 export  function BurgerMenuGuest(props,) {
-    console.log(!isTV)
     return(
         <> 
             {!isTV?

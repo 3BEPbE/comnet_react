@@ -8,7 +8,7 @@ import { Dimensions } from 'react-native';
 import { Alert } from 'react-native';
 
 const { width: screenWidth } = Dimensions.get('window')
-const isTV = screenWidth>950
+const isTV = screenWidth>900
 
 export const Datas = createContext(null);
 
@@ -60,7 +60,7 @@ export const ContextProvider = (props) => {
     const login = async(data,setError,navigation,routeName) => {
       axios({
           method: 'POST',
-          url:`http://172.16.236.76/api/login`,//28 123457
+          url:`http://94.158.63.185/api/login`,//28 123457
           data
           }).then((e)=>{
               if(e.data.status==='error'||e.data[0].error){
@@ -79,7 +79,7 @@ export const ContextProvider = (props) => {
       if(isLogin){
         return axios({
           method: 'POST',
-          url:`http://172.16.236.76/api/auth/genre/list`,//28 123457
+          url:`http://94.158.63.185/api/auth/genre/list`,//28 123457
           data:{
             limit:isTV?24:12,
             categories:0,
@@ -96,7 +96,7 @@ export const ContextProvider = (props) => {
       }else{
         return axios({
           method: 'POST',
-          url:`http://172.16.236.76/api/noauth/genre/list`,//28 123457
+          url:`http://94.158.63.185/api/noauth/genre/list`,//28 123457
           data:{
             limit:isTV?24:12,
             page:0,
@@ -117,7 +117,7 @@ export const ContextProvider = (props) => {
       if(isLogin){
        return axios({
           method: 'POST',
-          url:`http://172.16.236.76/api/auth/video/list?`,//28 123457
+          url:`http://94.158.63.185/api/auth/video/list?`,//28 123457
           data:{
             limit:isTV?28:20,
             page,
@@ -133,7 +133,7 @@ export const ContextProvider = (props) => {
       }else{
        return axios({
           method: 'POST',
-          url:`http://172.16.236.76/api/noauth/video/list?`,//28 123457
+          url:`http://94.158.63.185/api/noauth/video/list?`,//28 123457
           data:{
             limit:isTV?28:20,
             page,
@@ -155,7 +155,7 @@ export const ContextProvider = (props) => {
     const getCurrentMovie = async(id)=>{
      return axios({
         method: 'POST',
-        url:`http://172.16.236.76/api/auth/video/detail`,//28 123457
+        url:`http://94.158.63.185/api/auth/video/detail`,//28 123457
         data:{
           id,
           authkey:token
@@ -170,7 +170,7 @@ export const ContextProvider = (props) => {
     const getSrc = async(id)=>{
       return axios({
         method: 'POST',
-        url:`http://172.16.236.76/api/auth/video/url`,//28 123457
+        url:`http://94.158.63.185/api/auth/video/url`,//28 123457
         data:{
           id:id.id,
           authkey:token,
@@ -189,7 +189,7 @@ export const ContextProvider = (props) => {
       if(isLogin){
         return axios({
            method: 'POST',
-           url:`http://172.16.236.76/api/auth/search`,//28 123457
+           url:`http://94.158.63.185/api/auth/search`,//28 123457
            data:{
              authkey:token,
              search:text
@@ -203,7 +203,7 @@ export const ContextProvider = (props) => {
        }else{
         return axios({
            method: 'POST',
-           url:`http://172.16.236.76/api/noauthsearch`,//28 123457
+           url:`http://94.158.63.185/api/noauthsearch`,//28 123457
            data:{
              search:text
            }
@@ -222,10 +222,10 @@ export const ContextProvider = (props) => {
         [
           {
             text: "Отмена",
-            onPress: () => navigation.navigate('Home'),
+            onPress: () => isTV ? navigation.navigate('HomeTV') : navigation.navigate('Home'),
             style: "cancel"
           },
-          { text: "Подключить", onPress: () => navigation.navigate('Login',{routeName:"Profile"}) }
+          { text: "Подключить", onPress: () => navigation.navigate('Login',{routeName:"HomeTV"}) }
         ],
         { cancelable: false }
       );
@@ -235,12 +235,13 @@ export const ContextProvider = (props) => {
       if(isLogin){
         axios({
           method: 'POST',
-          url:`http://172.16.236.76/api/auth/status`,//28 123457
+          url:`http://94.158.63.185/api/auth/status`,//28 123457
           data:{
             authkey:token,
           }
           }).then((e)=>{
             if(e.data['0'].status===1){
+              console.log(123)
               storeData('token',null)  
               setLogin(false)
               AlertBusyToken(navigation)
@@ -256,7 +257,7 @@ export const ContextProvider = (props) => {
       if(isLogin){
        return axios({
           method: 'POST',
-          url:`http://172.16.236.76/api/auth/channel/list`,
+          url:`http://94.158.63.185/api/auth/channel/list`,
           data:{
             authkey:token,
           }
@@ -272,7 +273,7 @@ export const ContextProvider = (props) => {
       if(isLogin){
         return axios({
            method: 'POST',
-           url:`http://172.16.236.76/api/auth/channel/uri`,
+           url:`http://94.158.63.185/api/auth/channel/uri`,
            data:{
              authkey:token,
              id
@@ -290,7 +291,7 @@ export const ContextProvider = (props) => {
       if(isLogin){
         return axios({
            method: 'POST',
-           url:`http://172.16.236.76/api/auth/archive/url`,
+           url:`http://94.158.63.185/api/auth/archive/url`,
            data:{
              authkey:token,
              pid,
@@ -309,7 +310,7 @@ export const ContextProvider = (props) => {
       if(isLogin){
         return axios({
            method: 'POST',
-           url:`http://172.16.236.76/api/auth/epg/range`,
+           url:`http://94.158.63.185/api/auth/epg/range`,
            data:{
              authkey:token,
              cid,
@@ -326,12 +327,28 @@ export const ContextProvider = (props) => {
       if(isLogin){
         return axios({
            method: 'POST',
-           url:`http://172.16.236.76/api/auth/profile/costumer/info`,
+           url:`http://94.158.63.185/api/auth/profile/costumer/info`,
            data:{
              authkey:token
            }
            }).then((e)=>{
             return(e.data['0'])
+               
+           }).catch((e)=>{
+               console.log(e)
+           })
+       }
+    }
+    const getChannelCat = () => {
+      if(isLogin){
+        return axios({
+           method: 'POST',
+           url:`http://94.158.63.185/api/auth/category/tv/list`,
+           data:{
+             authkey:token
+           }
+           }).then((e)=>{
+            return(e.data['0'].categories)
                
            }).catch((e)=>{
                console.log(e)
@@ -368,7 +385,7 @@ export const ContextProvider = (props) => {
     const getDocs = () =>{
       return axios({
         method: 'GET',
-        url:`http://172.16.236.76/api/noauth/documents`,
+        url:`http://94.158.63.185/api/noauth/documents`,
         }).then((e)=>{
          return e.data['0']
             
@@ -402,7 +419,8 @@ export const ContextProvider = (props) => {
             getUserInfo,
             getAksiya,
             getParners,
-            getDocs
+            getDocs,
+            getChannelCat
           }}>
             {children}
         </Datas.Provider>

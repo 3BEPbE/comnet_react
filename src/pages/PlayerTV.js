@@ -1,9 +1,8 @@
 
 import React from 'react'
-import {View,StyleSheet,Text,Dimensions,TVEventHandler,Image,BackHandler} from 'react-native'
+import {View,StyleSheet,Text,Dimensions,TVEventHandler,Image,BackHandler,ScrollView} from 'react-native'
 import { Datas   } from '../context';
 import Video from 'react-native-video';
-import Controller from '../components/Controller';
 import { DrawerItem } from '@react-navigation/drawer';
 import {useFocusEffect} from '@react-navigation/native';
 import PlayerMenu from '../components/PlayerMenu';
@@ -12,7 +11,7 @@ import SliderTimeShift from '../components/SlayderTimeShift';
 
 const { width: screenWidth,height:screenHeight } = Dimensions.get('window')
 export default function PlayerTV({navigation}){
-    const {getChannelSrc,getChannel} = React.useContext(Datas)
+    const {getChannelSrc,getChannel,getTimeShift} = React.useContext(Datas)
     const [uri,setUri] = React.useState()
     const [currentID,setID] = React.useState()
     const [isPlayerVisible,setVisible] = React.useState(true)
@@ -22,7 +21,23 @@ export default function PlayerTV({navigation}){
     const [isOpenMenu,setOpenMenu] = React.useState(false)
     const [data,setData] = React.useState()
     const [isTimeShift,setShift] = React.useState(false)
-    const [time,setTime] = React.useState()
+    const [timeData,setTimeData] = React.useState({begin_time:false})
+    const [timer,setTimer] = React.useState(0)
+    const [secondMenu,setSecondMenu] = React.useState(false)
+    
+
+    React.useEffect(()=>{
+      if(timeData.begin_time){
+        setTimer(0)
+        const interval = setInterval(()=>{
+          if(!isPaused){
+            setTimer((i)=>i+5)
+          }
+        },2000)
+        return () => clearInterval(interval);
+      }
+    },[timeData.begin_time])
+
 
     React.useEffect(()=>{
         clearTimeout(timerRef.current);
@@ -36,14 +51,30 @@ export default function PlayerTV({navigation}){
         React.useCallback(() => {
           // Enabled TVEventHandler
           const tvEventHandler = new TVEventHandler();
+          const backHandler = BackHandler.addEventListener(
+            'hardwareBackPress',
+            ()=>{
+              let open = false;
+            
+                setOpenMenu((isOpen)=>{
+                    if(!isOpen){
+                      open = true;
+                      return true
+                    }else{
+                      open = false
+                    }
+                });
+                return open
+              
+            },
+          );
           tvEventHandler.enable(null, ((comp,e)=>{if(!data){return};tvEventListener(e,setID)}));
-          // Clean up
           return () => {
-            // Remove BackHandler
-            // Disable TVEventHandler
+            backHandler.remove();
             tvEventHandler.disable();
           };
-        }, [data]),
+        }, [data,currentID]),
+
       );
       React.useEffect(()=>{
         navigation.addListener('beforeRemove', (e) => {
@@ -56,12 +87,14 @@ export default function PlayerTV({navigation}){
       },[navigation])
  
       function tvEventListener(event) {
-            console.log(event)
-           if((event.eventType=='left'||event.eventType=='right'||event.eventType=='select')&&event.eventKeyAction===0){
+           if((event.eventType=='select')&&event.eventKeyAction===0){
              setEvent((i)=>!i)
            } 
              if(event.eventKeyAction===1){
               setOpenMenu((menu)=>{
+                if(menu && event.eventType==='left'){
+                  setSecondMenu(true)
+                }
                 if(!menu){
                   setVisible((visible)=>{
                     if(visible){
@@ -74,6 +107,22 @@ export default function PlayerTV({navigation}){
                      if(event.eventType==='down'){
                          Left()
                      }
+                     if(event.eventType==='left'){
+                         setShift((isShift)=>{
+                           if(isShift){
+                            skipLeft()
+                           }
+                           return isShift
+                         })
+                     }
+                     if(event.eventType==='right'){
+                       setShift((isShift)=>{
+                           if(isShift){
+                            skipRight()
+                           }
+                           return isShift
+                         })  
+                     }
                     }
                  return visible
                 })
@@ -81,36 +130,66 @@ export default function PlayerTV({navigation}){
                 return menu
                })
            }
+           console.log(event,2)
+      }
+
+       function skipLeft(){
+        setTimer((sec)=>{
+          setID((id)=>{
+
+            setTimeData((timedata)=>{
+              const fetch = async()=>{
+                const uri = await getTimeShift(id,timedata.pid,timedata.current_time+sec-10)
+                setUri(uri.uri)
+              }
+              fetch()
+              return timedata
+            })
+            return id
+          })
+          return sec-10
+        })
+      }
+       function skipRight(){
+        setTimer((sec)=>{
+          setID((id)=>{
+
+            setTimeData((timedata)=>{
+              const fetch = async()=>{
+                const uri = await getTimeShift(id,timedata.pid,timedata.current_time+sec+10)
+                setUri(uri.uri)
+              }
+              fetch()
+              return timedata
+            })
+            return id
+          })
+          return sec+10
+        })
       }
       function Right (){
-        setShift((isShift)=>{
-         if(!isShift) 
-         { setID((i)=>{
+          setTimeData({begin_time:false})
+          setShift(false)
+          setID((i)=>{
             const index =  data.findIndex((item)=>item.id===i)
             if(index>data.length){
                 return data[data.length-1].id
             }else{
                return data[index+1].id
             }
-        })}
-          return isShift
         })
-      
       }
       function Left (){
-        setShift((isShift)=>{
-          if(!isShift)
-          {setID((i)=>{
+        setTimeData({begin_time:false})
+        setShift(false)
+          setID((i)=>{
             const index = data.findIndex((item)=>item.id===i)
             if(index===0){
                 return data[0].id
             }else{
                return data[index-1].id
             }
-        })}
-        return isShift
         })
-        
       }
       function componentEventListener(event) {
         if (!event.eventType) {
@@ -141,12 +220,19 @@ export default function PlayerTV({navigation}){
       }
       fetch()
   },[])
-  
+
+  React.useEffect(()=>{
+    const fetch = async()=>{
+      const uri = await getTimeShift(currentID,timeData.pid,timeData.current_time)
+      setUri(uri.uri)
+    }
+    if(timeData.begin_time) fetch();
+},[timeData.begin_time])
   
     return(
-        <View style={styles.container}>
-            {currentID?<TimeShift setTime={setTime} setShift={setShift} setPaused={setPaused} setUri={setUri} isPlayerVisible={isPlayerVisible} setVisible={setVisible} isOpenMenu={isOpenMenu} currentID={currentID}/>:<></>}
-            {isOpenMenu?<PlayerMenu setShift={setShift} setID={setID} channelList={data}/>:<></>}
+        <ScrollView style={styles.container}>
+            {currentID?<TimeShift currentID={currentID} setTimeData={setTimeData} setShift={setShift} setPaused={setPaused} isPlayerVisible={isPlayerVisible} setVisible={setVisible} isOpenMenu={isOpenMenu} currentID={currentID}/>:<></>}
+            {isOpenMenu?<PlayerMenu secondMenu={secondMenu} setSecondMenu={setSecondMenu} setOpenMenu={setOpenMenu} setTimeData={setTimeData} setShift={setShift} setID={setID} channelList={data}/>:<></>}
            {uri? <Video
                 paused={isPaused}
                 source={{uri: uri, type: 'm3u8'}}
@@ -154,8 +240,7 @@ export default function PlayerTV({navigation}){
                 controls={false}
                 resizeMode='stretch' />:<></> }
             {!isOpenMenu?<View style={{...styles.controller,backgroundColor:isPlayerVisible?"#00000061":'transparent'}}>
-              <DrawerItem label='' style={{width:0,height:0}}/>
-              {isPlayerVisible?<SliderTimeShift time={time}/>:<></>}
+              {isPlayerVisible?<SliderTimeShift setTimer={setTimer} timer={timer} setUri={setUri} currentID={currentID} timeData={timeData} setTimeData={setTimeData}/>:<></>}
                {!isOpenMenu? <>{isPlayerVisible?
               <View style={styles.buttons}>
                   <DrawerItem onPress={OpenMenu} style={styles.focusPause} pressColor='#fff' label='' icon={()=><Image style={styles.pauseIcon} source={require('../images/menuPlayer.png')}/>}/>
@@ -165,7 +250,7 @@ export default function PlayerTV({navigation}){
               </View>:<></>}</>:<></>}
           </View>:<></>}
       
-        </View>
+        </ScrollView>
     )
 }
 
