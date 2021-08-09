@@ -14,7 +14,7 @@ import HomeTV from './pages/HomeTV';
 import Login from './pages/Login';
 import { Dimensions } from 'react-native';
 import SmartTV from './pages/SmartTV';
-import EventsDemo from './components/demos/EventsDemo';
+import Movies from '../src/pages/Movies'
 import PlayerTV from './pages/PlayerTV';
 
 const { width: screenWidth } = Dimensions.get('window')
@@ -34,10 +34,10 @@ const StackTV = (props) => {
   return(
     <Stack.Navigator>
           {/* <Stack.Screen props={props} options={{...options,headerShown:isTV?false:true}}  name="a"  component={EventsDemo} /> */}
-          <Stack.Screen props={props} options={{...options,headerShown:isTV?false:true}}  name="HomeTV"  component={HomeTV} />
-          <Stack.Screen props={props} options={{...options,headerShown:isTV?false:true}}  name="Login"  component={Login} />
-          <Stack.Screen props={props} options={{...options,headerShown:isTV?false:true}}  name="SmartTV"  component={SmartTV} />
-          <Stack.Screen props={props} options={{...options,headerShown:isTV?false:true}}  name="PlayerTV"  component={PlayerTV} />   
+          <Stack.Screen props={props} options={{...options,headerShown:false}}  name="HomeTV"  component={HomeTV} />
+          <Stack.Screen props={props} options={{...options,headerShown:false}}  name="Login"  component={Login} />
+          <Stack.Screen props={props} options={{...options,headerShown:false}}  name="Movies"  component={Movies} />
+          <Stack.Screen props={props} options={{...options,headerShown:false}}  name="PlayerTV"  component={PlayerTV} />   
     </Stack.Navigator>
   )
 }

@@ -1,22 +1,38 @@
 import React from 'react'
 import {View,StyleSheet,Text,Dimensions} from 'react-native'
 import  Slider  from '@react-native-community/slider';
+import {Datas} from '../context'
+
 const { width: screenWidth } = Dimensions.get('window')
 
-export default function SliderTimeShift({time}){
-    const [sliderVal,setSliderVal] = React.useState(0)
+export default function SliderTimeShift({setUri,setTimer,timeData,currentID,timer}){
+
+    const {getTimeShift} = React.useContext(Datas)
+    const [sliderVal,setSliderVal] = React.useState(()=>{
+      if(timer){return timer}
+    })
+    
+    const changePosition  = async(sec) =>{
+      setTimer(sec)
+      const uri = await getTimeShift(currentID,timeData.pid,timeData.current_time+sec)
+      setUri(uri.uri)
+    }
+
+
+
+
 
     return(
         <>
-            {time?<Slider
+            {timeData.begin_time?<Slider
           value={sliderVal}
           style={styles.slider}
           minimumValue={0}
-          maximumValue={time.end_time-time.begin_time}
+          maximumValue={timeData.end_time-timeData.begin_time}
           minimumTrackTintColor="#ff4f12"
           maximumTrackTintColor="#fff"
           thumbTintColor='#fff'
-          onValueChange={(sec)=>setSliderVal(sec)}
+          onValueChange={(sec)=>changePosition(sec)}
         />:<></>}
         </>
     )

@@ -2,7 +2,7 @@ import React from 'react';
 import { View, StyleSheet, Text, Image, TextInput, Dimensions, ScrollView} from 'react-native';
 import {DrawerItem} from '@react-navigation/drawer'
 import {Datas} from '../context'
-import { HeaderTV } from '../components/HeaderTv';
+
 const { width: screenWidth } = Dimensions.get('window')
 
 export default function Login({navigation,route}) {
@@ -24,9 +24,9 @@ export default function Login({navigation,route}) {
     return(
         <>
         {/* <HeaderTV/> */}
-        <ScrollView style={styles.container}>
+        <View style={styles.container}>
           <View style={styles.block}>
-              <DrawerItem label='' style={{marginHorizontal:0,marginVertical:0,marginLeft:5,width:240}} pressColor='#fff' icon={()=><Image source={require('../images/logo.png')}/>}/>
+             <Image source={require('../images/logo.png')}/>
             <View style={styles.textBlock}>
                 <Text style={styles.infoText}>Войти</Text>
                 <View style={styles.line}></View>
@@ -36,13 +36,13 @@ export default function Login({navigation,route}) {
                 <View style={styles.inputItem}>
                     <Text style={{...styles.titleInput,color:errorColor}}>Абонемент</Text>
                     <DrawerItem pressColor='#fff' onPress={()=>textInputs[0].focus()} style={styles.focusItem} label='' icon={()=>(
-                       <TextInput ref={(input)=>{textInputs[0]=input}} value={data.abonement} onChangeText={(text)=>changeHandler(text,'abonement')} style={{...styles.input,borderColor:errorColor}} autoCompleteType={'off'} autoCorrect={false}/>
+                       <TextInput  keyboardType="numeric" ref={(input)=>{textInputs[0]=input}} value={data.abonement} onChangeText={(text)=>changeHandler(text,'abonement')} style={{...styles.input,borderColor:errorColor}} autoCompleteType={'off'} autoCorrect={false}/>
                     )}/>
                 </View>
                 <View style={styles.inputItem}>
                     <Text style={{...styles.titleInput,color:errorColor}}>Пароль</Text>
                     <DrawerItem  pressColor='#fff' onPress={()=>textInputs[1].focus()} style={styles.focusItem} label='' icon={()=>(
-                         <TextInput ref={(input)=>{textInputs[1]=input}} secureTextEntry={true} autoCompleteType ='password' value={data.password} onChangeText={(text)=>changeHandler(text,'password')} style={{...styles.input,borderColor:errorColor}} autoCompleteType={'off'} autoCorrect={false}/>
+                         <TextInput  ref={(input)=>{textInputs[1]=input}} secureTextEntry={true} autoCompleteType ='password' value={data.password} onChangeText={(text)=>changeHandler(text,'password')}  keyboardType="numeric" style={{...styles.input,borderColor:errorColor}} autoCompleteType={'off'} autoCorrect={false}/>
                     )}/>
                 </View>
             </View>
@@ -63,7 +63,7 @@ export default function Login({navigation,route}) {
             </View>
         </View>
         
-        </ScrollView>
+        </View>
         </>
         
     )
@@ -75,7 +75,7 @@ const styles = StyleSheet.create({
         backgroundColor:'#0A0A0A',
     },
     block:{
-        marginTop:50,
+        marginTop:70,
         alignItems:'center'
     },
     textBlock:{

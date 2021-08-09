@@ -13,13 +13,11 @@ class Post extends PureComponent {
        this.activeDay = props.activeDay
        this.currentTime = new Date().getTime()/1000
        this.fetchTimeShift = props.fetchTimeShift
-       this.setTime = props.setTime
     }
 
     render() { return( 
         <DrawerItem pressColor='#fff' onPress={()=>{
-            this.fetchTimeShift(this.item.id,this.item.begin_time);
-            this.setTime({begin_time:this.item.begin_time,end_time:this.item.end_time})}}
+            this.fetchTimeShift(this.item.id,this.item.begin_time,this.item.end_time)}}
             style={styles.focusProgram} label='' icon={()=>(
             <View style={styles.progarm}>
                 <Text style={styles.textProgram}>{this.item.name.length>30?`${this.item.name.slice(0,30)}...`:this.item.name}</Text>
@@ -32,9 +30,9 @@ class Post extends PureComponent {
     ) }
   }
 
-export default function TimeShift({isPlayerVisible,isOpenMenu,currentID,setVisible,setUri,setPaused,setShift,setTime}){
+export default function TimeShift({isPlayerVisible,isOpenMenu,currentID,setVisible,setPaused,setShift,setTimeData}){
 
-    const {getProgramListByDay,getTimeShift} = React.useContext(Datas)
+    const {getProgramListByDay} = React.useContext(Datas)
     const [activeDay,setActiveDay] = React.useState(6)
     const [data,setData] = React.useState()
     const [day,setDays] = React.useState()
@@ -48,12 +46,16 @@ export default function TimeShift({isPlayerVisible,isOpenMenu,currentID,setVisib
         fetch()
     },[])
 
-    const fetchTimeShift = async(pid,begin_time) =>{
-        const newUriObject = await getTimeShift(currentID,pid,begin_time)
+    const fetchTimeShift = async(pid,begin_time,end_time) =>{
+        setTimeData({
+            begin_time,
+            pid,
+            end_time,
+            current_time:begin_time
+        })
         setShift(true)
         setVisible(false)
         setPaused(false)
-        setUri(newUriObject.uri)
     }
 
     return(
@@ -73,7 +75,7 @@ export default function TimeShift({isPlayerVisible,isOpenMenu,currentID,setVisib
             {data?<FlatList
                 style={styles.block2}
                 data={data[activeDay]}
-                renderItem={({item})=>(<Post setTime={setTime} fetchTimeShift={fetchTimeShift} activeDay={activeDay}  item = {item}/>)}
+                renderItem={({item})=>(<Post fetchTimeShift={fetchTimeShift} activeDay={activeDay}  item = {item}/>)}
                 keyExtractor={item => item.id.toString()}
                 />:<></>}
         </View>:<></>}

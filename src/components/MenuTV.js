@@ -1,7 +1,9 @@
-import {Text, View,Image,StyleSheet,ImageBackground,Dimensions, TouchableWithoutFeedback } from 'react-native'
+import {Text, View,Image,StyleSheet,ImageBackground,Dimensions, BackHandler,Alert } from 'react-native'
 import React from 'react'
 import { DrawerItem } from '@react-navigation/drawer'
 import {Datas} from '../context'
+import RNExitApp from 'react-native-exit-app';
+import {useFocusEffect} from '@react-navigation/native';
 
 
 const { width: screenWidth,height:screenHeight } = Dimensions.get('window')
@@ -9,8 +11,43 @@ const { width: screenWidth,height:screenHeight } = Dimensions.get('window')
 
 
 export default function MenuTV ({navigation}) {
-    const {isLogin} = React.useContext(Datas)
+    const {isLogin,checkToken} = React.useContext(Datas)
 
+    React.useEffect(()=>{
+        checkToken(navigation)
+    },[])
+
+    const AlertBusyToken = (navigation) =>{
+        Alert.alert(
+          "",
+          "Do you sure?",
+          [
+            {
+              text: "no",
+              onPress: () => {},
+              style: "cancel"
+            },
+            { text: "yes", onPress: () => RNExitApp.exitApp() }
+          ],
+          { cancelable: false }
+        );
+      }
+
+    useFocusEffect(
+        React.useCallback(() => {
+          // Listen to back button
+          const backHandler = BackHandler.addEventListener(
+            'hardwareBackPress',
+            ()=>{  
+                AlertBusyToken()
+                return true
+            },
+          );
+          return () => {
+            backHandler.remove();
+          };
+        }, []),
+      );
     
     return(
         <View style={styles.container}>

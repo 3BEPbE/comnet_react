@@ -8,7 +8,7 @@ import { Dimensions } from 'react-native';
 import { Alert } from 'react-native';
 
 const { width: screenWidth } = Dimensions.get('window')
-const isTV = screenWidth>950
+const isTV = screenWidth>900
 
 export const Datas = createContext(null);
 
@@ -222,10 +222,10 @@ export const ContextProvider = (props) => {
         [
           {
             text: "Отмена",
-            onPress: () => navigation.navigate('Home'),
+            onPress: () => isTV ? navigation.navigate('HomeTV') : navigation.navigate('Home'),
             style: "cancel"
           },
-          { text: "Подключить", onPress: () => navigation.navigate('Login',{routeName:"Profile"}) }
+          { text: "Подключить", onPress: () => navigation.navigate('Login',{routeName:"HomeTV"}) }
         ],
         { cancelable: false }
       );
@@ -241,6 +241,7 @@ export const ContextProvider = (props) => {
           }
           }).then((e)=>{
             if(e.data['0'].status===1){
+              console.log(123)
               storeData('token',null)  
               setLogin(false)
               AlertBusyToken(navigation)
@@ -338,6 +339,22 @@ export const ContextProvider = (props) => {
            })
        }
     }
+    const getChannelCat = () => {
+      if(isLogin){
+        return axios({
+           method: 'POST',
+           url:`http://94.158.63.185/api/auth/category/tv/list`,
+           data:{
+             authkey:token
+           }
+           }).then((e)=>{
+            return(e.data['0'].categories)
+               
+           }).catch((e)=>{
+               console.log(e)
+           })
+       }
+    }
     const getAksiya = () =>{
        return axios({
           method: 'GET',
@@ -402,7 +419,8 @@ export const ContextProvider = (props) => {
             getUserInfo,
             getAksiya,
             getParners,
-            getDocs
+            getDocs,
+            getChannelCat
           }}>
             {children}
         </Datas.Provider>
