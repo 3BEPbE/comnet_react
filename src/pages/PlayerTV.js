@@ -56,13 +56,13 @@ export default function PlayerTV({navigation}){
       },[navigation])
  
       function tvEventListener(event) {
-            console.log(event)
-           if((event.eventType=='left'||event.eventType=='right'||event.eventType=='select')&&event.eventKeyAction===0){
+           if((event.eventType=='right'||event.eventType=='select')&&event.eventKeyAction===0){
              setEvent((i)=>!i)
            } 
              if(event.eventKeyAction===1){
               setOpenMenu((menu)=>{
                 if(!menu){
+                
                   setVisible((visible)=>{
                     if(visible){
                       setEvent((i)=>!i)
@@ -73,7 +73,9 @@ export default function PlayerTV({navigation}){
                      }
                      if(event.eventType==='down'){
                          Left()
-                     }
+                     }if(event.eventType==='left'){
+                      setOpenMenu(true)
+                  }
                     }
                  return visible
                 })

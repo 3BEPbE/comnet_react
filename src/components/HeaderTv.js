@@ -8,9 +8,7 @@ export const HeaderTV = ({navigation}) => {
     return(
         <View style={styles.container}>
             <View style={styles.heaader}>
-                <DrawerItem style={{marginHorizontal:0,marginVertical:0,marginLeft:20,width:175}} pressColor='#fff' label='' icon={()=>(
                         <Image style={styles.logo} source={require('../images/logo.png')}/> 
-                )} />
             </View>
         </View>
     )
