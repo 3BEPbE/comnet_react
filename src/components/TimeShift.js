@@ -45,12 +45,16 @@ export default function TimeShift({isPlayerVisible,isOpenMenu,setID,currentID,se
             date[date.length-1] = 'сегодня'
             let values = Object.values(data)
             let time = new Date().getTime()/1000
-            let filtred = values[6].filter((item)=>{
+        
+            
+            let filtred = values[values.length-1].filter((item)=>{
                 return (item.begin_time<time&&item.end_time>time)
             })
-             values[6] = values[6].filter((item)=>!(item.begin_time<=time&&item.end_time>=time))
-             values[6].unshift(filtred[0])
-
+            if(filtred[0]){
+             values[values.length-1] = values[values.length-1].filter((item)=>!(item.begin_time<=time&&item.end_time>=time))
+             values[values.length-1].unshift(filtred[0])
+            }
+            setActiveDay(values.length-1)
             setData(values)
             setDays(date) 
         }
@@ -73,7 +77,6 @@ export default function TimeShift({isPlayerVisible,isOpenMenu,setID,currentID,se
         setPaused({paused:false,work:false})
         setID(currentID)
     }
-    
     return(
         <>
         {isPlayerVisible&&!isOpenMenu?<View style={styles.container}>

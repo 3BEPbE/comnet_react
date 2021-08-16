@@ -226,6 +226,7 @@ export const ContextProvider = (props) => {
     }
 
     const checkToken = (navigation)=>{
+      
       if(isLogin){
         axios({
           method: 'POST',

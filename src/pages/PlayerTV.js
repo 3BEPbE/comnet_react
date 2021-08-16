@@ -232,7 +232,6 @@ export default function PlayerTV({navigation}){
                   return sec1}
               })
          }
-         console.log(id1)
         if(id1){
           const data = await getTimeShift(id1,timeData1.pid,sec1)
           setUri(data.uri)
@@ -281,8 +280,8 @@ export default function PlayerTV({navigation}){
             if(current[0].has_subscription){
               const info = await getTimeShift(currentID,current[0].program_id,time/1000-100)
               const timeShift = await getProgramListByDay(currentID)
-              const programData = findClosestId(Object.values(timeShift)[6],time/1000)
-  
+              const programData = findClosestId(Object.values(timeShift)[Object.values(timeShift).length-1],time/1000)
+              console.log(Object.values(timeShift)[Object.values(timeShift).length-1].map(i=>{console.log(i.name); return i}))
               setUri(info.uri)
               setShift(true)
               setTimer(time/1000-100)
