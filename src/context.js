@@ -81,10 +81,7 @@ export const ContextProvider = (props) => {
           method: 'POST',
           url:`http://94.158.63.185/api/auth/genre/list`,//28 123457
           data:{
-            limit:isTV?24:12,
-            categories:0,
             authkey:token,
-            season:0,
             ...params
           }
           }).then((e)=>{
@@ -98,9 +95,6 @@ export const ContextProvider = (props) => {
           method: 'POST',
           url:`http://94.158.63.185/api/noauth/genre/list`,//28 123457
           data:{
-            limit:isTV?24:12,
-            page:0,
-            season:0,
             ...params
           }
           }).then((e)=>{
@@ -279,7 +273,6 @@ export const ContextProvider = (props) => {
              id
            }
            }).then((e)=>{
-             console.log
             return(e.data['0'])
                
            }).catch((e)=>{
@@ -296,7 +289,7 @@ export const ContextProvider = (props) => {
              authkey:token,
              pid,
              cid,
-             time: Math.trunc(begin_time)
+             time: Math.trunc(begin_time),
            }
            }).then((e)=>{
             return(e.data['0'])

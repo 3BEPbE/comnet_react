@@ -59,6 +59,25 @@ export default function MenuTV ({navigation}) {
                       </View>
                )} label=''/>
               
+            
+                     <DrawerItem pressColor='#fff' style={styles.blockFocus2} icon={()=>(
+                    <View style={styles.block3}>
+                         <ImageBackground style={styles.menutv2} source={require('../images/menutv5.png')}>
+                                <Text style={styles.textmenu2}>Шоу</Text>
+                          </ImageBackground>
+                    </View>
+            )} label=''/>
+                  
+                        
+           </View>
+           <View style={styles.block}>
+           <DrawerItem pressColor='#fff' onPress={()=>{navigation.navigate('Movies')}} style={styles.blockFocus} icon={()=>(
+                      <View style={styles.block2}>
+                          <ImageBackground style={styles.menutv2} source={require('../images/menutv2.png')}>
+                                <Text style={styles.textmenu2}>Фильмы</Text>
+                          </ImageBackground>
+                      </View>
+                )} label=''/>
               <DrawerItem pressColor='#fff' style={styles.blockFocus} icon={()=>(
                     <View style={styles.block3}>
                                 <ImageBackground   style={styles.menutv2} source={require('../images/menutv3.png')}>
@@ -66,17 +85,6 @@ export default function MenuTV ({navigation}) {
                                 </ImageBackground>
                     </View>  
               )} label=''/>
-                  
-                        
-           </View>
-           <View style={styles.block}>
-           <DrawerItem pressColor='#fff' style={styles.blockFocus} icon={()=>(
-                      <View style={styles.block2}>
-                          <ImageBackground style={styles.menutv2} source={require('../images/menutv2.png')}>
-                                <Text style={styles.textmenu2}>Фильмы</Text>
-                          </ImageBackground>
-                      </View>
-                )} label=''/>
           
             <DrawerItem pressColor='#fff' style={styles.blockFocus2} icon={()=>(
                     <View style={styles.block3}>
@@ -85,35 +93,37 @@ export default function MenuTV ({navigation}) {
                           </ImageBackground>
                     </View>
             )} label=''/>
-            <DrawerItem pressColor='#fff' style={styles.blockFocus2} icon={()=>(
-                    <View style={styles.block3}>
-                         <ImageBackground style={styles.menutv2} source={require('../images/menutv5.png')}>
-                                <Text style={styles.textmenu2}>Шоу</Text>
-                          </ImageBackground>
-                    </View>
-            )} label=''/>
+     
            </View>
            <View style={styles.block}>
                <View style={styles.block4}>
-                    <DrawerItem pressColor='#fff' style={styles.blockFocus3} label='' icon={()=>(
+                    <DrawerItem onPress={()=>{navigation.navigate('Aksiya')}} pressColor='#fff' style={styles.blockFocus3} label='' icon={()=>(
                         <View style={styles.blockFocus4}>
                                   <Image style={styles.menutv6}  source={require('../images/menutv6.png')}/>
                                   <Text style={styles.textmenu1}>Акции</Text>
                         </View>
                     )}/>
-                     <DrawerItem pressColor='#fff' style={styles.blockFocus3} label='' icon={()=>(
+                     <DrawerItem onPress={()=>navigation.navigate('MovieList',{favorited:1})} pressColor='#fff' style={styles.blockFocus3} label='' icon={()=>(
                         <View style={styles.blockFocus4}>
                             <Image style={styles.menutv6}  source={require('../images/menutv7.png')}/>
-                            <Text style={styles.textmenu1}>Избранные</Text>
+                            <Text style={styles.textmenu1}>Избранное</Text>
                         </View>
                     )}/>
                </View>
-               <DrawerItem pressColor='#fff' onPress = {()=>navigation.navigate('Login',{routeName:'HomeTV'})} style={styles.blockFocus} icon={()=>(
-                      <View style={styles.block1}>
-                         <Image style={styles.menutv1} source={require('../images/menutv1.png')}/> 
-                         <Text style={styles.textmenu1}>Login</Text>
-                      </View>
-               )} label=''/>
+               <DrawerItem pressColor='#fff' style={styles.blockFocus2} icon={()=>(
+                    <View style={styles.block3}>
+                         <ImageBackground style={styles.menutv2} source={require('../images/menutv4.png')}>
+                                <Text style={styles.textmenu2}>Просмотронное</Text>
+                          </ImageBackground>
+                    </View>
+            )} label=''/>
+            <DrawerItem onPress={()=>navigation.navigate('Login',{routeName:'HomeTV'})} pressColor='#fff' style={styles.blockFocus2} icon={()=>(
+                    <View style={styles.block3}>
+                         <ImageBackground style={styles.menutv2} source={require('../images/menutv4.png')}>
+                                <Text style={styles.textmenu2}>Профиль</Text>
+                          </ImageBackground>
+                    </View>
+            )} label=''/>
            </View>
         </View>
     )
@@ -129,7 +139,7 @@ const styles = StyleSheet.create({
     },
     block:{
         width:'32%',
-        height:screenHeight-110,
+        height:screenHeight-95,
         justifyContent:'space-between'
     },
     blockFocus:{

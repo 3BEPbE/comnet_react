@@ -5,7 +5,7 @@ import {Datas} from '../context'
 
 const { width: screenWidth } = Dimensions.get('window')
 
-export default function SliderTimeShift({setUri,setTimer,timeData,currentID,timer}){
+export default function SliderTimeShift({setUri,setTimer,timeData,currentID,timer,setEvent,setPaused}){
 
     const {getTimeShift} = React.useContext(Datas)
     const [sliderVal,setSliderVal] = React.useState(()=>{
@@ -13,22 +13,27 @@ export default function SliderTimeShift({setUri,setTimer,timeData,currentID,time
     })
     
     const changePosition  = async(sec) =>{
+      setPaused({paused:false,work:true})
+      const time = new Date().getTime()/1000
+      if(sec>time){
+        setSliderVal(time)
+        return
+      }
+      setEvent((i)=>!i)
       setTimer(sec)
-      const uri = await getTimeShift(currentID,timeData.pid,timeData.current_time+sec)
+      const uri = await getTimeShift(currentID,timeData.pid,sec)
       setUri(uri.uri)
     }
 
 
 
-
-
     return(
         <>
-            {timeData.begin_time?<Slider
+          {timeData.begin_time?<Slider
           value={sliderVal}
           style={styles.slider}
-          minimumValue={0}
-          maximumValue={timeData.end_time-timeData.begin_time}
+          minimumValue={timeData.begin_time}
+          maximumValue={timeData.end_time}
           minimumTrackTintColor="#ff4f12"
           maximumTrackTintColor="#fff"
           thumbTintColor='#fff'

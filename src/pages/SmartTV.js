@@ -8,7 +8,7 @@ import { Datas } from '../context';
 import { converter } from '../helper';
 import { width } from '../helper';
 const { width: screenWidth } = Dimensions.get('window')
-let isTV = screenWidth>950
+
 
 export default function SmartTV({navigation}){
 

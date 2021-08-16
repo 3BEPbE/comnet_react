@@ -1,6 +1,5 @@
 import {Text, View,Image,StyleSheet,Dimensions } from 'react-native'
 import React from 'react'
-import { DrawerItem } from '@react-navigation/drawer'
 const { width: screenWidth } = Dimensions.get('window')
 
 export const HeaderTV = ({navigation}) => {
@@ -8,7 +7,7 @@ export const HeaderTV = ({navigation}) => {
     return(
         <View style={styles.container}>
             <View style={styles.heaader}>
-                        <Image style={styles.logo} source={require('../images/logo.png')}/> 
+                    <Image style={styles.logo} source={require('../images/logo.png')}/> 
             </View>
         </View>
     )

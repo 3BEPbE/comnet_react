@@ -16,23 +16,24 @@ class Post extends PureComponent {
     }
 
     render() { return( 
-        <DrawerItem pressColor='#fff' onPress={()=>{
-            this.fetchTimeShift(this.item.id,this.item.begin_time,this.item.end_time)}}
+        <DrawerItem pressColor='red' onPress={()=>{
+            this.fetchTimeShift(this.item.id,this.item.begin_time,this.item.end_time,this.item.name)}}
             style={styles.focusProgram} label='' icon={()=>(
-            <View style={styles.progarm}>
-                <Text style={styles.textProgram}>{this.item.name.length>30?`${this.item.name.slice(0,30)}...`:this.item.name}</Text>
+            <View style={{...styles.progarm,backgroundColor:this.currentTime<this.item.begin_time?'rgba(171,171,171,0.4)':'#00000085'}}>
                 <View style={styles.programBlock}>
-                    <Text style={styles.textTime}>{`${converter(this.item.begin_time)}:${converter(this.item.end_time)}`}</Text>
-                    <Image  source={require('../images/adv2.png')} style={{...styles.watched,opacity: this.currentTime>this.item.end_time?1:this.activeDay!==6?1:0}}/>
+                    <Text style={styles.textProgram}>{this.item.name.length>27?`${this.item.name.slice(0,27)}...`:this.item.name}</Text>
+                    <Image  source={this.currentTime>this.item.begin_time&&this.currentTime<this.item.end_time?require('../images/shine.png'):require('../images/archive.png')} style={{...styles.watched,opacity:(this.currentTime>this.item.begin_time&&this.currentTime<this.item.end_time)|| this.currentTime>this.item.end_time?1:this.activeDay!==6?1:0}}/>
                 </View>
+                <Text style={styles.textTime}>{`${converter(this.item.begin_time)}:${converter(this.item.end_time)}`}</Text>
+        
             </View>
         )}/>
     ) }
   }
 
-export default function TimeShift({isPlayerVisible,isOpenMenu,currentID,setVisible,setPaused,setShift,setTimeData}){
+export default function TimeShift({isPlayerVisible,isOpenMenu,setID,currentID,setVisible,setPaused,setShift,setTimeData,setUri,setTimer}){
 
-    const {getProgramListByDay} = React.useContext(Datas)
+    const {getProgramListByDay,getTimeShift} = React.useContext(Datas)
     const [activeDay,setActiveDay] = React.useState(6)
     const [data,setData] = React.useState()
     const [day,setDays] = React.useState()
@@ -40,33 +41,47 @@ export default function TimeShift({isPlayerVisible,isOpenMenu,currentID,setVisib
     React.useEffect(()=>{
         const fetch = async () => {
             const data = await getProgramListByDay(currentID)
-            setData(Object.values(data))
-            setDays(Object.keys(data)) 
+            const date = Object.keys(data)
+            date[date.length-1] = 'сегодня'
+            let values = Object.values(data)
+            let time = new Date().getTime()/1000
+            let filtred = values[6].filter((item)=>{
+                return (item.begin_time<time&&item.end_time>time)
+            })
+             values[6] = values[6].filter((item)=>!(item.begin_time<=time&&item.end_time>=time))
+             values[6].unshift(filtred[0])
+
+            setData(values)
+            setDays(date) 
         }
         fetch()
     },[])
 
-    const fetchTimeShift = async(pid,begin_time,end_time) =>{
+    const fetchTimeShift = async(pid,begin_time,end_time,name) =>{
+        const data = await getTimeShift(currentID,pid,begin_time)
+        setUri(data.uri)
+        setTimer(begin_time)
         setTimeData({
             begin_time,
             pid,
             end_time,
-            current_time:begin_time
+            current_time:begin_time,
+            name,
         })
         setShift(true)
         setVisible(false)
-        setPaused(false)
+        setPaused({paused:false,work:false})
+        setID(currentID)
     }
-
+    
     return(
         <>
         {isPlayerVisible&&!isOpenMenu?<View style={styles.container}>
             <View style={styles.block1}>
                 {day?day.map((item,index)=>(
-                    <DrawerItem onPress={()=>{setActiveDay(index)}} key={item} pressColor='#fff' style={styles.focusDay} pressOpacity={0} label='' icon={()=>(
-                        <View style={styles.day}>
+                    <DrawerItem onPress={()=>{setActiveDay(index)}} key={item} pressColor='red' style={{...styles.focusDay,width:index===activeDay?150:150}}  label='' icon={()=>(
+                        <View style={{...styles.day,borderWidth:index===activeDay?2:0,transform:[{scale:index===activeDay?1.1:1}],backgroundColor:index===activeDay?'#E41A4B':'#00000085'}}>
                             <Text style={styles.text}>{item}</Text>
-                            <View style={{...styles.dott,opacity:index===activeDay?1:0}}></View>
                         </View>
                     )}/>
                 )):<></>}
@@ -74,6 +89,7 @@ export default function TimeShift({isPlayerVisible,isOpenMenu,currentID,setVisib
             
             {data?<FlatList
                 style={styles.block2}
+                ref = {(ref)=>ref}
                 data={data[activeDay]}
                 renderItem={({item})=>(<Post fetchTimeShift={fetchTimeShift} activeDay={activeDay}  item = {item}/>)}
                 keyExtractor={item => item.id.toString()}
@@ -88,30 +104,30 @@ const styles = StyleSheet.create({
      position:'absolute',
      zIndex:3,
      height:screenHeight,
-     width:screenWidth/2.3,
+     width:screenWidth/2.25,
      right:0,
      top:0,
      flexDirection:'row',
-     justifyContent:'space-between'
+     justifyContent:'space-between',
  },
  block1:{
-     width:'18%',
+     width:'25%',
      height:'100%',
-     justifyContent:'center'
+     marginTop:20
  },
  block2:{
-    width:300,
     height:screenHeight-110
  },
  day:{
      width:'100%',
-     height:40,
+     height:60,
      backgroundColor:'#00000085',
      marginTop:0,
      alignItems:'center',
-     justifyContent:'space-around',
+     justifyContent:'center',
      borderRadius:7,
-     flexDirection:'row'
+     flexDirection:'row',
+     borderColor:'#fff'
  },
  text:{
      color:'#fff',
@@ -123,7 +139,8 @@ const styles = StyleSheet.create({
  },
  focusProgram:{
     marginHorizontal:0,
-    marginVertical:0
+    marginVertical:0,
+    marginLeft:20,
  },
  progarm:{
     width:'100%',
@@ -150,12 +167,13 @@ const styles = StyleSheet.create({
  },
  programBlock:{
      flexDirection:'row',
-     alignItems:'center'
+     alignItems:'center',
+     justifyContent:'space-between'
  },
  watched:{
      width:30,
      height:30,
-     marginLeft:20,
-     resizeMode:'contain'
+     marginRight:20,
+     resizeMode:'cover'
  }
 });

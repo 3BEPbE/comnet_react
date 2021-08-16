@@ -17,7 +17,7 @@ class Post extends PureComponent {
     }
 
     render() { return( 
-        <DrawerItem style={{marginHorizontal:0,marginVertical:0,width:screenWidth,alignItems:'center',justifyContent:'center'}} pressColor='#fff' onPress={()=>{this.navigation.navigate('Movie',this.item)}} label='' icon={()=>{
+        <DrawerItem style={{marginHorizontal:0,marginVertical:0,width:screenWidth}} pressColor='#fff' onPress={()=>{this.navigation.navigate('Movie',this.item)}} label='' icon={()=>{
             return(<ImageBackground resizeMode='stretch' source={require('../images/bigExample2.png')} style={styles.imgBlocl}>
               <ImageBackground source={require('../images/corusulGradient.png')} style={styles.textBlock}>
                   <View style={styles.ranking}>
@@ -57,11 +57,10 @@ export default function BigCardCarusel({gid,navigation}) {
     const renderItem = React.useCallback(({ item, index }) => {
       return(
            <Post navigation={navigation} item={item} index={index}/>
-            
     )}, []);
   
     return (
-        <View style={{marginBottom:20}}>
+        <View>
           <Carousel
             layout="default"
             data={data}
@@ -69,8 +68,8 @@ export default function BigCardCarusel({gid,navigation}) {
             itemWidth={isTV?screenWidth:screenWidth}
             sliderHeight={isTV?screenWidth/3.1:310}
             renderItem={renderItem}
-            activeSlideAlignment={'center'}
-            inactiveSlideScale={0.93}
+            activeSlideAlignment={'start'}
+            inactiveSlideScale={1}
             initialNumToRender={7}
           />
         </View>
@@ -82,15 +81,15 @@ const styles = StyleSheet.create({
     imgBlocl:{
         borderRadius: 8,
         overflow:'hidden',
-        height: (isTV?((screenWidth-150)/3.1):310),
+        height: (isTV?((screenWidth-250)/3.1):310),
         display:'flex',
         justifyContent:'flex-end', 
-        width:screenWidth-130,
+        width:screenWidth-220,
         resizeMode:'center',
-        marginLeft:isTV?30:0
+        marginLeft:100, 
     },
     textBlock:{
-        height: (isTV?(screenWidth-150)/3.1-40:350),
+        height: (isTV?(screenWidth-250)/3.1-40:350),
         display:'flex',
         justifyContent:'flex-end',
         padding:15

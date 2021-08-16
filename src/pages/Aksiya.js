@@ -1,19 +1,19 @@
 import React from 'react'
 import {View,StyleSheet,Text} from 'react-native'
 import { ScrollView } from 'react-native-gesture-handler';
-import { HeaderTV } from '../components/HeaderTv';
-import  MenuTV  from '../components/MenuTV';
 import { Datas   } from '../context';
+import AksiyaCarusel from '../components/AksiyaCarusel';
+import Partners from '../components/Partners';
 
-export default function HomeTV({navigation}){
-    const {getData,checkToken} = React.useContext(Datas)
+export default function Aksiya({navigation}){
+    const {getData} = React.useContext(Datas)
     React.useEffect(()=>{
-        checkToken(navigation)
+        getData('token')
     },[])
     return(
         <ScrollView style={styles.container}>
-            <HeaderTV navigation={navigation}/>
-            <MenuTV navigation={navigation}/>
+          <AksiyaCarusel/>
+          <Partners/>
         </ScrollView>
     )
 }

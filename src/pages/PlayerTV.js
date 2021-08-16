@@ -8,62 +8,98 @@ import {useFocusEffect} from '@react-navigation/native';
 import PlayerMenu from '../components/PlayerMenu';
 import TimeShift from '../components/TimeShift';
 import SliderTimeShift from '../components/SlayderTimeShift';
+import ChannelList from '../components/ChannelList';
 
 const { width: screenWidth,height:screenHeight } = Dimensions.get('window')
 export default function PlayerTV({navigation}){
-    const {getChannelSrc,getChannel,getTimeShift} = React.useContext(Datas)
+    const {getProgramListByDay,getChannel,getTimeShift} = React.useContext(Datas)
     const [uri,setUri] = React.useState()
     const [currentID,setID] = React.useState()
-    const [isPlayerVisible,setVisible] = React.useState(true)
+    const [isPlayerVisible,setVisible] = React.useState(false)
     const [event,setEvent] = React.useState(false)
     const timerRef = React.useRef(null);
-    const [isPaused,setPaused] = React.useState(false)
+    const timeMenu = React.useRef(null);
+    const [isPaused,setPaused] = React.useState({paused:false,work:true})
     const [isOpenMenu,setOpenMenu] = React.useState(false)
     const [data,setData] = React.useState()
     const [isTimeShift,setShift] = React.useState(false)
     const [timeData,setTimeData] = React.useState({begin_time:false})
     const [timer,setTimer] = React.useState(0)
     const [secondMenu,setSecondMenu] = React.useState(false)
-    
+    const [changeMenu,setChangeMenu] = React.useState(false)
+    const refNum = React.useRef(0)
+    const [blocked,setBlocked] = React.useState(false)
+    const [type,setType] = React.useState(false)
+
 
     React.useEffect(()=>{
       if(timeData.begin_time){
-        setTimer(0)
         const interval = setInterval(()=>{
-          if(!isPaused){
+          if(!isPaused.paused){
             setTimer((i)=>i+5)
           }
-        },2000)
+        },5000)
         return () => clearInterval(interval);
       }
     },[timeData.begin_time])
 
+    React.useEffect(()=>{
+      clearTimeout(timeMenu.current);
+      if(isOpenMenu){
+        timeMenu.current = setTimeout(()=>{ 
+          setOpenMenu(false)
+      },5000)
+      }
+
+    },[changeMenu,isOpenMenu])
+
 
     React.useEffect(()=>{
         clearTimeout(timerRef.current);
-        if(!isPaused||isOpenMenu){
-        setVisible(true)
+        if(!isPaused.paused||isOpenMenu){
+        if(!refNum.current){
+          refNum.current = 1
+          setVisible(false)
+        }else{
+          refNum.current = 1
+          setVisible(true)
+        }
         timerRef.current = setTimeout(()=>{ 
             setVisible(false)
         },5000)}
-    },[event,isPaused])
+    },[event,isPaused.paused])
     useFocusEffect(
         React.useCallback(() => {
-          // Enabled TVEventHandler
           const tvEventHandler = new TVEventHandler();
           const backHandler = BackHandler.addEventListener(
             'hardwareBackPress',
             ()=>{
               let open = false;
-            
-                setOpenMenu((isOpen)=>{
-                    if(!isOpen){
-                      open = true;
-                      return true
-                    }else{
-                      open = false
-                    }
-                });
+              let isVisible = false
+              setVisible((visible)=>{
+                if(visible){
+                  open = true;
+                  isVisible= true
+                  return false
+                }else{
+                  isVisible = false
+                  return false
+                }})
+
+                setOpenMenu((menu)=>{
+                  if(isVisible){
+                    open = true
+                    return false
+                  }else{
+                      if(menu){
+                        open = false
+                        return false
+                      }else{
+                        open = true
+                        return true
+                      }
+                  }
+                })
                 return open
               
             },
@@ -73,123 +109,161 @@ export default function PlayerTV({navigation}){
             backHandler.remove();
             tvEventHandler.disable();
           };
-        }, [data,currentID]),
+        }, [data]),
 
       );
-      React.useEffect(()=>{
-        navigation.addListener('beforeRemove', (e) => {
-          setOpenMenu((menu)=>{
-            if(menu){
-              setOpenMenu(false)
-              e.preventDefault();
-            }})
-          })
-      },[navigation])
- 
-      function tvEventListener(event) {
 
-           if((event.eventType=='select')&&event.eventKeyAction===0){
+      function tvEventListener(event) {
+            let isOpen = true
+            if(event.eventKeyAction===0){
+              setOpenMenu((menu)=>{
+                if(menu){
+                  isOpen = true
+                }else{
+                  isOpen = false
+                }
+                return menu
+              })
+              if(isOpen){
+                setChangeMenu((i)=>!i)
+              }
+            }
+
+           if((event.eventType=='select')&&event.eventKeyAction===0&&!isOpen){
+            setOpenMenu((menu)=>{
+              setVisible((visible)=>{
+                if(!visible&&!menu)setPaused({paused:false,work:false})
+                return visible
+              })
+              return menu
+            })
+      
              setEvent((i)=>!i)
            } 
              if(event.eventKeyAction===1){
-              setOpenMenu((menu)=>{
-                if(menu && event.eventType==='left'){
+               let openMenu = false;
+               let visible = false;
+               let isShift = false
+                setOpenMenu((menu)=>{
+                openMenu = menu;
+                return menu
+                })
+                if(openMenu && event.eventType==='left'){
                   setSecondMenu(true)
                 }
-                if(!menu){
-                
-                  setVisible((visible)=>{
-                    if(visible){
-                      setEvent((i)=>!i)
-                    }    
-                    if(!visible){
-                     if(event.eventType === 'up'){
-                        Right()
-                     }
-                     if(event.eventType==='down'){
-                         Left()
-
-                     }
-                     if(event.eventType==='left'){
-                         setShift((isShift)=>{
-                           if(isShift){
-                            skipLeft()
-                           }
-                           return isShift
-                         })
-                     }
-                     if(event.eventType==='right'){
-                       setShift((isShift)=>{
-                           if(isShift){
-                            skipRight()
-                           }
-                           return isShift
-                         })  
-                     }}
-                 return visible
+                if(!openMenu){ 
+                 setVisible((visible1)=>{
+                 visible = visible1 
+                 return visible1
                 })
+                if(visible){
+                  setEvent((i)=>!i)
+                }   
+                if(!visible){
+                 if(event.eventType === 'up'){
+                    Right()
+                 }
+                 if(event.eventType==='down'){
+                     Left()
+                 }
+                 if(event.eventType==='left'){
+                     setShift((isShift1)=>{
+                       isShift = isShift1
+                       return isShift1
+                     })
+                     if(isShift){
+                      skipLeft()
+                     }
+                 }
+                 if(event.eventType==='right'){
+                    setShift((isShift1)=>{
+                      isShift = isShift1
+                      return isShift1
+                    })
+                    if(isShift){
+                      skipRight()
+                    }  
+                 }}
                 }
-                return menu
-               })
            }
-           console.log(event,2)
       }
 
-       function skipLeft(){
-        setTimer((sec)=>{
-          setID((id)=>{
-
-            setTimeData((timedata)=>{
-              const fetch = async()=>{
-                const uri = await getTimeShift(id,timedata.pid,timedata.current_time+sec-10)
-                setUri(uri.uri)
-              }
-              fetch()
-              return timedata
-            })
+      async function skipLeft(){
+         let id1 = 0;
+         let sec1 = 0;
+         let timeData1 = false
+        for(let i = 0;i<2;i++){
+          await setTimeData((timedata)=>{
+            timeData1 = timedata
+            return timedata
+          })
+          await setID((id)=>{
+            id1 = id
             return id
           })
-          return sec-10
-        })
+          await setTimer((sec)=>{
+            sec1 = sec-10 
+            return sec-10 
+          })
+          const data = await getTimeShift(id1,timeData1.pid,sec1-10)
+          setUri(data.uri)
+        } 
       }
-       function skipRight(){
-        setTimer((sec)=>{
-          setID((id)=>{
-
-            setTimeData((timedata)=>{
-              const fetch = async()=>{
-                const uri = await getTimeShift(id,timedata.pid,timedata.current_time+sec+10)
-                setUri(uri.uri)
-              }
-              fetch()
-              return timedata
-            })
-            return id
-          })
-          return sec+10
-        })
+      async function skipRight(){
+         let id1 = 0;
+         let sec1 = 0;
+         let timeData1 = false
+         for(let i = 0;i<2;i++){
+              await setTimeData((timedata)=>{
+                  timeData1 = timedata
+                  return timedata
+                })
+              await setID((id)=>{
+                  id1 = id
+                  return id
+                })
+              await setTimer((sec)=>{
+                  let time = new Date().getTime()/1000
+        
+                  if(sec+15>time){
+                    return sec
+                  }else{
+                    sec1 = sec+10 
+                  return sec1}
+              })
+         }
+         console.log(id1)
+        if(id1){
+          const data = await getTimeShift(id1,timeData1.pid,sec1)
+          setUri(data.uri)
+        }
       }
       function Right (){
-          setTimeData({begin_time:false})
-          setShift(false)
+          setPaused({paused:false,work:true})
           setID((i)=>{
-            const index =  data.findIndex((item)=>item.id===i)
-            if(index>data.length){
-                return data[data.length-1].id
+            const filtered = data.filter((item)=>item.has_subscription)
+            if(filtered){
+              let index =  filtered.findIndex((item)=>item.id===i)
+              setOpenMenu()
+              if(index>=filtered.length-1){
+                  return filtered[0].id
+              }else{
+                 return filtered[index+1].id
+              }
             }else{
-               return data[index+1].id
+              return i
             }
         })
       }
       function Left (){
-        setTimeData({begin_time:false})
-        setShift(false)
+        setPaused({paused:false,work:true})
           setID((i)=>{
-            const index = data.findIndex((item)=>item.id===i)
+            const filtered = data.filter((item)=>item.has_subscription)
+            let index =  filtered.findIndex((item)=>item.id===i)
             if(index===0){
-                return data[0].id
+                return filtered[filtered.length-1].id
             }else{
-               return data[index-1].id
+               return filtered[index-1].id
             }
         })
       }
@@ -198,61 +272,92 @@ export default function PlayerTV({navigation}){
           return;
         }
       }
-      componentEventListener({eventType:true})// i dont know what is it but without it does't work:)
+      componentEventListener({eventType:true})// i dont know what is it but without it does't work:)    
     React.useEffect(()=>{
         const fetch=async()=>{
-            const data = await getChannelSrc(currentID)
-            setUri(data.uri)
+         
+            const time = new Date().getTime()
+            const current = data.filter((item)=>item.id === currentID)
+            if(current[0].has_subscription){
+              const info = await getTimeShift(currentID,current[0].program_id,time/1000-100)
+              const timeShift = await getProgramListByDay(currentID)
+              const programData = findClosestId(Object.values(timeShift)[6],time/1000)
+  
+              setUri(info.uri)
+              setShift(true)
+              setTimer(time/1000-100)
+              setTimeData({
+                name:programData.name,
+                begin_time:programData.begin_time,
+                pid:programData.id,
+                end_time:programData.end_time,
+                current_time:programData.begin_time,
+              })  
+            }   
         }
         if(currentID){
           fetch()
         }
         
     },[currentID])
-    const OpenMenu = ()=>{
-        setOpenMenu(true)
-        
-    }
 
+    const findClosestId = (arr,x)=>{
+      let newArr = arr.sort((a, b) => a.begin_time - b.begin_time);
+      newArr =  newArr.filter((item)=>item.begin_time<=x)
+      return newArr[newArr.length-1]
+     }
+    
     React.useEffect(()=>{
       const fetch=async()=>{
-          const data = await getChannel()
-          setID(data[0].id)
+          let data = await getChannel()
+          data = data.map((item)=>{item.has_subscription = 0;return item})
+          data[24].has_subscription = 1;data[25].has_subscription = 1;data[38].has_subscription = 1;data[39].has_subscription = 1;data[50].has_subscription = 1;data[6].has_subscription = 1
           setData(data)
+          const filtered = data.filter(item=>item.has_subscription)
+          if(filtered){
+            setID(filtered[0].id)
+          }else{
+            setBlocked(true)
+          }
       }
       fetch()
   },[])
 
-  React.useEffect(()=>{
-    const fetch = async()=>{
-      const uri = await getTimeShift(currentID,timeData.pid,timeData.current_time)
-      setUri(uri.uri)
-    }
-    if(timeData.begin_time) fetch();
-},[timeData.begin_time])
   
     return(
-        <ScrollView style={styles.container}>
-            {currentID?<TimeShift currentID={currentID} setTimeData={setTimeData} setShift={setShift} setPaused={setPaused} isPlayerVisible={isPlayerVisible} setVisible={setVisible} isOpenMenu={isOpenMenu} currentID={currentID}/>:<></>}
-            {isOpenMenu?<PlayerMenu secondMenu={secondMenu} setSecondMenu={setSecondMenu} setOpenMenu={setOpenMenu} setTimeData={setTimeData} setShift={setShift} setID={setID} channelList={data}/>:<></>}
-           {uri? <Video
-                paused={isPaused}
+        <View style={styles.container}>
+            <ChannelList data={data} id={currentID} timeData={timeData}/>
+            {currentID?<TimeShift  setTimer={setTimer} setUri={setUri} currentID={currentID} setTimeData={setTimeData} setShift={setShift} setPaused={setPaused} isPlayerVisible={isPlayerVisible} setVisible={setVisible} setID={setID} isOpenMenu={isOpenMenu} currentID={currentID}/>:<></>}
+            {isOpenMenu?<PlayerMenu type={type} setType={setType} setPaused={setPaused} data={data} secondMenu={secondMenu} currentID={currentID} setSecondMenu={setSecondMenu} setOpenMenu={setOpenMenu} setTimeData={setTimeData} setShift={setShift} setID={setID} channelList={data}/>:<></>}
+           {uri? 
+           
+           <>
+           <Video
                 source={{uri: uri, type: 'm3u8'}}
                 style={{ width:screenWidth , height: screenHeight }}
+                paused={isPaused.paused}
                 controls={false}
-                resizeMode='stretch' />:<></> }
-            {!isOpenMenu?<View style={{...styles.controller,backgroundColor:isPlayerVisible?"#00000061":'transparent'}}>
-              {isPlayerVisible?<SliderTimeShift setTimer={setTimer} timer={timer} setUri={setUri} currentID={currentID} timeData={timeData} setTimeData={setTimeData}/>:<></>}
-               {!isOpenMenu? <>{isPlayerVisible?
-              <View style={styles.buttons}>
-                  <DrawerItem onPress={OpenMenu} style={styles.focusPause} pressColor='#fff' label='' icon={()=><Image style={styles.pauseIcon} source={require('../images/menuPlayer.png')}/>}/>
-                  <DrawerItem onPress={Left} style={styles.focusPause} pressColor='#fff' label='' icon={()=><Image style={styles.pauseIcon} source={require('../images/Left.png')}/>}/>
-                  <DrawerItem onPress={()=>{setPaused(i=>!i)}} style={styles.focusPause} pressColor='#fff' label='' icon={()=><Image style={styles.pauseIcon} source={isPaused?require('../images/startIcon.png'):require('../images/Pause-button.png')}/>}/>
-                  <DrawerItem onPress={Right} style={styles.focusPause} pressColor='#fff' label='' icon={()=><Image style={styles.pauseIcon} source={require('../images/Right.png')}/>}/>
-              </View>:<></>}</>:<></>}
-          </View>:<></>}
+                resizeMode='stretch' /></>:<></> }
+            <View style={{...styles.controller,backgroundColor:isPlayerVisible?"#00000061":'transparent'}}>
+              {isPlayerVisible&&timer?<SliderTimeShift setPaused={setPaused} setEvent={setEvent} setTimer={setTimer} timer={timer} setUri={setUri} setID={setID} currentID={currentID} timeData={timeData} />:<></>}
+                  <View style={styles.buttons}>
+                    <>{isPlayerVisible?<>
+                      <DrawerItem onPress={skipLeft} style={styles.focusPause} pressColor='#fff' label='' icon={()=><Image style={styles.pauseIcon} source={require('../images/leftSkip.png')}/>}/>
+                      </>:<></>
+                      }</>
+                      <DrawerItem onPress={()=>{
+                        setPaused((old)=>{ 
+                          if(!old.work){
+                          return{paused:old.paused,work:true}
+                        }
+                         return{paused:!old.paused,work:true}
+                        })
+                      }} style={{...styles.focusPause,opacity:isPlayerVisible?1:0}} pressColor='#fff' label='' icon={()=><Image style={styles.pauseIcon} source={isPaused.paused?require('../images/startIcon.png'):require('../images/Pause-button.png')}/>}/>
+                     <>{isPlayerVisible?<><DrawerItem onPress={skipRight} style={styles.focusPause} pressColor='#fff' label='' icon={()=><Image style={styles.pauseIcon} source={require('../images/rightSkip.png')}/>}/></>:<></>}</>
+                  </View>
+          </View>
       
-        </ScrollView>
+        </View>
     )
 }
 
@@ -266,11 +371,12 @@ const styles = StyleSheet.create({
  },
  controller:{
     width:screenWidth,
-    height:100,
+    height:110,
     position:'absolute',
     bottom:0,
     backgroundColor:'#00000061',
-    alignItems:'center'
+    alignItems:'center',
+    justifyContent:'space-around'
   },
   buttons:{
     alignItems:'center',
