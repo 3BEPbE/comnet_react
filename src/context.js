@@ -47,9 +47,13 @@ export const ContextProvider = (props) => {
         
         if(jsonValue!=='null'){
           setToken(JSON.parse(jsonValue).token)
-          setLogin(true)
+          if(key==='token'){
+            setLogin(true)
+          }
         }else{
-          setLogin(false)
+          if(key==='token'){
+            setLogin(false)
+          }
         }
         return jsonValue != null ? JSON.parse(jsonValue) : null;
       } catch(e) {
@@ -219,7 +223,7 @@ export const ContextProvider = (props) => {
             onPress: () => isTV ? navigation.navigate('HomeTV') : navigation.navigate('Home'),
             style: "cancel"
           },
-          { text: "Подключить", onPress: () => navigation.navigate('Login',{routeName:"HomeTV"}) }
+          { text: "Подробное", onPress: () => navigation.navigate('Login',{routeName:"HomeTV"}) }
         ],
         { cancelable: false }
       );
@@ -294,6 +298,7 @@ export const ContextProvider = (props) => {
            }
            }).then((e)=>{
             return(e.data['0'])
+            
                
            }).catch((e)=>{
                console.log(e)

@@ -14,7 +14,6 @@ export default function MenuTV ({navigation}) {
     const {isLogin,checkToken} = React.useContext(Datas)
 
     React.useEffect(()=>{
-        console.log(123)
         checkToken(navigation)
     },[])
 

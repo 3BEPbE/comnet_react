@@ -39,7 +39,7 @@ class Post extends PureComponent {
         this.setPaused({paused:false,work:true})
       }
     }
-
+  
     render() { return( 
         <DrawerItem  onPress={()=>{this.press()}} pressColor='red' style={{...styles.focusItem,width:this.currentID===this.item.id?screenWidth/1.8/2:screenWidth/1.8/2}}  icon={()=>
         <View style={{...styles.item,backgroundColor:this.currentID===this.item.id?'#e41a4b':this.index == -1?'rgba(171, 171, 171, 0.4)':'#27272794'}}>
@@ -57,28 +57,31 @@ class Post extends PureComponent {
 
 
 
-const PlayerMenu = ({channelList,setID,setShift,setTimeData,setOpenMenu,currentID,data,setPaused,type,setType}) => {
+const PlayerMenu = ({channelList,setID,setShift,setTimeData,setOpenMenu,currentID,data,setPaused,setType,type}) => {
 
   const [categories,setCategories] = React.useState({original:channelList,filtered:channelList,category:false})
+  
+  const {getChannelCat,isLogin} = React.useContext(Datas)
 
-  const {getChannelCat} = React.useContext(Datas)
+
 
   React.useEffect(()=>{
     const fetch = async()=>{
       const categories = await getChannelCat()
-      setCategories((old)=>{
-        categories.unshift({name:'Все телеканалы',id:false})
-
-        return{original:old.original,filtered:old.filtered,category:categories}
-      })
+      if(categories){
+        setCategories((old)=>{
+          categories.unshift({name:'Все телеканалы',id:false})
+          return{original:old.original,filtered:old.filtered,category:categories}
+        })
+      }
     }
-    fetch()
-  },[])
+    if(isLogin)fetch()
+  },[isLogin])
 
   const categoryList = (
     ({ item }) => (
-      <DrawerItem onPress={()=>setType(item.id)} pressColor='red' style={{...styles.focusItem2,width:type===item.id?screenWidth/1.8/2.3-60:screenWidth/1.8/2.3-60}} icon={()=>(
-        <View style={{...styles.itemCat,backgroundColor:type===item.id?'#e41a4b':'#27272794',width:type===item.id?screenWidth/1.8/2.3-60:screenWidth/1.8/2.3-70}}>
+      <DrawerItem onPress={()=>setType(item.id)} pressColor='red' style={{...styles.focusItem2,width:type===item.id?screenWidth/1.8/2.3-54:screenWidth/1.8/2.3-54}} icon={()=>(
+        <View style={{...styles.itemCat,backgroundColor:type===item.id?'#e41a4b':'#27272794',width:type===item.id?screenWidth/1.8/2.3-70:screenWidth/1.8/2.3-70}}>
             <Text style={styles.categorieText}>{item.name}</Text>
         </View>
       )} label=''/>
@@ -88,6 +91,7 @@ const PlayerMenu = ({channelList,setID,setShift,setTimeData,setOpenMenu,currentI
   React.useEffect(()=>{
     if(categories){
       if(type){
+        
         setCategories((old)=>{
           if(old.original){
           let filtered = old.original.filter((item)=>item.category_id===type);
@@ -97,7 +101,6 @@ const PlayerMenu = ({channelList,setID,setShift,setTimeData,setOpenMenu,currentI
             let current = old.original.filter(item=>item.id === currentID)[0]
             filtered.unshift(current)
           }
-
           return {original:old.original,filtered:filtered,category:old.category}}
           return old
       })
@@ -106,7 +109,7 @@ const PlayerMenu = ({channelList,setID,setShift,setTimeData,setOpenMenu,currentI
           if(old.original){
             let filtered = old.original.filter(item=>item.id !== currentID);
             let current = old.original.filter(item=>item.id === currentID)[0]
-            filtered.unshift(current)
+            filtered.unshift(current)  
             return {original:old.original,filtered:filtered,category:old.category}
           }
           return old
@@ -219,7 +222,6 @@ itemCat:{
   overflow:'hidden',
   alignItems:'center',
   justifyContent:'center',
-  margin:-5
 },
 focusItem2:{
   marginHorizontal:0,

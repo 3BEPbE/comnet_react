@@ -7,7 +7,7 @@ import {Datas} from '../context'
 
 const { width: screenWidth } = Dimensions.get('window')
 
-const arr = ['Комедия','Приключения','Драма',"Боевик","Триллер",'Семейный']
+const arr = ['Комедия','Приключения','Драма',"Боевик","Триллер",'Семейный',"Триллер",'Семейный',"Триллер",'Семейный']
 
 class Post extends PureComponent {
   constructor(props){
@@ -39,7 +39,8 @@ export default function BigJanrCarusel({navigation,gid,season}) {
         let filtered = data.filter((item)=>{
            return arr.some((i)=>i === item.name)   
         })
-    
+        filtered.push(filtered[1])
+        filtered.push(filtered[2])
         setData(filtered.map((item)=>{
             if(item.name === 'Комедия'){
                 item.image = require('../images/janr1.png')
@@ -125,6 +126,6 @@ const styles = StyleSheet.create({
     },
     text:{
       color:'#fff',
-      marginLeft:20
+      marginLeft:5
     }
   });

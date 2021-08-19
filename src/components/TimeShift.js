@@ -41,25 +41,27 @@ export default function TimeShift({isPlayerVisible,isOpenMenu,setID,currentID,se
     React.useEffect(()=>{
         const fetch = async () => {
             const data = await getProgramListByDay(currentID)
-            const date = Object.keys(data)
-            date[date.length-1] = 'сегодня'
-            let values = Object.values(data)
-            let time = new Date().getTime()/1000
-        
+            if(data){
+                const date = Object.keys(data)
+                date[date.length-1] = 'сегодня'
+                let values = Object.values(data)
+                let time = new Date().getTime()/1000
             
-            let filtred = values[values.length-1].filter((item)=>{
-                return (item.begin_time<time&&item.end_time>time)
-            })
-            if(filtred[0]){
-             values[values.length-1] = values[values.length-1].filter((item)=>!(item.begin_time<=time&&item.end_time>=time))
-             values[values.length-1].unshift(filtred[0])
+                
+                let filtred = values[values.length-1].filter((item)=>{
+                    return (item.begin_time<time&&item.end_time>time)
+                })
+                if(filtred[0]){
+                 values[values.length-1] = values[values.length-1].filter((item)=>!(item.begin_time<=time&&item.end_time>=time))
+                 values[values.length-1].unshift(filtred[0])
+                }
+                setActiveDay(values.length-1)
+                setData(values)
+                setDays(date) 
             }
-            setActiveDay(values.length-1)
-            setData(values)
-            setDays(date) 
         }
         fetch()
-    },[])
+    },[currentID])
 
     const fetchTimeShift = async(pid,begin_time,end_time,name) =>{
         const data = await getTimeShift(currentID,pid,begin_time)
