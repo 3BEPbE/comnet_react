@@ -3,7 +3,7 @@ import { View, StyleSheet, Text, Image, TextInput, Dimensions, ScrollView} from 
 import {DrawerItem} from '@react-navigation/drawer'
 import {Datas} from '../context'
 
-const { width: screenWidth } = Dimensions.get('window')
+const { width: screenWidth,height:screenHeight } = Dimensions.get('window')
 
 export default function Login({navigation,route}) {
 
@@ -26,11 +26,13 @@ export default function Login({navigation,route}) {
         {/* <HeaderTV/> */}
         <View style={styles.container}>
           <View style={styles.block}>
-             <Image source={require('../images/logo.png')}/>
+            <View style={styles.content1}>
+            <Image style={styles.logo} source={require('../images/logo.png')}/>
             <View style={styles.textBlock}>
                 <Text style={styles.infoText}>Войти</Text>
                 <View style={styles.line}></View>
                 <Text style={styles.infoText}>Зарегистрироватся </Text>
+            </View>
             </View>
             <View style={styles.inputBlock}>
                 <View style={styles.inputItem}>
@@ -73,10 +75,19 @@ const styles = StyleSheet.create({
     container:{
         flex:1,
         backgroundColor:'#0A0A0A',
+        height:screenHeight
     },
     block:{
-        marginTop:70,
-        alignItems:'center'
+        alignItems:'center',
+        height:screenHeight
+    },
+    content1:{
+        height:screenHeight/100*33,
+        alignItems:'center', 
+        justifyContent:'space-around'
+    },
+    logo:{
+        marginTop:20
     },
     textBlock:{
         flexDirection:'row',
@@ -87,21 +98,20 @@ const styles = StyleSheet.create({
         fontWeight:'700',
         color:'#fff',
         fontSize:18,
-        marginTop:50
     },
     line:{
         width:2,
         height:25,
         backgroundColor:'#fff',
-        marginTop:50
     },
     titleInput:{
         color:'#6A6A6A',
         fontSize:16
     },
     inputBlock:{
-        marginTop:55,
-        alignItems:'center'
+        alignItems:'center',
+        height:screenHeight/100*33,
+        justifyContent:'space-around'
     },
     inputItem:{
         alignItems:'flex-start',
@@ -130,7 +140,7 @@ const styles = StyleSheet.create({
     },
     buttonLogin:{
         width:'100%',
-        height:50,
+        height:45,
         backgroundColor:'#E41A4B',
         alignItems:'center',
         justifyContent:'center',
@@ -139,7 +149,7 @@ const styles = StyleSheet.create({
     },
     buttonReg:{
         width:'100%',
-        height:50,
+        height:45,
         backgroundColor:'#E41A4B',
         alignItems:'center',
         justifyContent:'center',
@@ -151,8 +161,8 @@ const styles = StyleSheet.create({
         fontSize:16
     },
     blockButton:{
-        marginBottom:30,
-        alignItems:'center'
+        height:screenHeight/33,
+        alignItems:'center',
     },
     error:{
         color:'#fff',
@@ -160,7 +170,7 @@ const styles = StyleSheet.create({
         textAlign:'center',
         fontSize:15,
         marginTop:0,
-        marginBottom:10
+        marginBottom:5
     }
 
   });

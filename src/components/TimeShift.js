@@ -3,7 +3,7 @@ import {View,StyleSheet,Text,Dimensions, FlatList, Image} from 'react-native'
 import { Datas } from '../context'
 import { DrawerItem } from '@react-navigation/drawer'
 import { converter } from '../helper'
-
+import Carousel from 'react-native-snap-carousel'
 const { width: screenWidth,height:screenHeight } = Dimensions.get('window')
 
 class Post extends PureComponent {
@@ -21,10 +21,17 @@ class Post extends PureComponent {
             style={styles.focusProgram} label='' icon={()=>(
             <View style={{...styles.progarm,backgroundColor:this.currentTime<this.item.begin_time?'rgba(171,171,171,0.4)':'#00000085'}}>
                 <View style={styles.programBlock}>
-                    <Text style={styles.textProgram}>{this.item.name.length>27?`${this.item.name.slice(0,27)}...`:this.item.name}</Text>
-                    <Image  source={this.currentTime>this.item.begin_time&&this.currentTime<this.item.end_time?require('../images/shine.png'):require('../images/archive.png')} style={{...styles.watched,opacity:(this.currentTime>this.item.begin_time&&this.currentTime<this.item.end_time)|| this.currentTime>this.item.end_time?1:this.activeDay!==6?1:0}}/>
+                    <View style={styles.iconBlock}>
+                        <Text style={styles.textProgram}>{this.item.name.length>27?`${this.item.name.slice(0,27)}...`:this.item.name}</Text>
+                        <Text style={styles.textTime}>{`${converter(this.item.begin_time)} ⚊ ${converter(this.item.end_time)}`}</Text>
+                       
+                    </View>
+                    <View style={styles.liveBlock}>
+                         {this.currentTime>this.item.begin_time&&this.currentTime<this.item.end_time?<Text style={styles.live}>Live</Text>:<></>}
+                        <Image  source={this.currentTime>this.item.begin_time&&this.currentTime<this.item.end_time?require('../images/shine.png'):require('../images/startIcon.png')} style={{...styles.watched,opacity:(this.currentTime>this.item.begin_time&&this.currentTime<this.item.end_time)|| this.currentTime>this.item.end_time?1:this.activeDay!==6?1:0}}/>
+                    </View>
                 </View>
-                <Text style={styles.textTime}>{`${converter(this.item.begin_time)}:${converter(this.item.end_time)}`}</Text>
+               
         
             </View>
         )}/>
@@ -37,6 +44,33 @@ export default function TimeShift({isPlayerVisible,isOpenMenu,setID,currentID,se
     const [activeDay,setActiveDay] = React.useState(6)
     const [data,setData] = React.useState()
     const [day,setDays] = React.useState()
+    const [index,setIndex] = React.useState(false)
+    const [carousel,setCarusel] = React.useState(<></>)
+
+    React.useEffect(()=>{
+    if(data){
+        setCarusel(<></>)
+        setTimeout(()=>{
+        setCarusel(
+            <Carousel
+            layout="default"
+            vertical={true}
+            data={data[activeDay]}
+            style={styles.block2}
+            itemWidth={190}
+            itemHeight={screenHeight/100*14+15}
+            firstItem={index?index:0}
+            sliderHeight={screenHeight/100*80}
+            sliderWidth={screenWidth/2.25/100*75}
+            renderItem={({item})=>(<Post fetchTimeShift={fetchTimeShift} activeDay={activeDay}  item = {item}/>)}
+            inactiveSlideScale={1}
+            activeSlideAlignment={'start'}
+        />
+        )
+        },100)
+    }
+    },[data,activeDay])
+
 
     React.useEffect(()=>{
         const fetch = async () => {
@@ -45,17 +79,14 @@ export default function TimeShift({isPlayerVisible,isOpenMenu,setID,currentID,se
                 const date = Object.keys(data)
                 date[date.length-1] = 'сегодня'
                 let values = Object.values(data)
-                let time = new Date().getTime()/1000
-            
-                
-                let filtred = values[values.length-1].filter((item)=>{
-                    return (item.begin_time<time&&item.end_time>time)
-                })
-                if(filtred[0]){
-                 values[values.length-1] = values[values.length-1].filter((item)=>!(item.begin_time<=time&&item.end_time>=time))
-                 values[values.length-1].unshift(filtred[0])
-                }
                 setActiveDay(values.length-1)
+                let time = new Date().getTime()/1000
+                let index = values[values.length-1].findIndex((item)=>time>item.begin_time&&time<item.end_time)
+                if(index-4>0){
+                    setIndex(index-4)
+                }else{
+                    setIndex(index)
+                }
                 setData(values)
                 setDays(date) 
             }
@@ -79,6 +110,8 @@ export default function TimeShift({isPlayerVisible,isOpenMenu,setID,currentID,se
         setPaused({paused:false,work:false})
         setID(currentID)
     }
+
+    
     return(
         <>
         {isPlayerVisible&&!isOpenMenu?<View style={styles.container}>
@@ -92,13 +125,11 @@ export default function TimeShift({isPlayerVisible,isOpenMenu,setID,currentID,se
                 )):<></>}
             </View>
             
-            {data?<FlatList
-                style={styles.block2}
-                ref = {(ref)=>ref}
-                data={data[activeDay]}
-                renderItem={({item})=>(<Post fetchTimeShift={fetchTimeShift} activeDay={activeDay}  item = {item}/>)}
-                keyExtractor={item => item.id.toString()}
-                />:<></>}
+            {data[activeDay]&&index?
+            <>  
+              {carousel}
+            </>
+                :<></>}
         </View>:<></>}
         </>
     )
@@ -109,23 +140,21 @@ const styles = StyleSheet.create({
      position:'absolute',
      zIndex:3,
      height:screenHeight,
-     width:screenWidth/2.25,
+     width:screenWidth/1.8,
      right:0,
      top:0,
      flexDirection:'row',
      justifyContent:'space-between',
  },
  block1:{
-     width:'25%',
+     width:'25%', 
      height:'100%',
      marginTop:20
  },
- block2:{
-    height:screenHeight-110
- },
+
  day:{
      width:'100%',
-     height:60,
+     height:screenHeight/100*7.5,
      backgroundColor:'#00000085',
      marginTop:0,
      alignItems:'center',
@@ -136,7 +165,7 @@ const styles = StyleSheet.create({
  },
  text:{
      color:'#fff',
-     fontSize:20
+     fontSize:18
  },
  focusDay:{
      marginHorizontal:0,
@@ -149,26 +178,28 @@ const styles = StyleSheet.create({
  },
  progarm:{
     width:'100%',
-    height:80,
+    height:screenHeight/100*14,
     backgroundColor:'#00000085',
     marginTop:0,
     justifyContent:'space-around',
-    borderRadius:7
+    borderRadius:7,
+    position:'relative'
  },
  textProgram:{
     color:'#fff',
-    fontSize:20,
+    fontSize:18,
     marginLeft:20
  },
  textTime:{
     color:'#fff',
-    fontSize:18,
+    fontSize:16,
     marginLeft:20
  },
  dott:{
      width:4,
      height:4,
-     backgroundColor:'#fff'
+     backgroundColor:'#fff',
+     marginTop:10
  },
  programBlock:{
      flexDirection:'row',
@@ -176,9 +207,23 @@ const styles = StyleSheet.create({
      justifyContent:'space-between'
  },
  watched:{
-     width:30,
-     height:30,
-     marginRight:20,
-     resizeMode:'cover'
+     width:15,
+     height:15  ,
+     resizeMode:'cover', 
+    
+ },
+ iconBlock:{
+    height:screenHeight/100*10,
+    justifyContent:'space-between',
+ },
+ live:{
+     color:'#fff',
+     fontSize:18,
+ },
+ liveBlock:{
+    height:screenHeight/100*10,
+    flexDirection:'row',
+    alignItems:'center',
+    marginRight:10
  }
 });

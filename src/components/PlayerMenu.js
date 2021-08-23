@@ -27,6 +27,8 @@ class Post extends PureComponent {
        this.setPaused = props.setPaused
        const filtered = this.data.filter((item)=>item.has_subscription)
        this.index =  filtered.findIndex((item)=>item.id===this.item.id)
+       this.isOpenDescription = props.isOpenDescription
+       this.setOpenDescrition = props.setOpenDescrition
     }
 
     press(){
@@ -34,9 +36,20 @@ class Post extends PureComponent {
       if(this.index == -1){
         return
       }else{
-        this.setID(this.item.id);
-        this.setOpenMenu(false)
-        this.setPaused({paused:false,work:true})
+        this.setOpenDescrition((old)=>{
+          if(!old[0]){
+            return [true,this.item]
+          }else{
+            if(old[1].id===this.item.id){
+              this.setID(this.item.id);
+              this.setOpenMenu(false)
+              this.setPaused({paused:false,work:true}) 
+              return [false,null]
+            }else{
+             return[true,this.item]
+            }
+          }
+        })
       }
     }
   
@@ -46,7 +59,7 @@ class Post extends PureComponent {
           <View style={styles.item2}>
             <View style={styles.block1}><Image style={styles.logo} source={{uri:  this.item.icon}}/></View>
             <View style={styles.block2}>
-                <Text style={styles.programName}>{this.item.program_name.length>40?`${this.item.program_name.slice(0,40)}...`:this.item.program_name}</Text>
+                <Text style={styles.programName}>{this.item.program_name.length>18?`${this.item.program_name.slice(0,15)}...`:this.item.program_name}</Text>
                 <Text style={styles.programName}>{`${converter(this.item.program_begin_time)}:${converter(this.item.program_end_time)}`}</Text>
             </View>
           </View>
@@ -57,12 +70,11 @@ class Post extends PureComponent {
 
 
 
-const PlayerMenu = ({channelList,setID,setShift,setTimeData,setOpenMenu,currentID,data,setPaused,setType,type}) => {
+const PlayerMenu = ({channelList,setID,setShift,setTimeData,setOpenMenu,currentID,data,setPaused,setType,type,isOpenDescription, setOpenDescrition}) => {
 
   const [categories,setCategories] = React.useState({original:channelList,filtered:channelList,category:false})
   
   const {getChannelCat,isLogin} = React.useContext(Datas)
-
 
 
   React.useEffect(()=>{
@@ -121,7 +133,8 @@ const PlayerMenu = ({channelList,setID,setShift,setTimeData,setOpenMenu,currentI
 
   return (
     <>
-     <View style={{...styles.container,width:screenWidth/1.8}}>
+    <View style={styles.wrap}>
+    <View style={{...styles.container,width:screenWidth/1.8}}>
        {categories.category?
         <FlatList
           style={styles.blockCat}
@@ -134,14 +147,23 @@ const PlayerMenu = ({channelList,setID,setShift,setTimeData,setOpenMenu,currentI
           <FlatList
           style={styles.block}
           data={categories.filtered}
-          
-          renderItem={({item})=>(<Post setPaused={setPaused} data={data} currentID={currentID} setShift={setShift} setTimeData={setTimeData} setOpenMenu={setOpenMenu}  setID={setID} item = {item}/>)}
+          renderItem={({item})=>(<Post isOpenDescription={isOpenDescription} setOpenDescrition={setOpenDescrition} setPaused={setPaused} data={data} currentID={currentID} setShift={setShift} setTimeData={setTimeData} setOpenMenu={setOpenMenu}  setID={setID} item = {item}/>)}
           keyExtractor={item => item.id.toString()}
           />
         :<></>
        }
     
      </View>
+    {isOpenDescription[0]?<>
+        <View style={styles.description}>
+          <Image source={{uri:isOpenDescription[1].icon}} style={styles.imgDescription}/>
+          <View style={styles.descBlock}>
+              <Text style={styles.title}>{isOpenDescription[1].name}</Text>
+              <Text style={styles.text}>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s.</Text>
+          </View>
+        </View>
+        </>:<></>}
+    </View>
     </>
   );
 };
@@ -149,22 +171,26 @@ const PlayerMenu = ({channelList,setID,setShift,setTimeData,setOpenMenu,currentI
 export default PlayerMenu;
 
 const styles = StyleSheet.create({
+    wrap:{
+      flexDirection:'row',
+      position:'absolute',
+      zIndex:2,
+    },
     container:{
     height:screenHeight,
-    position:'absolute',
     flexDirection:'row',
-    zIndex:2,
   },
   block:{
       width:screenWidth/1.8/2,
+      marginLeft:-15
   },
   blockCat:{
     width:screenWidth/1.8/3.1,
-    marginTop:20
+    marginLeft:-15
   },
  
 item:{
-    height:60,
+    height:screenHeight/100*9,
     width:screenWidth/1.8/2-15,
     borderRadius:7,
     overflow:'hidden',
@@ -172,8 +198,8 @@ item:{
     borderColor:'#e41a4bcc',
 },
 item2:{
-  height:60,
-  width:screenWidth/1.8/2-60,
+  height:screenHeight/100*9,
+  width:screenWidth/1.8/2-50,
   borderRadius:7,
   overflow:'hidden',
   flexDirection:'row',
@@ -195,27 +221,28 @@ block1:{
     overflow:'hidden'
 },
 block2:{
-    height:60,
+    height:screenHeight/100*9,
     alignItems:'center',
     width:screenWidth/1.8/2-15-60,
     justifyContent:'center'
 },
 logo:{
-    width:50,
-    height:50,
+    width:screenHeight/100*9-10,
+    height:screenHeight/100*9-10,
     resizeMode:'contain'
 },
 programName:{
     color:'#fff',
-    width:screenWidth/1.8/2-15-70,
-    marginLeft:5
+    width:screenWidth/1.8/2-15-75,
+    marginLeft:5,
+    fontSize:15
 },
 categorieText:{
   color:'#fff',
-  fontSize:20,
+  fontSize:16,
 },
 itemCat:{
-  height:60,
+  height:screenHeight/100*8,
   width:screenWidth/1.8/2.3-40,
   backgroundColor:'#27272794'   ,
   borderRadius:7,
@@ -231,9 +258,37 @@ focusItem2:{
   marginLeft:20,
 },
 lock:{
-  width:32,
-  height:32,
+  width:25,
+  height:25,
   resizeMode:'contain',
   marginTop:10
+},
+description:{
+  marginTop:20,
+  width:screenWidth-screenWidth/1.8/2-screenWidth/1.8/3.1-150,
+  height:150,
+  backgroundColor:'rgba(28, 28, 28, 0.7);',
+  marginLeft:-30,
+  borderRadius:7,
+  flexDirection:'row'
+},
+imgDescription:{
+  height:'100%',
+  width:'27%',
+  resizeMode:'contain',
+  backgroundColor:'#fff'
+},
+descBlock:{
+  height:'100%',
+  width:'73%',
+  padding:10,
+},
+title:{
+  color:'#fff',
+  fontSize:17
+},
+text:{
+  color:'#fff',
+  fontSize:15
 }
 });

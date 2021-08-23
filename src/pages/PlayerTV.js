@@ -37,6 +37,7 @@ export default function PlayerTV({navigation}){
     const sliderRef = React.useRef(null)
     const [sliderChange,setSliderChange] = React.useState(false)
     const [type,setType] = React.useState(false)
+    const [isOpenDescription,setOpenDescrition] = React.useState([false,null])
     
     React.useEffect(()=>{
       clearTimeout(sliderRef.current);
@@ -60,8 +61,15 @@ export default function PlayerTV({navigation}){
     React.useEffect(()=>{
       clearTimeout(timeMenu.current);
       if(isOpenMenu){
-        timeMenu.current = setTimeout(()=>{ 
-          setOpenMenu(false)
+        timeMenu.current = setTimeout(()=>{
+          let isOpen = [false,false]
+          setOpenDescrition((old)=>{
+            isOpen = old
+            return old
+          })
+          if(!isOpen[1]){
+            setOpenMenu(false)
+          }
       },6000)
       }
 
@@ -279,16 +287,21 @@ export default function PlayerTV({navigation}){
            {isOpenMenu?<TouchableWithoutFeedback><></></TouchableWithoutFeedback>:<></>}
             <ChannelList data={data} id={currentID} timeData={timeData}/>
             {currentID?<TimeShift  setTimer={setTimer} setUri={setUri} currentID={currentID} setTimeData={setTimeData} setShift={setShift} setPaused={setPaused} isPlayerVisible={isPlayerVisible} setVisible={setVisible} setID={setID} isOpenMenu={isOpenMenu} currentID={currentID}/>:<></>}
-            {isOpenMenu?<PlayerMenu type={type} setType={setType}  setPaused={setPaused} data={data} secondMenu={secondMenu} currentID={currentID} setSecondMenu={setSecondMenu} setOpenMenu={setOpenMenu} setTimeData={setTimeData} setShift={setShift} setID={setID} channelList={data}/>:<></>}
+            {isOpenMenu?<PlayerMenu isOpenDescription={isOpenDescription} setOpenDescrition={setOpenDescrition} type={type} setType={setType}  setPaused={setPaused} data={data} secondMenu={secondMenu} currentID={currentID} setSecondMenu={setSecondMenu} setOpenMenu={setOpenMenu} setTimeData={setTimeData} setShift={setShift} setID={setID} channelList={data}/>:<></>}
            {uri? 
            
            <>
            <Video
+                onLoad={(e)=>{console.log(e)}}
                 source={{uri: uri, type: 'm3u8'}}
                 style={{ width:screenWidth , height: screenHeight }}
                 paused={isPaused.paused}
                 onBuffer={(buffer)=>setBuffer(buffer)}
                 controls={false}
+                selectedAudioTrack={{
+                  type:'title' ,
+                  value:'en'
+                }}
                 resizeMode='stretch' /></>:<></> }
             <View style={{...styles.controller,backgroundColor:isPlayerVisible?"#00000061":'transparent'}}>
               {sliderVisible||(isPlayerVisible&&timer)?<SliderTimeShift sliderChange={sliderChange}  setPaused={setPaused} setEvent={setEvent} setTimer={setTimer} timer={timer} setUri={setUri} setID={setID} currentID={currentID} timeData={timeData} />:<></>}
@@ -323,7 +336,7 @@ const styles = StyleSheet.create({
  },
  controller:{
     width:screenWidth,
-    height:110,
+    height:screenHeight/100*15,
     position:'absolute',
     bottom:0,
     backgroundColor:'#00000061',
@@ -334,18 +347,18 @@ const styles = StyleSheet.create({
     alignItems:'center',
     flexDirection:'row',
     width:400,
-    height:100,
+    height:screenHeight/100*7,
     justifyContent:'center'
   },
   pauseIcon:{
-      width:30,
-      height:30,
+      width:25,
+      height:25,
       resizeMode:'contain'
   },
   focusPause:{
     marginHorizontal:0,
     marginVertical:0,
-    width:45,
+    width:40,
     marginLeft:15,
     marginRight:15
   }

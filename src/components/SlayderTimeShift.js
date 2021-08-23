@@ -53,8 +53,7 @@ const styles = StyleSheet.create({
      backgroundColor:'#0A0A0A'
  },
  slider:{
-    width:screenWidth/1.5,
-    height:20,
-    transform: [{ scaleX: 1.5 }, { scaleY: 1.5 }]
+    width:screenWidth,
+    height:15,
   }
 });

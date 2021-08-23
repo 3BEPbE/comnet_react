@@ -62,22 +62,40 @@ export const ContextProvider = (props) => {
     }
   
     const login = async(data,setError,navigation,routeName) => {
-      axios({
-          method: 'POST',
-          url:`http://94.158.63.185/api/login`,//28 123457
-          data
-          }).then((e)=>{
-              if(e.data.status==='error'||e.data[0].error){
-                  setError('#e5474c')
-                  console.log('error')
-              }else{
-                  storeData('token',{token:e.data[0].authkey})
-                  getData('token')
-                  navigation.navigate(routeName)
-              }
-          }).catch((e)=>{
-              console.log(e)
-          })
+     await axios.get(`https://mw.tvcom.uz/tvmiddleware/api/login/`,{
+       params:{
+        api_key:'56JNSqNT',
+        client_id:1,
+        abonement:data.abonement,
+        password:data.password
+
+       }
+     })
+     .then((e)=>{
+               if(e.data.status==='error'||e.data[0].error){
+                   setError('#e5474c')
+                   console.log(data)
+               }else{
+                   storeData('token',{token:e.data[0].authkey})
+                   getData('token')
+                   navigation.navigate(routeName)
+               }});
+      // axios({
+      //     method: 'POST',
+      //     url:`http://94.158.63.185/api/login`,//28 123457
+      //     data
+      //     }).then((e)=>{
+      //         if(e.data.status==='error'||e.data[0].error){
+      //             setError('#e5474c')
+      //             console.log(data)
+      //         }else{
+      //             storeData('token',{token:e.data[0].authkey})
+      //             getData('token')
+      //             navigation.navigate(routeName)
+      //         }
+      //     }).catch((e)=>{
+      //         console.log(e)
+      //     })
     }
     const getJanr = (params) =>{
       if(isLogin){

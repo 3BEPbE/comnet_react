@@ -1,6 +1,6 @@
 import {Text, View,Image,StyleSheet,Dimensions } from 'react-native'
 import React from 'react'
-const { width: screenWidth } = Dimensions.get('window')
+const { width: screenWidth,height:screenHeight } = Dimensions.get('window')
 
 export const HeaderTV = ({navigation}) => {
 
@@ -16,16 +16,17 @@ export const HeaderTV = ({navigation}) => {
 const styles = StyleSheet.create({
     container:{
         backgroundColor:'#1C1C1C',
-        height:80
+        height:screenHeight/100*10,
+        justifyContent:'center'
     },
     header:{
-        width:screenWidth-40
+        width:screenWidth-40,
+
     },
     logo:{
         width:160,
-        height:160/3.7,
+        height:screenHeight/100*10-20,
         resizeMode:'contain',
         marginLeft:20,
-        marginTop:20,
     }
    });

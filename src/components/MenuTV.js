@@ -139,7 +139,7 @@ const styles = StyleSheet.create({
     },
     block:{
         width:'32%',
-        height:screenHeight-95,
+        height:screenHeight/100*90-20,
         justifyContent:'space-between'
     },
     blockFocus:{
@@ -160,14 +160,14 @@ const styles = StyleSheet.create({
     },
     block1:{
         width:screenWidth/100*31,
-        height:(screenHeight-110)/100*65,
+        height:(screenHeight/100*90)/100*65-20,
         backgroundColor:'#E41A4B',
         borderRadius:7
         
     },
     block2:{
         width:screenWidth/100*31,
-        height:(screenHeight-110)/100*31,
+        height:screenHeight/100*25.5,
         backgroundColor:'#E41A4B',
         borderRadius:7,
         overflow:'hidden'
@@ -175,7 +175,7 @@ const styles = StyleSheet.create({
     },
     block3:{
         width:screenWidth/100*31,
-        height:(screenHeight-110)/100*31.2,
+        height:screenHeight/100*26,
         backgroundColor:'#fff',
         borderRadius:7,
         overflow:'hidden'
@@ -193,15 +193,15 @@ const styles = StyleSheet.create({
     },
     textmenu1:{
         color:'#fff',
-        fontSize:30,
+        fontSize:22,
         marginLeft:20,
-        marginTop:20
+        position:'absolute',
+        bottom:20
 
     },
     textmenu2:{
         color:'#fff',
-        fontSize:30,
-        marginLeft:20,
+        fontSize:22,
         marginTop:20,
         position:'absolute',
         bottom:20,
@@ -215,7 +215,7 @@ const styles = StyleSheet.create({
     },
     menutv6:{
         width:60,
-        height:70,
+        height:screenHeight/100*10,
         marginLeft:20,
         marginTop:20,
         resizeMode:'contain'
@@ -223,7 +223,7 @@ const styles = StyleSheet.create({
     blockFocus4:{
         backgroundColor:'#E41A4B',
         width:screenWidth/200*31,
-        height:(screenHeight-110)/100*32-10,
+        height:screenHeight/100*26,
         borderRadius:7,
     }
    });
