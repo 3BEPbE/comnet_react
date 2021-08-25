@@ -57,10 +57,10 @@ class Post extends PureComponent {
         <DrawerItem  onPress={()=>{this.press()}} pressColor='red' style={{...styles.focusItem,width:this.currentID===this.item.id?screenWidth/1.8/2:screenWidth/1.8/2}}  icon={()=>
         <View style={{...styles.item,backgroundColor:this.currentID===this.item.id?'#e41a4b':this.index == -1?'rgba(171, 171, 171, 0.4)':'#27272794'}}>
           <View style={styles.item2}>
-            <View style={styles.block1}><Image style={styles.logo} source={{uri:  this.item.icon}}/></View>
+            <View style={styles.block1}><Image style={styles.logo} source={{uri:  `${this.item.icon.replace('http','https')}`}}/></View>
             <View style={styles.block2}>
                 <Text style={styles.programName}>{this.item.program_name.length>18?`${this.item.program_name.slice(0,15)}...`:this.item.program_name}</Text>
-                <Text style={styles.programName}>{`${converter(this.item.program_begin_time)}:${converter(this.item.program_end_time)}`}</Text>
+                <Text style={styles.programName}>{`${converter(this.item.program_begin_time)}-${converter(this.item.program_end_time)}`}</Text>
             </View>
           </View>
           {this.index == -1?<Image style={styles.lock} source={require('../images/lock.png')}/>:<></>}

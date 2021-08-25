@@ -1,5 +1,5 @@
 import React,{PureComponent} from 'react';
-import { View ,StyleSheet,Text,Dimensions,Image} from 'react-native';
+import { View ,StyleSheet,Text,Dimensions,Image, FlatList, Touchable, TouchableWithoutFeedback} from 'react-native';
 import Carousel from 'react-native-snap-carousel';
 import { DrawerItem } from '@react-navigation/drawer'
 import {Datas} from '../context'
@@ -7,7 +7,7 @@ import {Datas} from '../context'
 
 const { width: screenWidth } = Dimensions.get('window')
 
-const arr = ['Комедия','Приключения','Драма',"Боевик","Триллер",'Семейный',"Триллер",'Семейный',"Триллер",'Семейный']
+const arr = ['Комедия','Комедия','Приключения','Драма',"Боевик","Триллер",'Семейный',"Триллер",'Семейный',"Триллер",'Семейный',"Триллер"]
 
 class Post extends PureComponent {
   constructor(props){
@@ -16,7 +16,7 @@ class Post extends PureComponent {
 
   }
   render() { return( 
-    <DrawerItem  pressColor={'#fff'}  style={styles.focusItem}   label='' icon={()=>(
+    <View  style={styles.focusItem} >
       <View  style={styles.mainBlockItem}>
         <View style={styles.block1}>
             <Image style={styles.image} source={this.item.image}/>
@@ -24,14 +24,18 @@ class Post extends PureComponent {
         <View style={styles.block2}>
           <Text style={styles.text}>{this.item.name}</Text>
         </View>
-      </View>)}/>)
+      </View>
+      </View>)
     }
   }
 
-export default function BigJanrCarusel({navigation,gid,season}) {
+export default function BigJanrCarusel({pos,setPos}) {
 
     const {getJanr,isLogin} = React.useContext(Datas)
     const [data,setData] = React.useState([])
+    const flatList = React.useRef(null)
+    const [activeIndex,setIndex] = React.useState(null)
+    const [visible,setVisible] = React.useState(false)
 
     React.useEffect(()=>{
       const fetch =async()=>{
@@ -41,6 +45,9 @@ export default function BigJanrCarusel({navigation,gid,season}) {
         })
         filtered.push(filtered[1])
         filtered.push(filtered[2])
+        filtered.push(filtered[4])
+        filtered.push(filtered[5])
+        filtered.push(filtered[6])
         setData(filtered.map((item)=>{
             if(item.name === 'Комедия'){
                 item.image = require('../images/janr1.png')
@@ -68,25 +75,35 @@ export default function BigJanrCarusel({navigation,gid,season}) {
       fetch()
     },[isLogin])
 
-     const renderItem = React.useCallback(({ item, index }) => {
-      return(
-      <Post item ={item}/>
-    )}, []);
-      
+    React.useEffect(()=>{
+      if(flatList.current&&data&&pos.main==='janr'){
+        setVisible(true)
+        if(!visible){
+          setPos(activeIndex)
+          setVisible(true)
+        }else{
+          setIndex(pos.index)
+        }
+        flatList.current.scrollToIndex({viewPosition:0,index:pos.index,animated:true })
+      }else if(pos.main!=='janr'){
+        setVisible(true)
+      }
+    },[flatList,data,pos])
+
     return (
             <>
             <View style={{marginTop:10}}>
-              {data?<Carousel
-                layout="default"
-                data={data}
-                sliderWidth={screenWidth}
-                itemWidth={195}
-                sliderHeight={200}
-                renderItem={renderItem}
-                activeSlideAlignment="start"
-                inactiveSlideOpacity={1}
-                inactiveSlideScale={1}
-              />:<></>}
+              <TouchableWithoutFeedback><></></TouchableWithoutFeedback>
+            {typeof activeIndex ==='number'?<View  style={{...styles.focused,marginLeft:activeIndex>data.length-8?screenWidth/8*(activeIndex-(data.length-8)):0}}></View>:<></>}
+            {data?<FlatList 
+              data={data}
+              renderItem={({ item, index })=>  <Post item={item} index={index}/>}
+              keyExtractor={(item,index) => index+100+''}
+              horizontal={true}
+              ref={flatList}
+           
+              getItemLayout={(data, index) => ({ index, length: screenWidth/8, offset: (screenWidth/8 * index) })}
+            />:<></>}
             </View>
           </>
 
@@ -97,14 +114,15 @@ const styles = StyleSheet.create({
     
    
     mainBlockItem:{
-        height: 190,
-        width:180,
-        position:'relative'
+        height: 110,
+        width:screenWidth/8-10,
+        position:'relative',
+        marginLeft:-5
     },
     focusItem:{
-        marginHorizontal:0,
-        marginVertical:0,
-        width:195
+        width:screenWidth/8,
+        justifyContent:'center',
+        alignItems:'center'
     },
     block1:{
       height:'80%',
@@ -120,12 +138,21 @@ const styles = StyleSheet.create({
       justifyContent:'flex-end'
     },
     image:{
-      width:80,
-      height:80,
+      width:50,
+      height:50,
       resizeMode:'contain'
     },
     text:{
       color:'#fff',
-      marginLeft:5
+      marginLeft:5,
+      fontSize:12
+    },
+    focused:{
+      width:screenWidth/8-5,
+      height:120,
+      position:'absolute',
+      backgroundColor:'#E41A4B',
+      top:-5,
+      borderRadius:7
     }
   });

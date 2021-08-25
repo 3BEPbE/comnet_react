@@ -62,46 +62,28 @@ export const ContextProvider = (props) => {
     }
   
     const login = async(data,setError,navigation,routeName) => {
-     await axios.get(`https://mw.tvcom.uz/tvmiddleware/api/login/`,{
-       params:{
-        api_key:'56JNSqNT',
-        client_id:1,
-        abonement:data.abonement,
-        password:data.password
-
-       }
-     })
-     .then((e)=>{
-               if(e.data.status==='error'||e.data[0].error){
-                   setError('#e5474c')
-                   console.log(data)
-               }else{
-                   storeData('token',{token:e.data[0].authkey})
-                   getData('token')
-                   navigation.navigate(routeName)
-               }});
-      // axios({
-      //     method: 'POST',
-      //     url:`http://94.158.63.185/api/login`,//28 123457
-      //     data
-      //     }).then((e)=>{
-      //         if(e.data.status==='error'||e.data[0].error){
-      //             setError('#e5474c')
-      //             console.log(data)
-      //         }else{
-      //             storeData('token',{token:e.data[0].authkey})
-      //             getData('token')
-      //             navigation.navigate(routeName)
-      //         }
-      //     }).catch((e)=>{
-      //         console.log(e)
-      //     })
+      axios({
+          method: 'POST',
+          url:`https://api92.tvcom.uz/api/login`,//28 123457
+          data
+          }).then((e)=>{
+              if(e.data.status==='error'||e.data[0].error){
+                  setError('#e5474c')
+                  console.log(data)
+              }else{
+                  storeData('token',{token:e.data[0].authkey})
+                  getData('token')
+                  navigation.navigate(routeName)
+              }
+          }).catch((e)=>{
+              console.log(e)
+          })
     }
     const getJanr = (params) =>{
       if(isLogin){
         return axios({
           method: 'POST',
-          url:`http://94.158.63.185/api/auth/genre/list`,//28 123457
+          url:`https://api92.tvcom.uz/api/auth/category/genre/list`,//28 123457
           data:{
             authkey:token,
             ...params
@@ -115,7 +97,7 @@ export const ContextProvider = (props) => {
       }else{
         return axios({
           method: 'POST',
-          url:`http://94.158.63.185/api/noauth/genre/list`,//28 123457
+          url:`https://api92.tvcom.uz/api/noauth/genre/list`,//28 123457
           data:{
             ...params
           }
@@ -129,11 +111,10 @@ export const ContextProvider = (props) => {
     }
     
     const getFilms = (page,params)=>{
-      console.log(params)
       if(isLogin){
        return axios({
           method: 'POST',
-          url:`http://94.158.63.185/api/auth/video/list?`,//28 123457
+          url:`https://api92.tvcom.uz/api/auth/video/list?`,//28 123457
           data:{
             limit:isTV?28:20,
             page,
@@ -149,7 +130,7 @@ export const ContextProvider = (props) => {
       }else{
        return axios({
           method: 'POST',
-          url:`http://94.158.63.185/api/noauth/video/list?`,//28 123457
+          url:`https://api92.tvcom.uz/api/noauth/video/list?`,//28 123457
           data:{
             limit:isTV?28:20,
             page,
@@ -171,7 +152,7 @@ export const ContextProvider = (props) => {
     const getCurrentMovie = async(id)=>{
      return axios({
         method: 'POST',
-        url:`http://94.158.63.185/api/auth/video/detail`,//28 123457
+        url:`https://api92.tvcom.uz/api/auth/video/detail`,//28 123457
         data:{
           id,
           authkey:token
@@ -186,7 +167,7 @@ export const ContextProvider = (props) => {
     const getSrc = async(id)=>{
       return axios({
         method: 'POST',
-        url:`http://94.158.63.185/api/auth/video/url`,//28 123457
+        url:`https://api92.tvcom.uz/api/auth/video/url`,//28 123457
         data:{
           id:id.id,
           authkey:token,
@@ -205,7 +186,7 @@ export const ContextProvider = (props) => {
       if(isLogin){
         return axios({
            method: 'POST',
-           url:`http://94.158.63.185/api/auth/search`,//28 123457
+           url:`https://api92.tvcom.uz/api/auth/search`,//28 123457
            data:{
              authkey:token,
              search:text
@@ -219,7 +200,7 @@ export const ContextProvider = (props) => {
        }else{
         return axios({
            method: 'POST',
-           url:`http://94.158.63.185/api/noauthsearch`,//28 123457
+           url:`https://api92.tvcom.uz/api/noauthsearch`,//28 123457
            data:{
              search:text
            }
@@ -252,21 +233,20 @@ export const ContextProvider = (props) => {
       if(isLogin){
         axios({
           method: 'POST',
-          url:`http://94.158.63.185/api/auth/status`,//28 123457
+          url:`https://api92.tvcom.uz/api/auth/status`,//28 123457
           data:{
             authkey:token,
           }
           }).then((e)=>{
             if(e.data['0'].status===1){
-              console.log(123)
               storeData('token',null)  
               setLogin(false)
               AlertBusyToken(navigation)
             }
-           return(e.data['0'])
+            return(e.data['0'])
               
           }).catch((e)=>{
-              console.log(e)
+            console.log(e+'qqq')
           })
       }
     }
@@ -274,15 +254,16 @@ export const ContextProvider = (props) => {
       if(isLogin){
        return axios({
           method: 'POST',
-          url:`http://94.158.63.185/api/auth/channel/list`,
+          url:`https://api92.tvcom.uz/api/auth/channel/list`,
           data:{
             authkey:token,
           }
           }).then((e)=>{
-           return(e.data['0'].channels)
+            console.log(e.data['0'].channels[0])
+            return(e.data['0'].channels)
               
           }).catch((e)=>{
-              console.log(e)
+              console.log(e+'ccc')
           })
       }
     }
@@ -290,7 +271,7 @@ export const ContextProvider = (props) => {
       if(isLogin){
         return axios({
            method: 'POST',
-           url:`http://94.158.63.185/api/auth/channel/uri`,
+           url:`https://api92.tvcom.uz/api/auth/channel/uri`,
            data:{
              authkey:token,
              id
@@ -306,28 +287,32 @@ export const ContextProvider = (props) => {
     const getTimeShift = (cid,pid,begin_time) => {
       if(isLogin){
         return axios({
-           method: 'POST',
-           url:`http://94.158.63.185/api/auth/archive/url`,
-           data:{
+           method: 'GET',
+           url:`https://mw.tvcom.uz/tvmiddleware/api/program/url`,
+           params:{
              authkey:token,
              pid,
              cid,
              time: Math.trunc(begin_time),
+             redirect:0,
+             client_id:1
            }
            }).then((e)=>{
-            return(e.data['0'])
+            return(e.data)
             
                
            }).catch((e)=>{
-               console.log(e)
+               console.log(e+'aaa')
            })
        }
     }
     const getProgramListByDay = (cid) =>{
       if(isLogin){
+  
+
         return axios({
            method: 'POST',
-           url:`http://94.158.63.185/api/auth/epg/range`,
+           url:`https://api92.tvcom.uz/api/auth/epg/range`,
            data:{
              authkey:token,
              cid,
@@ -336,7 +321,7 @@ export const ContextProvider = (props) => {
             return(e.data['0'])
                
            }).catch((e)=>{
-               console.log(e)
+            console.log(e+'ddd')
            })
        }
     }
@@ -344,7 +329,7 @@ export const ContextProvider = (props) => {
       if(isLogin){
         return axios({
            method: 'POST',
-           url:`http://94.158.63.185/api/auth/profile/costumer/info`,
+           url:`https://api92.tvcom.uz/api/auth/profile/costumer/info`,
            data:{
              authkey:token
            }
@@ -360,15 +345,15 @@ export const ContextProvider = (props) => {
       if(isLogin){
         return axios({
            method: 'POST',
-           url:`http://94.158.63.185/api/auth/category/tv/list`,
+           url:`https://api92.tvcom.uz/api/auth/category/list`,
            data:{
-             authkey:token
+             authkey:token,
            }
            }).then((e)=>{
             return(e.data['0'].categories)
                
            }).catch((e)=>{
-               console.log(e)
+            console.log(e+'lll')
            })
        }
     }
@@ -402,7 +387,7 @@ export const ContextProvider = (props) => {
     const getDocs = () =>{
       return axios({
         method: 'GET',
-        url:`http://94.158.63.185/api/noauth/documents`,
+        url:`https://api92.tvcom.uz/api/noauth/documents`,
         }).then((e)=>{
          return e.data['0']
             

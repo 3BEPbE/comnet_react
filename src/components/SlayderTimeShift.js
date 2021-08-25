@@ -8,6 +8,7 @@ const { width: screenWidth } = Dimensions.get('window')
 export default function SliderTimeShift({setUri,setTimer,timeData,currentID,timer,setEvent,setPaused,sliderChange}){
 
     const {getTimeShift} = React.useContext(Datas)
+    const changeTime = React.useRef()
     const [sliderVal,setSliderVal] = React.useState(()=>{
       if(timer){return timer}
     })
@@ -26,8 +27,11 @@ export default function SliderTimeShift({setUri,setTimer,timeData,currentID,time
       }
       setEvent((i)=>!i)
       setTimer(sec)
-      const uri = await getTimeShift(currentID,timeData.pid,sec)
-      setUri(uri.uri)
+      clearTimeout(changeTime.current)
+      changeTime.current = setTimeout(async()=>{
+        const uri = await getTimeShift(currentID,timeData.pid,sec)
+        setUri(uri.uri)
+      },700)
     }
 
     return(
@@ -35,7 +39,6 @@ export default function SliderTimeShift({setUri,setTimer,timeData,currentID,time
           {timeData.begin_time?<Slider
           value={sliderVal}
           style={styles.slider}
-       
           minimumValue={timeData.begin_time}
           maximumValue={timeData.end_time}
           minimumTrackTintColor="#ff4f12"

@@ -112,18 +112,17 @@ export default function MenuTV ({navigation}) {
                </View>
                <DrawerItem pressColor='#fff' style={styles.blockFocus2} icon={()=>(
                     <View style={styles.block3}>
-                         <ImageBackground style={styles.menutv2} source={require('../images/menutv4.png')}>
-                                <Text style={styles.textmenu2}>Просмотронное</Text>
-                          </ImageBackground>
+                          <Image style={styles.menutv6}  source={require('../images/watched.png')}/>
+                          <Text style={styles.textmenu2}>Просмотреные</Text>
                     </View>
             )} label=''/>
-            <DrawerItem onPress={()=>navigation.navigate('Login',{routeName:'HomeTV'})} pressColor='#fff' style={styles.blockFocus2} icon={()=>(
+                   <DrawerItem pressColor='#fff' onPress={()=>navigation.navigate('Login',{routeName:'HomeTV'})} style={styles.blockFocus2} icon={()=>(
                     <View style={styles.block3}>
-                         <ImageBackground style={styles.menutv2} source={require('../images/menutv4.png')}>
+                                <Image style={styles.menutv6}  source={require('../images/person.png')}/>
                                 <Text style={styles.textmenu2}>Профиль</Text>
-                          </ImageBackground>
                     </View>
             )} label=''/>
+            
            </View>
         </View>
     )
@@ -176,7 +175,7 @@ const styles = StyleSheet.create({
     block3:{
         width:screenWidth/100*31,
         height:screenHeight/100*26,
-        backgroundColor:'#fff',
+        backgroundColor:'#E41A4B',
         borderRadius:7,
         overflow:'hidden'
         
@@ -193,19 +192,19 @@ const styles = StyleSheet.create({
     },
     textmenu1:{
         color:'#fff',
-        fontSize:22,
-        marginLeft:20,
+        fontSize:18,
+        marginLeft:10,
         position:'absolute',
         bottom:20
 
     },
     textmenu2:{
         color:'#fff',
-        fontSize:22,
+        fontSize:18,
         marginTop:20,
         position:'absolute',
         bottom:20,
-        left:20
+        left:10
 
     },
     menutv2:{
@@ -214,10 +213,10 @@ const styles = StyleSheet.create({
         resizeMode:'cover'
     },
     menutv6:{
-        width:60,
+        width:50,
         height:screenHeight/100*10,
-        marginLeft:20,
-        marginTop:20,
+        marginLeft:10,
+        marginTop:15,
         resizeMode:'contain'
     },
     blockFocus4:{

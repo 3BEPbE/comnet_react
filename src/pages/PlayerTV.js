@@ -38,6 +38,7 @@ export default function PlayerTV({navigation}){
     const [sliderChange,setSliderChange] = React.useState(false)
     const [type,setType] = React.useState(false)
     const [isOpenDescription,setOpenDescrition] = React.useState([false,null])
+    const changeTime = React.useRef()
     
     React.useEffect(()=>{
       clearTimeout(sliderRef.current);
@@ -167,9 +168,12 @@ export default function PlayerTV({navigation}){
       async function skipLeft(){
           const fetch = async (sec) => {
             setSliderClick((i)=>!i)
-            const data = await getTimeShift(currentID,timeData.pid,sec)
-            setUri(data.uri)
-            checkToken(navigation)
+            clearTimeout(changeTime.current)
+            changeTime.current = setTimeout( async()=>{
+              const data = await getTimeShift(currentID,timeData.pid,sec)
+              setUri(data.uri)
+              checkToken(navigation)
+            },700)
           }
           setTimer((sec)=>{
             fetch(sec-10)
@@ -188,12 +192,15 @@ export default function PlayerTV({navigation}){
              fetch(sec+10) 
              return sec+10}
           })
+          setSliderChange(timer-10)
           const fetch = async (sec) => {
-            setSliderChange(sec)
             setSliderClick((i)=>!i)
-            const data = await getTimeShift(currentID,timeData.pid,sec)
-            setUri(data.uri)
-            checkToken(navigation)
+            clearTimeout(changeTime.current)
+            changeTime.current = setTimeout( async()=>{
+              const data = await getTimeShift(currentID,timeData.pid,sec)
+              setUri(data.uri)
+              checkToken(navigation)
+            },700)
           }
       }
       function Right (){
@@ -269,19 +276,21 @@ export default function PlayerTV({navigation}){
       checkToken(navigation)
       const fetch=async()=>{
           let data = await getChannel()
-          data[0].has_subscription = 0
-          setData(data)
-          const filtered = data.filter(item=>item.has_subscription)
-          if(filtered){
-            setID(filtered[0].id)
-          }else{
-            setBlocked(true)
+          if(data){
+            data[0].has_subscription = 0
+            setData(data)
+            const filtered = data.filter(item=>item.has_subscription)
+            if(filtered){
+              setID(filtered[0].id)
+            }else{
+              setBlocked(true)
+            } 
           }
       }
      if(isLogin) fetch()
   },[])
 
-  
+  console.log(uri)
     return(
         <View style={styles.container}>
            {isOpenMenu?<TouchableWithoutFeedback><></></TouchableWithoutFeedback>:<></>}
@@ -292,7 +301,6 @@ export default function PlayerTV({navigation}){
            
            <>
            <Video
-                onLoad={(e)=>{console.log(e)}}
                 source={{uri: uri, type: 'm3u8'}}
                 style={{ width:screenWidth , height: screenHeight }}
                 paused={isPaused.paused}
@@ -300,7 +308,7 @@ export default function PlayerTV({navigation}){
                 controls={false}
                 selectedAudioTrack={{
                   type:'title' ,
-                  value:'en'
+                  value:'en' 
                 }}
                 resizeMode='stretch' /></>:<></> }
             <View style={{...styles.controller,backgroundColor:isPlayerVisible?"#00000061":'transparent'}}>

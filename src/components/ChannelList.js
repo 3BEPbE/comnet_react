@@ -23,9 +23,9 @@ export default function ChannelList({timeData,data,id}){
     return(
         <>
        {item? <View style={styles.container}>
-            <View   View style={styles.block1}><Image style={styles.logo} source={{uri:item.icon}}/></View>
+            <View   View style={styles.block1}><Image style={styles.logo} source={{uri:item.icon.replace('http','https')}}/></View>
             <View style={styles.block2}>
-              <Text style={styles.programName}>{timeData.name.length>40?`${timeData.name.slice(0,40)}...`:timeData.name}</Text>
+              <Text style={styles.programName}>{timeData.name.length>14?`${timeData.name.slice(0,14)}...`:timeData.name}</Text>
               <Text style={styles.programName}>{`${converter(timeData.begin_time)}:${converter(timeData.end_time)}`}</Text>
             </View>
         </View>:<></>}
