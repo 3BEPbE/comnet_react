@@ -13,6 +13,7 @@ import MovieList from './pages/MovieList';
 import Movies from '../src/pages/Movies'
 import PlayerTV from './pages/PlayerTV';
 import Aksiya from './pages/Aksiya';
+import Search from './pages/Search';
 
 const { width: screenWidth } = Dimensions.get('window')
 let isTV = screenWidth>900
@@ -21,11 +22,10 @@ let isTV = screenWidth>900
 
 enableScreens();
 const Stack = createStackNavigator()
-/////const Drawer = createDrawerNavigator();
 
 const StackTV = (props) => {
   
-  const {createOption,checkToken,getData} = React.useContext(Datas)
+  const {checkToken,getData,createOption} = React.useContext(Datas)
   const options = createOption(props.navigation,"Home")
   getData('token')
   return(
@@ -36,6 +36,7 @@ const StackTV = (props) => {
           <Stack.Screen props={props} options={{...options,headerShown:false}}  name="MovieList"  component={MovieList} />
           <Stack.Screen props={props} options={{...options,headerShown:false}}  name="Movies"  component={Movies} />
           <Stack.Screen props={props} options={{...options,headerShown:false}}  name="PlayerTV"  component={PlayerTV} />  
+          <Stack.Screen props={props} options={{...options,headerShown:false}}  name="Search"  component={Search} /> 
           <Stack.Screen props={props} options={{...options,headerShown:false}}  name="Aksiya"  component={Aksiya} /> 
     </Stack.Navigator>
   )

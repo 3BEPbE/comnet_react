@@ -97,7 +97,7 @@ export const ContextProvider = (props) => {
       }else{
         return axios({
           method: 'POST',
-          url:`https://api92.tvcom.uz/api/noauth/genre/list`,//28 123457
+          url:`https://api92.tvcom.uz/api/noauth/category/genre/list`,//28 123457
           data:{
             ...params
           }
@@ -122,8 +122,7 @@ export const ContextProvider = (props) => {
             ...params
           }
           }).then((e)=>{
-              return(e.data['0'].videos)
-              
+              return(e.data['0'].videos)           
           }).catch((e)=>{
               console.log(e)
           })
@@ -189,7 +188,8 @@ export const ContextProvider = (props) => {
            url:`https://api92.tvcom.uz/api/auth/search`,//28 123457
            data:{
              authkey:token,
-             search:text
+             search:text,
+             limit:12
            }
            }).then((e)=>{
             return(e.data['0'].videos)
@@ -202,7 +202,8 @@ export const ContextProvider = (props) => {
            method: 'POST',
            url:`https://api92.tvcom.uz/api/noauthsearch`,//28 123457
            data:{
-             search:text
+             search:text,
+             limit:12
            }
            }).then((e)=>{ 
             return(e.data['0'].videos) 

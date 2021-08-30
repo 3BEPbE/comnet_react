@@ -1,5 +1,5 @@
 import React from 'react'
-import {View,StyleSheet,Text,Dimensions,Image,TVEventHandler} from 'react-native'
+import {View,StyleSheet,Text,Dimensions,Animated,TVEventHandler} from 'react-native'
 import { ScrollView, TouchableWithoutFeedback } from 'react-native-gesture-handler';
 import { HeaderTV } from '../components/HeaderTv';
 import BigCardCarusel from '../components/BigCardCarusel';
@@ -8,17 +8,36 @@ import BigJanrCarusel from '../components/BigJanrCarusel';
 import FilmCarusel from '../components/FilmCarusel';
 import Chooser from '../components/Chooser';
 import { useFocusEffect } from '@react-navigation/core';
+import { Datas } from '../context';
 const { width: screenWidth } = Dimensions.get('window')
 
 export default function Movies({navigation}){
-    const [select,setSelect] = React.useState(1)
+    const {checkToken} = React.useContext(Datas)
+    const [value,setValue] = React.useState(new Animated.Value(0))
+    const [margin,setMargin] = React.useState(0)
     const [eventType,setEvent] = React.useState()
     const stack = React.useRef([{main:'search'},{main:'category',index:1},{main:'janr',index:1},{main:'carusel1',index:1},{main:'carusel2'}]).current
-    const [pos,setPos] = React.useState({main:'search'})
+    const [pos,setPos] = React.useState({main:'carusel1',index:0})
+    const [activeCat,setActiveCat] = React.useState(1)
+    const [params,setParams] = React.useState({season:0,})
+    React.useEffect(()=>{
+        Animated.timing(value, {
+            toValue: -margin,
+            duration: 500,
+            useNativeDriver:true
+          }).start();
+    },[value,margin])
+
+    React.useEffect(()=>{
+        checkToken(navigation)
+    },[])
 
     React.useEffect(()=>{
         if(eventType){
             if(pos.main === 'search'){
+                if(eventType.eventType==='select'){
+                    navigation.navigate('Search')
+                }
                 if(eventType.eventType==='down'){
                     setPos({main:'category',index:1})
                 }
@@ -55,15 +74,19 @@ export default function Movies({navigation}){
                         setPos({main:'janr',index:pos.index+1})
                     }
                 }
-                if(eventType.eventType==='down'){
-                    if(pos.index+1<=11){
-                        setPos({main:'carusel1',index:0})
-                    }
+                if(eventType.eventType==='down'){ 
+                    setMargin(90)
+                    setPos({main:'carusel1',index:0})
                 }
             }
             if(pos.main==='carusel1'){
                 if(eventType.eventType==='up'){
+                    setMargin(0)
                     setPos({main:'janr',index:0})
+                }
+                if(eventType.eventType==='down'){
+                    setMargin(210)
+                    setPos({main:'carusel2',index:0})
                 }
                 if(eventType.eventType==='left'){
                     if(pos.index-1>=0){
@@ -73,6 +96,22 @@ export default function Movies({navigation}){
                 if(eventType.eventType==='right'){
                     if(pos.index+1<=11){
                         setPos({main:'carusel1',index:pos.index+1})
+                    }
+                }
+            }
+            if(pos.main==='carusel2'){
+                if(eventType.eventType==='up'){
+                    setMargin(90)
+                    setPos({main:'carusel1',index:0})
+                }
+                if(eventType.eventType==='left'){
+                    if(pos.index-1>=0){
+                        setPos({main:'carusel2',index:pos.index-1})
+                    }
+                }
+                if(eventType.eventType==='right'){
+                    if(pos.index+1<=11){
+                        setPos({main:'carusel2',index:pos.index+1})
                     }
                 }
             }
@@ -95,14 +134,25 @@ export default function Movies({navigation}){
             setEvent(event)
         }
     }
-
+    React.useEffect(()=>{
+        if(activeCat===1){
+            setParams({season:0})
+        }else if(activeCat===2){
+            setParams({season:1})
+        }else if(activeCat===3){
+            setParams({gid:10})
+        }
+    },[activeCat])
     return(
-        <ScrollView style={styles.container}>
-         <HeaderTV pos={pos} main={true}/>
-         <Chooser pos={pos}/>
-         <BigJanrCarusel setPos={setPos} pos={pos}/>
-         <FilmCarusel text={'Новинки'} pos={pos} params={{new:1,season:0,limit:12}}/>
-        </ScrollView>
+        <View style={styles.container}> 
+            <Animated.View style={{ transform: [{ translateY: value }]}}>
+                <HeaderTV pos={pos} main={true}/>
+                <Chooser activeCat={activeCat} setActiveCat={setActiveCat} setPos={setPos} pos={pos}/>
+                <BigJanrCarusel setPos={setPos} pos={pos}/>
+                <FilmCarusel setPos={setPos} name={'carusel1'} text={'Новинки'} pos={pos} params={{new:1,...params}}/>
+                <FilmCarusel setPos={setPos} name={'carusel2'} text={'Новинки'} pos={pos} params={{new:1,...params}}/>
+            </Animated.View>
+        </View>
     )
 }
 

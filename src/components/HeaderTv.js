@@ -1,4 +1,4 @@
-import {Text, View,Image,StyleSheet,Dimensions } from 'react-native'
+import {Text, View,Image,StyleSheet,Dimensions, TouchableWithoutFeedback } from 'react-native'
 import React from 'react'
 import { DrawerItem } from '@react-navigation/drawer'
 const { width: screenWidth,height:screenHeight } = Dimensions.get('window')
@@ -9,7 +9,7 @@ export const HeaderTV = ({navigation,main,pos}) => {
         <View style={styles.container}>
             <View style={styles.header}>
                     <Image style={styles.logo} source={require('../images/logo.png')}/> 
-                   {main? <View style={{...styles.searchBlock,backgroundColor:pos.main==='search'?'#E41A4B':'transparent'}}><Image style={styles.search} source={require('../images/burgerSearchbar.png')}/></View>:<></>}
+                   {main? <TouchableWithoutFeedback><View style={{...styles.searchBlock,backgroundColor:pos.main==='search'?'#E41A4B':'transparent'}}><Image style={styles.search} source={require('../images/burgerSearchbar.png')}/></View></TouchableWithoutFeedback> :<></>}
             </View>
         </View>
     )

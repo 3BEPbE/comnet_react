@@ -1,22 +1,44 @@
 import React from 'react'
-import {View,StyleSheet,Text,Dimensions,Image} from 'react-native'
+import {View,StyleSheet,Text,Dimensions,Image,TouchableWithoutFeedback} from 'react-native'
 import { DrawerItem } from '@react-navigation/drawer';
 
 const { width: screenWidth } = Dimensions.get('window')
 
-export default function Chooser({pos}){
-
+export default function Chooser({pos,setPos,activeCat,setActiveCat}){
+    const [visible,setVisible] = React.useState(false)
+    React.useEffect(()=>{
+        if(pos.main==='category'){
+            if(!visible){
+                setPos({main:'category',index:activeCat})  
+                setVisible(true)
+            }else{
+                setActiveCat(pos.index)
+                setVisible(true)
+            }
+        }else{
+            setVisible(false)
+        }
+    },[pos])
     return(
         <View style={styles.container}>
-              <View style={{...styles.item,backgroundColor:pos.main==='category'&&pos.index===1?'#E41A4B':'#1C1C1C'}}>
+            <TouchableWithoutFeedback>
+                <View style={styles.item}>
                     <Text style={styles.text}>Фильмы</Text>
+                    {activeCat===1?<View style={{...styles.line,backgroundColor:pos.main==='category'?'#E41A4B':'#fff'}}></View>:<></>}
                 </View>
-                <View style={{...styles.item,backgroundColor:pos.main==='category'&&pos.index===2?'#E41A4B':'#1C1C1C'}}>
+            </TouchableWithoutFeedback>
+            <TouchableWithoutFeedback>
+                <View style={styles.item}>
                     <Text style={styles.text}>Сериалы</Text>
+                    {activeCat===2?<View style={{...styles.line,backgroundColor:pos.main==='category'?'#E41A4B':'#fff'}}></View>:<></>}
                 </View>
-                <View style={{...styles.item,backgroundColor:pos.main==='category'&&pos.index===3?'#E41A4B':'#1C1C1C'}}>
+            </TouchableWithoutFeedback>
+            <TouchableWithoutFeedback>
+                <View style={styles.item}>
                     <Text style={styles.text}>Мультфильмы</Text>
+                    {activeCat===3?<View style={{...styles.line,backgroundColor:pos.main==='category'?'#E41A4B':'#fff'}}></View>:<></>}
                 </View>
+            </TouchableWithoutFeedback>
         </View>
     )
 }
