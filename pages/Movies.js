@@ -12,6 +12,7 @@ import { Datas } from '../context';
 const { width: screenWidth } = Dimensions.get('window')
 
 export default function Movies({navigation}){
+
     const {checkToken,getJanr} = React.useContext(Datas)
     const [value,setValue] = React.useState(new Animated.Value(0))
     const [margin,setMargin] = React.useState(0)
@@ -165,6 +166,7 @@ export default function Movies({navigation}){
            setJanrID(janrList.filter((item)=>item.name === chosedJanr)[0].id)
         }
     },[chosedJanr])
+
     return(
         <View style={styles.container}> 
             <Animated.View style={{ transform: [{ translateY: value }]}}>
@@ -173,6 +175,7 @@ export default function Movies({navigation}){
                 <BigJanrCarusel  setChosedJanr={setChosedJanr} enterPress={enterPress} setPos={setPos} pos={pos}/>
                 <FilmCarusel navigation={navigation} enterPress={enterPress}  setPos={setPos} name={'carusel1'} text={'Новинки'} pos={pos} params={{new:1,...params,gid:janrID}}/>
                 <FilmCarusel navigation={navigation} enterPress={enterPress}  setPos={setPos} name={'carusel2'} text={'Новинки'} pos={pos} params={{new:1,...params,gid:janrID}}/>
+
             </Animated.View>
         </View>
     )

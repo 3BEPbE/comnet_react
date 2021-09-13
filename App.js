@@ -17,7 +17,7 @@ import CurrentMovie from './pages/CurrentMovie';
 import { PlayerMovie } from './pages/PlayerMovie';
 
 const { width: screenWidth } = Dimensions.get('window')
-let isTV = screenWidth>900
+
 
 
 
