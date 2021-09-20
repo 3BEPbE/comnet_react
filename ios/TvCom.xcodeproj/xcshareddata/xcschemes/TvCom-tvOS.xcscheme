@@ -15,9 +15,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "2D02E47A1E0B4A5D006451C7"
-               BuildableName = "aaa-tvOS.app"
-               BlueprintName = "aaa-tvOS"
-               ReferencedContainer = "container:aaa.xcodeproj">
+               BuildableName = "TvCom-tvOS.app"
+               BlueprintName = "TvCom-tvOS"
+               ReferencedContainer = "container:TvCom.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -33,9 +33,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "2D02E48F1E0B4A5D006451C7"
-               BuildableName = "aaa-tvOSTests.xctest"
-               BlueprintName = "aaa-tvOSTests"
-               ReferencedContainer = "container:aaa.xcodeproj">
+               BuildableName = "TvCom-tvOSTests.xctest"
+               BlueprintName = "TvCom-tvOSTests"
+               ReferencedContainer = "container:TvCom.xcodeproj">
             </BuildableReference>
          </TestableReference>
       </Testables>
@@ -55,9 +55,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "2D02E47A1E0B4A5D006451C7"
-            BuildableName = "aaa-tvOS.app"
-            BlueprintName = "aaa-tvOS"
-            ReferencedContainer = "container:aaa.xcodeproj">
+            BuildableName = "TvCom-tvOS.app"
+            BlueprintName = "TvCom-tvOS"
+            ReferencedContainer = "container:TvCom.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </LaunchAction>
@@ -72,9 +72,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "2D02E47A1E0B4A5D006451C7"
-            BuildableName = "aaa-tvOS.app"
-            BlueprintName = "aaa-tvOS"
-            ReferencedContainer = "container:aaa.xcodeproj">
+            BuildableName = "TvCom-tvOS.app"
+            BlueprintName = "TvCom-tvOS"
+            ReferencedContainer = "container:TvCom.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>

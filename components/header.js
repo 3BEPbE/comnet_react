@@ -7,11 +7,11 @@ export const options = {
         headerStyle:HeaderStyle.header,
 }
 
-export const HeaderRight = ({navigation}) => (
+export const HeaderCenter = ({navigation}) => (
 
         <DrawerItem pressColor='#fff' style={{width:95,padding:0}} label='' icon={()=>(
             <Text style={HeaderStyle.headerLink}>Главная</Text>
-        )}  onPress={() => navigation.navigate('Home')} />
+        )}  onPress={() => navigation.navigate('HomePhone')} />
             
       
 )
@@ -24,11 +24,11 @@ export const HeaderLeft = ({navigation}) => {
                 <View style={HeaderStyle.burgerItem}></View>
                 <View style={HeaderStyle.burgerItem}></View>
             </View>)}/>
-            <DrawerItem  pressColor='#fff' style={{marginHorizontal:0,width:130,marginTop:-15}} label='' icon={()=>( <Image style={{width:112,height:32}} source={require('../images/logo.png')}/>)}  onPress={() => navigation.navigate('Home')}/>
+            <DrawerItem  pressColor='#fff' style={{marginHorizontal:0,width:130}} label='' icon={()=>( <Image style={{width:112,height:32}} source={require('../images/logo.png')}/>)}  onPress={() => navigation.navigate('HomePhone')}/>
     </View> 
     
 )}
-export const HeaderCenter = ({navigation}) => (
+export const HeaderRight = ({navigation}) => (
     <View  style={HeaderStyle.searchbarBlock}>
       <DrawerItem  pressColor='#fff' style={{width:35}} label='' icon={()=>(<Image source={require('../images/burgerSearchbar.png')} style={HeaderStyle.searchBarIcon}/>)}  onPress={() => navigation.navigate('Search')}/>
     </View>

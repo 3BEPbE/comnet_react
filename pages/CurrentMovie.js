@@ -8,7 +8,7 @@ const { width: screenWidth,height:screenHeight } = Dimensions.get('window')
 
 export default function CurrentMovie({navigation,route}){
     const movie = route.params
-
+    console.log(movie)
     const tvEventListener = (event)=>{
         if(event.eventKeyAction){
             if(!movie.is_season){
@@ -43,6 +43,8 @@ export default function CurrentMovie({navigation,route}){
                 <View style={styles.block3}>
                     <Text style={styles.age}>Категория: {movie.rating}+</Text>
                     <Text style={{...styles.age,marginTop:20}}>{movie.countries}, {movie.year}</Text>
+                    <Text style={{...styles.age,marginTop:20}}>IMDB:{movie.imdb_rating}</Text>
+                    <Text style={{...styles.age,marginTop:20}}>Kinopoisk:{movie.kinopoisk_rating}</Text>
                     
                     <View style={styles.janres}>
                         {movie.genres.split(',').map((item,index)=>(

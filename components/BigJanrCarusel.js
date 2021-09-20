@@ -115,7 +115,7 @@ export default function BigJanrCarusel({pos,setPos,enterPress,setChosedJanr}) {
     return (
             <>
             <View style={{marginTop:10}}>
-            {typeof activeIndex ==='number'&&visible?<View  style={{...styles.focused,marginLeft:activeIndex>data.length-8?screenWidth/8*(activeIndex-(data.length-8)):0}}></View>:<></>}
+            {typeof activeIndex ==='number'&&visible&&data?<View  style={{...styles.focused,marginLeft:activeIndex>data.length-8?screenWidth/8*(activeIndex-(data.length-8)):0}}></View>:<></>}
             {data?<FlatList 
               data={data}
               renderItem={({ item, index })=>   <Post   item={item} index={index}/>}

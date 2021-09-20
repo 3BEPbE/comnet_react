@@ -210,7 +210,6 @@ const styles = StyleSheet.create({
      width:15,
      height:15  ,
      resizeMode:'cover', 
-    
  },
  iconBlock:{
     height:screenHeight/100*10,

@@ -22,10 +22,15 @@ export const ContextProvider = (props) => {
 
     const createOption = (navigation,position) => {
       const Options = {
-        Home:{
+        free:{
           ...options,
           headerTitle:()=>(<></>),
           headerLeft:()=>(<></>)
+        },
+        Home:{
+          ...options,
+          headerRight:()=>(<HeaderRight   navigation={navigation}/>),
+          headerLeft:()=>(<HeaderLeft navigation={navigation}/>)
         },
       }
       return Options[position]
@@ -220,10 +225,10 @@ export const ContextProvider = (props) => {
         [
           {
             text: "Отмена",
-            onPress: () => isTV ? navigation.navigate('HomeTV') : navigation.navigate('Home'),
+            onPress: () => isTV ? navigation.navigate('HomeTV') : navigation.navigate('HomePhone'),
             style: "cancel"
           },
-          { text: "Подробное", onPress: () => navigation.navigate('Login',{routeName:"HomeTV"}) }
+          { text: "Подробное", onPress: () => isTV ? navigation.navigate('Login',{routeName:"HomeTV"}) : navigation.navigate('LoginPhone',{routeName:"HomePhone"}) }
         ],
         { cancelable: false }
       );
@@ -260,7 +265,6 @@ export const ContextProvider = (props) => {
             authkey:token,
           }
           }).then((e)=>{
-            console.log(e.data['0'].channels[0])
             return(e.data['0'].channels)
               
           }).catch((e)=>{

@@ -59,9 +59,9 @@ export default function FilmCarusel({params,navigation,text,pos,setPos,name,cond
       },[isLogin,params,searchText])
    
       React.useEffect(()=>{
-        if(pos.main===name&&!data.length){
-          setPos({main:'search'})
-        }
+        // if(pos.main===name&&!data.length){
+        //   setPos({main:'search'})
+        // }
         if(flatList.current&&data&&pos.main===name){
           if(!visible){
             if(data.length-6<activeIndex+1){
